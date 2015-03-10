@@ -10,7 +10,7 @@
 using namespace std;
 
 /*
- * CSV Extractor: Uses regular expressions to extract comma separated text from argv[1]
+ * CSV Extractor: Uses regular expressions to extract comma separated text from argv[1]. Requires g++-4.9 or higher.
  */
 int main(int argc, char** argv) 
 {
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
     string line;
 
     regex csv_regex{"^(?:(?:\"((?:\"\"|[^\"])+)\"|([^,]*))(?:$|,))+$"};
-
+    
     if (inp.is_open()) {
 
         while(inp.good()) {
@@ -50,8 +50,7 @@ int main(int argc, char** argv)
                    
                     // process line
                     out << i->str() << '\n';
-                    //cout << i->str() << '\n';
-                }   
+               }   
                              
                              
             } catch (exception & e) {
