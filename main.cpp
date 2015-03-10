@@ -67,3 +67,12 @@ int main(int argc, char** argv)
     
     return(0);
 }
+/*
+ * TODO: Convert this to C++ and use transform()?
+ * Replace " with '. Replace "" with ". Replace beginning " with nothing.
+       $str = preg_replace(
+           array( '/[^"]"[^"]/', '/""/', '/^"?([^"].+)/'),
+           array("'", '"', '$1'),
+           $results[6]    
+       );
+ */
