@@ -1,1 +1,7 @@
-Read http://docs.oracle.com/cd/E17952_01/connector-cpp-en/connector-cpp-en.pdf
+I built the MySQL Connector for C++, libmysqlcppconn7, and its development package, libmysqlcppconn-dev, by doing:
+
+/usr/local/src $ sudo apt-get source --compile mysql-connector-c++
+
+To use the MySQL Connector for C++ read:
+
+http://docs.oracle.com/cd/E17952_01/connector-cpp-en/connector-cpp-en.pdf
