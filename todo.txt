@@ -1,0 +1,1 @@
+Read http://docs.oracle.com/cd/E17952_01/connector-cpp-en/connector-cpp-en.pdf
