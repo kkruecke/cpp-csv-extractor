@@ -15,21 +15,22 @@ using namespace std;
 int main(int argc, char** argv) 
 {
     ifstream inp;
-    
 
     if (argc != 2) {
 
         cerr << "Enter the input file name as the first parameter\n";
+        return 0;
     }
 
     inp.open(argv[1]);
     
-    ofstream out(string("output.txt"));
+    ofstream output(string("outputput.txt"));
 
     sregex_iterator it_end; // <-- requires g++-4.9
 
     string line;
 
+    // regular expression for parsing .csv file.
     regex csv_regex{"^(?:(?:\"((?:\"\"|[^\"])+)\"|([^,]*))(?:$|,))+$"};
     
     if (inp.is_open()) {
@@ -49,21 +50,20 @@ int main(int argc, char** argv)
                for (std::sregex_iterator i = it; i != it_end; ++i) {
                    
                     // process line
-                    out << i->str() << '\n';
+                    output << i->str() << '\n';
                }   
                              
                              
             } catch (exception & e) {
                 
                 cerr << "exception caught: " << e.what() << '\n';
-                
+                cerr << "Terminating" << "\n";
+                return;
             }
-
         }
     }
 
     inp.close();
-
     
     return(0);
 }
