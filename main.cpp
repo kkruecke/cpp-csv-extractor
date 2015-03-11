@@ -7,10 +7,23 @@
 #include <iostream>
 #include <exception>
 
+/*
+  Include directly the different
+  headers from cppconn/ and mysql_driver.h + mysql_util.h
+  (and mysql_connection.h). This will reduce your build time!
+*/
+
+#include "mysql_connection.h"
+
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+
 using namespace std;
 
 /*
- * CSV Extractor: Uses regular expressions to extract comma separated text from argv[1]. Requires g++-4.9 or higher.
+ *  Uses regular expression support in gcc-4.9 to extract comma separated text from file given in argv[1]. Requires g++-4.9 or higher.
  */
 int main(int argc, char** argv) 
 {
@@ -58,19 +71,16 @@ int main(int argc, char** argv)
                 
                 cerr << "exception caught: " << e.what() << '\n';
                 cerr << "Terminating" << "\n";
-                return;
+                return 0;
             }
         }
     }
 
     inp.close();
-    
+    output.close();
+
+    /* MySQL Connector for C++ examples in:  /usr/local/src/mysql-connector-c++-1.1.3/examples/ */
+   
     return(0);
 }
-/*
- * TODO: 
-   
-Transform into a MySQL data types. In particular, MySQL strings require quotes to be escaped with a backslash. 
-1. "" --> \"
 
-*/
