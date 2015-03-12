@@ -21,4 +21,8 @@ g++  -o dist/Debug/GNU-Linux-x86/csv-extractor build/Debug/GNU-Linux-x86/main.o 
 got:
 
  undefined reference to `get_driver_instance'
- 
+==================================
+
+Trying mysql++-dev mysql++3 instead:
+
+$ sudo aptitude install libmysql++-dev libmysql++3 libmysql++-doc
