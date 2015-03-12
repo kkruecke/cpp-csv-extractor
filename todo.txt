@@ -12,3 +12,13 @@ While the MySQL Connector for C++ examples are in
   /usr/local/src/mysql-connector-c++-1.1.3/examples
 
 the wrapper classes don't seem complete.
+
+
+Don't know how to set link configuration. Tried manually doing:
+
+g++  -o dist/Debug/GNU-Linux-x86/csv-extractor build/Debug/GNU-Linux-x86/main.o -L/usr/lib/libmysqlcppconn.so.7.1.1.3
+
+got:
+
+ undefined reference to `get_driver_instance'
+ 
