@@ -7,4 +7,8 @@ To use the MySQL Connector for C++ read:
 http://docs.oracle.com/cd/E17952_01/connector-cpp-en/connector-cpp-en.pdf
 
 
-MySQL Connector for C++ examples are in:  /usr/local/src/mysql-connector-c++-1.1.3/examples
+While the MySQL Connector for C++ examples are in
+
+  /usr/local/src/mysql-connector-c++-1.1.3/examples
+
+the wrapper classes don't seem complete.

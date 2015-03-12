@@ -1,86 +1,315 @@
-#include <cstdlib>
-#include <regex>
-#include <fstream>
-#include <string>
-#include <algorithm>
-#include <iterator>
+/**
+* Basic example demonstrating connect and simple queries
+*
+*/
+
+// Standard C++ includes
+#include <stdlib.h>
 #include <iostream>
-#include <exception>
+#include <sstream>
+#include <stdexcept>
+#include <memory>
 
 /*
-  Include directly the different
+  Public interface of the MySQL Connector/C++.
+  You might not use it but directly include directly the different
   headers from cppconn/ and mysql_driver.h + mysql_util.h
   (and mysql_connection.h). This will reduce your build time!
 */
+//--#include <driver/mysql_public_iface.h> // Should this be <cppconn/driver/...>?
 
-#include "mysql_connection.h"
-
+/* Connection parameter and sample data */
 #include <cppconn/driver.h>
+#include <cppconn/connection.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
+#include "examples.h"
 
 using namespace std;
 
-/*
- *  Uses regular expression support in gcc-4.9 to extract comma separated text from file given in argv[1]. Requires g++-4.9 or higher.
- */
-int main(int argc, char** argv) 
+/**
+* Usage example for Driver, Connection, (simple) Statement, ResultSet
+*/
+int main(int argc, const char **argv)
 {
-    ifstream inp;
+	string url(argc >= 2 ? argv[1] : EXAMPLE_HOST);
 
-    if (argc != 2) {
+	const string user(argc >= 3 ? argv[2] : EXAMPLE_USER);
 
-        cerr << "Enter the input file name as the first parameter\n";
-        return 0;
-    }
+	const string pass(argc >= 4 ? argv[3] : EXAMPLE_PASS);
 
-    inp.open(argv[1]);
-    
-    ofstream output(string("outputput.txt"));
+	const string database(argc >= 5 ? argv[4] : EXAMPLE_DB);
 
-    sregex_iterator it_end; // <-- requires g++-4.9
+	/* sql::ResultSet.rowsCount() returns size_t */
+	size_t row;
 
-    string line;
+	stringstream sql;
 
-    // regular expression for parsing .csv file.
-    regex csv_regex{"^(?:(?:\"((?:\"\"|[^\"])+)\"|([^,]*))(?:$|,))+$"};
-    
-    if (inp.is_open()) {
+	stringstream msg;
 
-        while(inp.good()) {
+	int i, affected_rows;
 
-            getline(inp, line);
+	cout << boolalpha;
 
-            try {
-                
-               sregex_iterator it(line.begin(), line.end(), csv_regex);
-               
-               if (it->str().empty()) {
-                   continue;
-               } 
-               
-               for (std::sregex_iterator i = it; i != it_end; ++i) {
-                   
-                    // process line
-                    output << i->str() << '\n';
-               }   
-                             
-                             
-            } catch (exception & e) {
-                
-                cerr << "exception caught: " << e.what() << '\n';
-                cerr << "Terminating" << "\n";
-                return 0;
-            }
-        }
-    }
+	cout << "1..1" << endl;
 
-    inp.close();
-    output.close();
+	cout << "# Connector/C++ connect basic usage example.." << endl;
 
-    /* MySQL Connector for C++ examples in:  /usr/local/src/mysql-connector-c++-1.1.3/examples/ */
-   
-    return(0);
+	cout << "#" << endl;
+
+
+	try {
+		//--sql::Driver * driver = sql::mysql::get_driver_instance();
+
+		sql::Driver driver;
+
+		unique_ptr<sql::Connection> conn {driver.connect( url, user, pass)};
+
+		/* Using the Driver to create a connection */
+		//--std::auto_ptr< sql::Connection > con(driver->connect(url, user, pass));
+
+		unique_ptr< sql::Connection > conn(driver->connect(url, user, pass));
+
+		/* Creating a "simple" statement - "simple" = not a prepared statement */
+		//--std::auto_ptr< sql::Statement > stmt(con->createStatement());
+
+		unique_ptr< sql::Statement > stmt(conn->createStatement());
+
+		/* Create a test table demonstrating the use of sql::Statement.execute() */
+		stmt->execute("USE " + database);
+
+		stmt->execute("DROP TABLE IF EXISTS test");
+
+		stmt->execute("CREATE TABLE test(id INT, label CHAR(1))");
+
+		cout << "#\t Test table created" << endl;
+
+		/* Populate the test table with data */
+		for (i = 0; i < EXAMPLE_NUM_TEST_ROWS; i++) {
+			/*
+			KLUDGE: You should take measures against SQL injections!
+			example.h contains the test data
+			*/
+			sql.str("");
+
+			sql << "INSERT INTO test(id, label) VALUES (";
+
+			sql << test_data[i].id << ", '" << test_data[i].label << "')";
+
+			stmt->execute(sql.str());
+
+		}
+
+		cout << "#\t Test table populated" << endl;
+
+		{
+			/*
+			Run a query which returns exactly one result set like SELECT
+			Stored procedures (CALL) may return more than one result set
+			*/
+			std::auto_ptr< sql::ResultSet > res(stmt->executeQuery("SELECT id, label FROM test ORDER BY id ASC"));
+
+			cout << "#\t Running 'SELECT id, label FROM test ORDER BY id ASC'" << endl;
+
+			/* Number of rows in the result set */
+			cout << "#\t\t Number of rows\t";
+
+			cout << "res->rowsCount() = " << res->rowsCount() << endl;
+
+			if (res->rowsCount() != EXAMPLE_NUM_TEST_ROWS) {
+
+				msg.str("");
+
+				msg << "Expecting " << EXAMPLE_NUM_TEST_ROWS << "rows, found " << res->rowsCount();
+
+				throw runtime_error(msg.str());
+
+			}
+
+			/* Fetching data */
+			row = 0;
+
+			while (res->next()) {
+
+				cout << "#\t\t Fetching row " << row << "\t";
+
+				/* You can use either numeric offsets... */
+				cout << "id = " << res->getInt(1);
+
+
+				/* ... or column names for accessing results. The latter is recommended. */
+				cout << ", label = '" << res->getString("label") << "'" << endl;
+
+				row++;
+
+			}
+		}
+
+		{
+			/* Fetching again but using type convertion methods */
+			std::auto_ptr< sql::ResultSet > res(stmt->executeQuery("SELECT id FROM test ORDER BY id DESC"));
+
+
+			cout << "#\t Fetching 'SELECT id FROM test ORDER BY id DESC' using type conversion" << endl;
+
+
+			row = 0;
+
+
+			while (res->next()) {
+
+				cout << "#\t\t Fetching row " << row;
+
+				cout << "#\t id (int) = " << res->getInt("id");
+
+				cout << "#\t id (boolean) = " << res->getBoolean("id");
+
+				cout << "#\t id (long) = " << res->getInt64("id") << endl;
+
+				row++;
+
+			}
+		}
+
+		/* Usage of UPDATE */
+		stmt->execute("INSERT INTO test(id, label) VALUES (100, 'z')");
+
+		affected_rows = stmt->executeUpdate("UPDATE test SET label = 'y' WHERE id = 100");
+
+		cout << "#\t UPDATE indicates " << affected_rows << " affected rows" << endl;
+
+		if (affected_rows != 1) {
+			msg.str("");
+
+			msg << "Expecting one row to be changed, but " << affected_rows << "change(s) reported";
+
+			throw runtime_error(msg.str());
+
+		}
+
+		{
+			std::auto_ptr< sql::ResultSet > res(stmt->executeQuery("SELECT id, label FROM test WHERE id = 100"));
+
+
+			res->next();
+
+			if ((res->getInt("id") != 100) || (res->getString("label") != "y")) {
+				msg.str("Update must have failed, expecting 100/y got");
+
+				msg << res->getInt("id") << "/" << res->getString("label");
+
+				throw runtime_error(msg.str());
+
+			}
+
+			cout << "#\t\t Expecting id = 100, label = 'y' and got id = " << res->getInt("id");
+
+			cout << ", label = '" << res->getString("label") << "'" << endl;
+
+		}
+
+		/* Clean up */
+		stmt->execute("DROP TABLE IF EXISTS test");
+
+		stmt.reset(NULL);
+ /* free the object inside  */
+
+		cout << "#" << endl;
+
+		cout << "#\t Demo of connection URL syntax" << endl;
+
+		try {
+			/*s This will implicitly assume that the host is 'localhost' */
+			url = "unix://path_to_mysql_socket.sock";
+
+			con.reset(driver->connect(url, user, pass));
+
+		} catch (sql::SQLException &e) {
+			cout << "#\t\t unix://path_to_mysql_socket.sock caused expected exception" << endl;
+
+			cout << "#\t\t " << e.what() << " (MySQL error code: " << e.getErrorCode();
+
+			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+
+		}
+
+		try {
+			url = "tcp://hostname_or_ip[:port]";
+
+			con.reset(driver->connect(url, user, pass));
+
+		} catch (sql::SQLException &e) {
+			cout << "#\t\t tcp://hostname_or_ip[:port] caused expected exception" << endl;
+
+			cout << "#\t\t " << e.what() << " (MySQL error code: " << e.getErrorCode();
+
+			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+
+		}
+
+		try {
+			/*
+			Note: in the MySQL C-API host = localhost would cause a socket connection!
+			Not so with the C++ Connector. The C++ Connector will translate
+			tcp://localhost into tcp://127.0.0.1 and give you a TCP connection
+			url = "tcp://localhost[:port]";
+
+			*/
+			con.reset(driver->connect(url, user, pass));
+
+		} catch (sql::SQLException &e) {
+			cout << "#\t\t tcp://hostname_or_ip[:port] caused expected exception" << endl;
+
+			cout << "#\t\t " << e.what() << " (MySQL error code: " << e.getErrorCode();
+
+			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+
+		}
+
+		cout << "# done!" << endl;
+
+
+	} catch (sql::SQLException &e) {
+		/*
+		The MySQL Connector/C++ throws three different exceptions:
+
+		- sql::MethodNotImplementedException (derived from sql::SQLException)
+		- sql::InvalidArgumentException (derived from sql::SQLException)
+		- sql::SQLException (derived from std::runtime_error)
+		*/
+		cout << "# ERR: SQLException in " << __FILE__;
+
+		cout << "(" << EXAMPLE_FUNCTION << ") on line " << __LINE__ << endl;
+
+		/* Use what() (derived from std::runtime_error) to fetch the error message */
+		cout << "# ERR: " << e.what();
+
+		cout << " (MySQL error code: " << e.getErrorCode();
+
+		cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+
+		cout << "not ok 1 - examples/connect.php" << endl;
+
+		return EXIT_FAILURE;
+
+	} catch (std::runtime_error &e) {
+
+		cout << "# ERR: runtime_error in " << __FILE__;
+
+		cout << "(" << EXAMPLE_FUNCTION << ") on line " << __LINE__ << endl;
+
+		cout << "# ERR: " << e.what() << endl;
+
+		cout << "not ok 1 - examples/connect.php" << endl;
+
+		return EXIT_FAILURE;
+
+	}
+
+	cout << "ok 1 - examples/connect.php" << endl;
+
+	return EXIT_SUCCESS;
+
 }
-
