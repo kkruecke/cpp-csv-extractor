@@ -1,13 +1,3 @@
-C++11 regex library tutorial
-============================
-
-See https://github.com/kkruecke/cpp-csv-extractor.git
-
-
-
-MySQL Connector for C++ Notes
-=============================
-
 I built the MySQL Connector for C++, libmysqlcppconn7, and its development package, libmysqlcppconn-dev, by doing:
 
 /usr/local/src $ sudo apt-get source --compile mysql-connector-c++
