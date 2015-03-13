@@ -1,8 +1,10 @@
 C++11 regex library tutorial
 ============================
 
-See http://www.regular-expressions.info/stdregex.html
+See:
 
+1. http://www.regular-expressions.info/stdregex.html
+2. http://www.informit.com/articles/article.aspx?p=2079020
 
 MySQL Connector for C++ Notes
 =============================
@@ -42,7 +44,17 @@ Pluses
 
 stl-like in design and implementation. It also does have documentation and examples.
 
-How to Install
---------------
+How to Install Directly
+-----------------------
 
 $ sudo aptitude install libmysql++-dev libmysql++3 libmysql++-doc
+
+How to Build from Source to Also Get Examples
+---------------------------------------------
+
+$ sudo aptitude purge libmysql++-dev libmysql++3 libmysql++-doc
+
+/usr/local/src $ sudo apt-get build-dep mysql++
+/usr/local/src $ sudo apt-get source --compile mysql++
+
+/usr/local/src $ /usr/local/src $ sudo dpkg -i libmysql++-devXXX libmysql++3XXX libmysql++-docXXX
