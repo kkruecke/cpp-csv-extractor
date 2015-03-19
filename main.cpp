@@ -50,41 +50,34 @@ int main(int argc, char** argv)
      */
     int bad = 0;   
    
-    string csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
+    regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
             
     if (inp.is_open()) {
         
         while(inp.good()) {
 
             getline(inp, line);
-            
-                  
+                             
             //TODO: add a transformation of: convert double quotes to single quote            
             try {
                 
-               //sregex_iterator it(line.begin(), line.end(), csv_regex);
-               
-               std::smatch match;
-               
-               //--string result;
-               bool bRc = regex_search(line, match, csv_regex);
-               /*
-               if (regex_search(line, match, csv_regex) && match.size() > 1) {
-                   
-                                     
-                   for(size_t i = 0; i < match.size(); ++i) {
+            smatch  match;
+            
+            if (regex_search(line, match, csv_regex) && match.size() > 1) {
+                
+                for(size_t i = 0; i < match.size(); ++i) {
                        
-                      cout << string("submatch " ) << i << string(" is: ") << endl;
+                    cout << string("submatch " ) << i << string(" is: ") << endl;
                       
-                      cout << match[i] << endl;
-                   }
-                                 
-               } else {
-                   
-                     cout << string("-----------No Regex Match found on line:-----------")  << endl << line << string("\n----------------------------------\n") << endl;
-                     bad++;
-               } 
-               */
+                    cout << match[i] << endl;
+                }
+                
+            } else {
+                
+               bad++; 
+                
+            }
+                             
             } catch (exception & e) {
                 
                 cerr << "exception caught: " << e.what() << '\n';
