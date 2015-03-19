@@ -32,6 +32,7 @@ int main(int argc, char** argv)
     inp.open(argv[1]);
     
     ofstream output(string("outputput.txt"));
+    ofstream failed_log(string("Failed_lines.txt"));
 
     string line;
     
@@ -84,6 +85,7 @@ int main(int argc, char** argv)
             } else {
                 
                cout << " ---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << "\n---------------" << endl;
+               failed_log << " ---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << "\n---------------" << endl;
                regex_failed++; 
                 
             }
