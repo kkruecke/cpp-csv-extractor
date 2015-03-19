@@ -19,17 +19,15 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
-    int latin_E_hex = 0xCB;
-
-    string Latin_E = to_string(latin_E_hex);  // LATIN CAPITAL LETTER E WITH DIAERESIS. See http://www.w3.org/TR/MathML2/isolat1.html
-
-    ifstream inp;
-
     if (argc != 2) {
 
         cerr << "You must enter the input file name as the first parameter. Please rerun\n";
         return 0;
     }
+
+    string Latin_E = ::to_string(0xCB);  // LATIN CAPITAL LETTER E WITH DIAERESIS. See http://www.w3.org/TR/MathML2/isolat1.html
+
+    ifstream inp;
 
     inp.open(argv[1]);
     
@@ -46,14 +44,19 @@ int main(int argc, char** argv)
      * 
        "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
      */
-    int regex_failed = 0;   
    
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
             
     if (inp.is_open()) {
-        
+       
+        int regex_failed = 0;   
+
+        int line_no = 0;
+ 
         while(inp.good()) {
          
+          ++line_no;  
+
           getline(inp, line);
           
           regex two_dbl_quotes{"(\"\")"};
@@ -80,7 +83,7 @@ int main(int argc, char** argv)
                 
             } else {
                 
-               cout << " ---- Regex Failes --------\n" << adjusted_line << "\n---------------" << endl;
+               cout << " ---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << "\n---------------" << endl;
                regex_failed++; 
                 
             }
@@ -92,9 +95,10 @@ int main(int argc, char** argv)
                return 0;
           }
         }
+
+        cout << string("There were ") << regex_failed << string(" total missing hits") << endl;
     }
     
-    cout << string("There were ") << regex_failed << string(" total missing hits") << endl;
 
     inp.close();
     output.close();
