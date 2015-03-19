@@ -57,22 +57,24 @@ int main(int argc, char** argv)
         while(inp.good()) {
 
           getline(inp, line);
-                             
-            /*
-             * TODO: add a transformation of: convert double quotes to single quote
-             */ 
-                                
+                                                                
           try {
                 
             smatch  match;
+            string  output;
             
             if (regex_search(line, match, csv_regex) && match.size() > 1) {
                 
-                for(size_t i = 0; i < match.size(); ++i) {
+                for(size_t i = 1; i < match.size(); ++i) {
                        
                     cout << "submatch " << i << " is: " << endl;
+                    
+                    /*
+                     * TODO: add a transformation of: convert two consecutive occurances of double quotes to one single quote
+                     */ 
                       
                     cout << match[i] << endl;
+                    
                 }
                 
             } else {
