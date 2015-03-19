@@ -97,8 +97,7 @@ int main(int argc, char** argv)
     inp.close();
     output.close();
 
-    /* MySQL++3 code not yet begun. */ 
-   
+       
     return(0);
 }
 
