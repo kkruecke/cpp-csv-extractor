@@ -35,16 +35,14 @@ int main(int argc, char** argv)
     
     ofstream output(string("outputput.txt"));
 
-    sregex_iterator it_end; // regular expression support requires g++-4.9.
-
     string line;
     
     /* 
-     * The regex below
+     * The raw regex below
      * 
          ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*)$
      * 
-     * when the backslash and quotes are escaped is written as:
+     * becomes, when the backslash and quotes are escaped, this c-style string:
      * 
        "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
      */
@@ -55,30 +53,34 @@ int main(int argc, char** argv)
     if (inp.is_open()) {
         
         while(inp.good()) {
-
+         
           getline(inp, line);
-                                                                
+          
+          regex two_dbl_quotes{"(\"\")"};
+          
+          string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
+          
+          /*
+           * TODO: add a transformation of: convert two consecutive occurances of double quotes with an escaped double quoted.
+           */                                                       
+          
           try {
                 
             smatch  match;
             string  output;
-            
-            if (regex_search(line, match, csv_regex) && match.size() > 1) {
+               
+            if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
                 
                 for(size_t i = 1; i < match.size(); ++i) {
                        
                     cout << "submatch " << i << " is: " << endl;
-                    
-                    /*
-                     * TODO: add a transformation of: convert two consecutive occurances of double quotes to one single quote
-                     */ 
                       
                     cout << match[i] << endl;
-                    
                 }
                 
             } else {
-                            
+                
+               cout << " ---- Regex Failes --------\n" << adjusted_line << "\n---------------" << endl;
                regex_failed++; 
                 
             }
