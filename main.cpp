@@ -40,17 +40,17 @@ int main(int argc, char** argv)
     string line;
     
     /* 
-     * This regex 
+     * The regex below
      * 
          ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*)$
      * 
      * when the backslash and quotes are escaped is written as:
      * 
-       "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^"]*\\\"|[^,]*),(\\\"[^\\\"]*"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*)$"
+       "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
      */
     int bad = 0;   
    
-    string csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*).\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*)";
+    string csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
             
     if (inp.is_open()) {
         
@@ -58,21 +58,21 @@ int main(int argc, char** argv)
 
             getline(inp, line);
             
-            // TODO: Transform any embedded double quotes to a single quote.
-            // <--  
+                  
+            //TODO: add a transformation of: convert double quotes to single quote            
             try {
                 
                //sregex_iterator it(line.begin(), line.end(), csv_regex);
                
-               smatch match;
+               std::smatch match;
                
-               string result;
-               
+               //--string result;
+               bool bRc = regex_search(line, match, csv_regex);
+               /*
                if (regex_search(line, match, csv_regex) && match.size() > 1) {
                    
-                   cout << line << endl;
-                   
-                   for(size_t i = 0; i< match.size(); ++i) {
+                                     
+                   for(size_t i = 0; i < match.size(); ++i) {
                        
                       cout << string("submatch " ) << i << string(" is: ") << endl;
                       
@@ -81,55 +81,10 @@ int main(int argc, char** argv)
                                  
                } else {
                    
-                     cout << "-----------No Regex Match found on line:-----------"   << endl << line << string("\n----------------------------------\n") << endl;
+                     cout << string("-----------No Regex Match found on line:-----------")  << endl << line << string("\n----------------------------------\n") << endl;
                      bad++;
                } 
-               /* 
-               if (it->str().empty()) {
-
-                   continue;
-               } 
-               
-               while (it != it_end) {
-                   
-                 std::smatch match = *it;
-                 
-                 std::cout << match.str() << "\n";
-                 
-                 it++;
-               } 
-               // Process hits                    
-               for (auto i = 0; it != it_end; ++it, ++i) {
-                 
-                    switch (i) {
-     int bad = 0;  
-			case 0: // #er
-			    break;
-
-			case 1: // date
-			    break;
-
-			case 2: // fname
-			    break;
-
-			case 3: // lname
-			    break;
-
-			case 4:
-			    break;
-
-                        default:
-			    break;
-                    }
-                    
-                      
-                    // write line
-                   string debug {it->str() };
-                   int d = 10;
-                   output << it->str() << Latin_E << '\n';
-               }   
-               */               
-                             
+               */
             } catch (exception & e) {
                 
                 cerr << "exception caught: " << e.what() << '\n';

@@ -1,15 +1,7 @@
- 
 Format of CSV file:
 
 Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
 
-Examples:
+Regular expression with quote marks -- the " variety -- escaped, and backslash also escaped:
 
-
-
-"^(\d+),(\d\d-\d\d-\d\d\d\d),(\"[^\"]*\"|[^,]*){5,6},(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
-
-
-
-"^(\d+),(\d\d-\d\d-\d\d\d\d),(\"[^\"]*\"|[^,]*){7,}
-
+"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*)"
