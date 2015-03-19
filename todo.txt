@@ -6,6 +6,8 @@ See:
 1. http://www.regular-expressions.info/stdregex.html
 2. http://www.informit.com/articles/article.aspx?p=2079020
 
+TODO: The regex is not capturing each comma separated match rather it is matching the whole line.
+
 MySQL Connector for C++ Notes
 =============================
 

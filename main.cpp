@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
     if (argc != 2) {
 
-        cerr << "Enter the input file name as the first parameter\n";
+        cerr << "You must enter the input file name as the first parameter. Please rerun\n";
         return 0;
     }
 
@@ -35,6 +35,7 @@ int main(int argc, char** argv)
     string line;
 
     // regular expression for parsing .csv file.
+    // TODO: I want to capture each sub-part and not simply match the whole line (or merely two alternatives).
     regex csv_regex{"^(?:(?:\"((?:\"\"|[^\"])+)\"|([^,]*))(?:$|,))+$"};
     
     if (inp.is_open()) {
@@ -46,6 +47,10 @@ int main(int argc, char** argv)
             try {
                 
                sregex_iterator it(line.begin(), line.end(), csv_regex);
+               
+               cout << "line is below \n" << line << endl;
+               
+               cout << string("regex fist part\n") <<  it->str() << endl;
                
                if (it->str().empty()) {
                    continue;
@@ -76,6 +81,8 @@ int main(int argc, char** argv)
                     */ 
                       
                     // write line
+                   string debug {it->str() };
+                   int d = 10;
                    output << it->str() << Latin_E << '\n';
                }   
                              
