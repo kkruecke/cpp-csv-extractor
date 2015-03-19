@@ -7,7 +7,6 @@
 #include <iostream>
 #include <exception>
 
-
 using namespace std;
 
 /*
@@ -15,6 +14,10 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
+    int latin_E_hex = 0xCB;
+
+    string Latin_E = to_string(latin_E_hex);  // LATIN CAPITAL LETTER E WITH DIAERESIS. See http://www.w3.org/TR/MathML2/isolat1.html
+
     ifstream inp;
 
     if (argc != 2) {
@@ -47,9 +50,9 @@ int main(int argc, char** argv)
                if (it->str().empty()) {
                    continue;
                } 
-               
-               for (auto i = 0; i != it_end; ++it, ++i) {
-                   
+                
+               for (auto i = 0; it != it_end; ++it, ++i) {
+                 /* Process hits                   
                     switch (i) {
 
 			case 0: // #er
@@ -70,9 +73,10 @@ int main(int argc, char** argv)
                         default:
 			    break;
                     }
+                    */ 
                       
-                    // process line
-                    output << it->str() << '\n';
+                    // write line
+                   output << it->str() << Latin_E << '\n';
                }   
                              
                              
