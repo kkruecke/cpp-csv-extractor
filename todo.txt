@@ -16,45 +16,13 @@ I built the MySQL Connector for C++, libmysqlcppconn7, and its development packa
 
 /usr/local/src $ sudo apt-get source --compile mysql-connector-c++
 
-Documentation on MySQL Connector for C++
-----------------------------------------
+Lucene++
+========
 
-http://docs.oracle.com/cd/E17952_01/connector-cpp-en/connector-cpp-en.pdf
+clone from https://github.com/luceneplusplus/LucenePlusPlus
 
-Examples subidr
-~~~~~~~~~~~~~~~
+Links on How make and make install work
+---------------------------------------
 
-  /usr/local/src/mysql-connector-c++-1.1.3/examples
-
-Problems were Encountered
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Don't know how to set link configuration. Tried manually doing:
-
-g++  -o dist/Debug/GNU-Linux-x86/csv-extractor build/Debug/GNU-Linux-x86/main.o -L/usr/lib/libmysqlcppconn.so.7.1.1.3
-
-but got:  undefined reference to `get_driver_instance'
-
-
-mysql++3 Alternative C++ Library for MySQL
-==========================================
-
-Pluses
-------
-
-stl-like in design and implementation. It also does have documentation and examples.
-
-How to Install Directly
------------------------
-
-$ sudo aptitude install libmysql++-dev libmysql++3 libmysql++-doc
-
-How to Build from Source to Also Get Examples
----------------------------------------------
-
-$ sudo aptitude purge libmysql++-dev libmysql++3 libmysql++-doc
-
-/usr/local/src $ sudo apt-get build-dep mysql++
-/usr/local/src $ sudo apt-get source --compile mysql++
-
-/usr/local/src $ /usr/local/src $ sudo dpkg -i libmysql++-devXXX libmysql++3XXX libmysql++-docXXX
+1. http://www.codecoffee.com/tipsforlinux/articles/27.html
+2. http://stackoverflow.com/questions/528399/what-should-linux-unix-make-install-consist-of
