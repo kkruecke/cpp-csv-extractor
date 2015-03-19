@@ -1,5 +1,6 @@
-Manually adjust the line of text.
+The can be only one signee per line. Manually adjust the lines of text to comply with this requirement.
 
+There still are about three lines that fail the regex.
 
 C++11 regex library tutorial
 ============================

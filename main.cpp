@@ -84,8 +84,8 @@ int main(int argc, char** argv)
                 
             } else {
                 
-               cout << " ---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << "\n---------------" << endl;
-               failed_log << " ---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << "\n---------------" << endl;
+               cout << "---- Regex Failed on line " << line_no << " ------------\n" << adjusted_line << "\n---------------" << endl;
+               failed_log << "---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << endl;
                regex_failed++; 
                 
             }
