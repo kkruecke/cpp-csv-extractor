@@ -58,7 +58,10 @@ int main(int argc, char** argv)
 
             getline(inp, line);
                              
-            //TODO: add a transformation of: convert double quotes to single quote            
+            /*
+             * TODO: add a transformation of: convert double quotes to single quote
+             */ 
+                                
             try {
                 
             smatch  match;
@@ -74,6 +77,8 @@ int main(int argc, char** argv)
                 
             } else {
                 
+               cout << "\n================\nBad Line: \n" << line << endl;
+               cout << "\n=============" << endl;
                bad++; 
                 
             }
