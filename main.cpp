@@ -48,7 +48,7 @@ int main(int argc, char** argv)
      * 
        "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
      */
-    int bad = 0;   
+    int regex_failed = 0;   
    
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
             
@@ -56,13 +56,13 @@ int main(int argc, char** argv)
         
         while(inp.good()) {
 
-            getline(inp, line);
+          getline(inp, line);
                              
             /*
              * TODO: add a transformation of: convert double quotes to single quote
              */ 
                                 
-            try {
+          try {
                 
             smatch  match;
             
@@ -70,29 +70,27 @@ int main(int argc, char** argv)
                 
                 for(size_t i = 0; i < match.size(); ++i) {
                        
-                    cout << string("submatch " ) << i << string(" is: ") << endl;
+                    cout << "submatch " << i << " is: " << endl;
                       
                     cout << match[i] << endl;
                 }
                 
             } else {
-                
-               cout << "\n================\nBad Line: \n" << line << endl;
-               cout << "\n=============" << endl;
-               bad++; 
+                            
+               regex_failed++; 
                 
             }
                              
-            } catch (exception & e) {
+          } catch (exception & e) {
                 
-                cerr << "exception caught: " << e.what() << '\n';
-                cerr << "Terminating" << "\n";
-                return 0;
-            }
+               cerr << "exception caught: " << e.what() << '\n';
+               cerr << "Terminating" << "\n";
+               return 0;
+          }
         }
     }
     
-    cout << string("There were ") << bad << string(" total missing hits") << endl;
+    cout << string("There were ") << regex_failed << string(" total missing hits") << endl;
 
     inp.close();
     output.close();
