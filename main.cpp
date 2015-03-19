@@ -10,7 +10,12 @@
 using namespace std;
 
 /*
- *  Uses regular expression support in gcc-4.9 to extract comma separated text from file given in argv[1]. Requires g++-4.9 or higher.
+ * 
+ * Format of CSV file:
+ * 
+ * Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+ *
+ * Examples
  */
 int main(int argc, char** argv) 
 {
@@ -30,36 +35,74 @@ int main(int argc, char** argv)
     
     ofstream output(string("outputput.txt"));
 
-    sregex_iterator it_end; // <-- requires g++-4.9
+    sregex_iterator it_end; // regular expression support requires g++-4.9.
 
     string line;
-
-    // regular expression for parsing .csv file.
-    // TODO: I want to capture each sub-part and not simply match the whole line (or merely two alternatives).
-    regex csv_regex{"^(?:(?:\"((?:\"\"|[^\"])+)\"|([^,]*))(?:$|,))+$"};
     
+    /* 
+     * This regex 
+     * 
+         ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*)$
+     * 
+     * when the backslash and quotes are escaped is written as:
+     * 
+       "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^"]*\\\"|[^,]*),(\\\"[^\\\"]*"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*),(\\\"[^\\\"]*\\\"|[^,]*)$"
+     */
+    int bad = 0;   
+   
+    string csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*).\"(\\\"[^\\\"]*\\\"|[^,]*),\"(\\\"[^\\\"]*\\\"|[^,]*)";
+            
     if (inp.is_open()) {
-
+        
         while(inp.good()) {
 
             getline(inp, line);
-
+            
+            // TODO: Transform any embedded double quotes to a single quote.
+            // <--  
             try {
                 
-               sregex_iterator it(line.begin(), line.end(), csv_regex);
+               //sregex_iterator it(line.begin(), line.end(), csv_regex);
                
-               cout << "line is below \n" << line << endl;
+               smatch match;
                
-               cout << string("regex fist part\n") <<  it->str() << endl;
+               string result;
                
+               if (regex_search(line, match, csv_regex) && match.size() > 1) {
+                   
+                   cout << line << endl;
+                   
+                   for(size_t i = 0; i< match.size(); ++i) {
+                       
+                      cout << string("submatch " ) << i << string(" is: ") << endl;
+                      
+                      cout << match[i] << endl;
+                   }
+                                 
+               } else {
+                   
+                     cout << "-----------No Regex Match found on line:-----------"   << endl << line << string("\n----------------------------------\n") << endl;
+                     bad++;
+               } 
+               /* 
                if (it->str().empty()) {
+
                    continue;
                } 
-                
+               
+               while (it != it_end) {
+                   
+                 std::smatch match = *it;
+                 
+                 std::cout << match.str() << "\n";
+                 
+                 it++;
+               } 
+               // Process hits                    
                for (auto i = 0; it != it_end; ++it, ++i) {
-                 /* Process hits                   
+                 
                     switch (i) {
-
+     int bad = 0;  
 			case 0: // #er
 			    break;
 
@@ -78,14 +121,14 @@ int main(int argc, char** argv)
                         default:
 			    break;
                     }
-                    */ 
+                    
                       
                     // write line
                    string debug {it->str() };
                    int d = 10;
                    output << it->str() << Latin_E << '\n';
                }   
-                             
+               */               
                              
             } catch (exception & e) {
                 
@@ -95,6 +138,8 @@ int main(int argc, char** argv)
             }
         }
     }
+    
+    cout << string("There were ") << bad << string(" total missing hits") << endl;
 
     inp.close();
     output.close();
