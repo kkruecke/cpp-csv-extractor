@@ -63,11 +63,7 @@ int main(int argc, char** argv)
           regex two_dbl_quotes{"(\"\")"};
           
           string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
-          
-          /*
-           * TODO: add a transformation of: convert two consecutive occurances of double quotes with an escaped double quoted.
-           */                                                       
-          
+                             
           try {
                 
             smatch  match;
