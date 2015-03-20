@@ -25,7 +25,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    string Latin_E = ::to_string(0xCB);  // LATIN CAPITAL LETTER E WITH DIAERESIS. See http://www.w3.org/TR/MathML2/isolat1.html
+    string Latin_E = "Ž";  // Latin captial letter Z with caron: Ž. See: http://www.ascii-code.com/
 
     ifstream inp;
 
@@ -52,10 +52,10 @@ int main(int argc, char** argv)
     
     bool regex_failed = false;   
     
+    int line_no = 0;
+    
     if (inp.is_open()) {
-       
-        int line_no = 0;
- 
+     
         while(inp.good()) {
          
           ++line_no;  
@@ -74,14 +74,14 @@ int main(int argc, char** argv)
             if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
                 
                 for(size_t i = 1; i < match.size(); ++i) {
-                       
-                    //cout << "submatch " << i << " is: " << endl;
+                    
+                    //TODO: This line fails when I replace cout with output, which is an ofstream. Why?
+                    cout << match.str(i) << Latin_E << endl;
                       
-                    //cout << match[i] << endl;
                 }
                 
-            } else {
-                              
+            } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will return an empty string, so we 
+                                                      // that the input was not empty and we are not at eof.
                regex_failed = true;
                
                failed_lines.push_back(line_no);
@@ -99,10 +99,12 @@ int main(int argc, char** argv)
     inp.close();
     output.close();
     failed_log.close();
-    
+
+    cout << line_no << " Total lines read.\n";
+
     if (regex_failed) {
             
-        cout << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
+        cerr << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
         
         copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
     }

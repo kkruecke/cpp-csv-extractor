@@ -1,6 +1,8 @@
-The can be only one signee per line. Manually adjust the lines of text to comply with this requirement.
+TODOes
+======
 
-There still are about three lines that fail the regex.
+ Line 78 fails when I replace cout with output, which is an ofstream. Why?
+
 
 C++11 regex library tutorial
 ============================
