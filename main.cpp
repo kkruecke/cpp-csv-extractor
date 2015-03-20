@@ -54,8 +54,6 @@ int main(int argc, char** argv)
     
     if (inp.is_open()) {
        
-        
-
         int line_no = 0;
  
         while(inp.good()) {
@@ -102,10 +100,11 @@ int main(int argc, char** argv)
     output.close();
     failed_log.close();
     
-    if (regex_failed > 0) {
+    if (regex_failed) {
             
-            cout << string("Regex failed on ") << regex_failed << string(" lines:\n");
-            copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
+        cout << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
+        
+        copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
     }
 
     return(0);
