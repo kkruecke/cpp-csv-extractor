@@ -3,4 +3,6 @@ build/
 dist/
 Makefile
 output.txt
-petition.csv
+Failed_lines.txt
+*.csv
+*~
