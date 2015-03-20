@@ -8,8 +8,12 @@ class DbInserter {
    private $FileIter;
    private $file_name;
    private $LogFile;
-   private $signee;
-   private $text_report;
+   private $signee_no;
+   private $date;
+   private $city;
+   private $state;
+   private $country;
+   private $comments;
    private $insert_stmt;
    private $signees = array();
 
@@ -24,8 +28,12 @@ class DbInserter {
        $this->LogFile = new \SplFileObject("text-log.txt", "w");
        $this->LogFile->setFlags(\SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY);
          
-       $this->text_report = (string) "";
        $this->signee = (int) 0;
+	$this->date = (string) "";
+	$this->city = (string) "";
+	$this->state = (string) "";
+	$this->country = (string) "";
+	$this->comments = (string) "";
 
        // SQL statements with named placeholders 
        $this->insert_stmt = $db_handle->prepare("INSERT INTO petition(signee_no, date, city, state, country, comments)
@@ -34,43 +42,16 @@ class DbInserter {
        // bind the parameters in each statement
        $this->insert_stmt->bindParam(':signee_no', $this->signee_no, \PDO::PARAM_INT);
   
-       $this->insert_stmt->bindParam(':text_report',  $this->text_report,  \PDO::PARAM_STR);
+       $this->insert_stmt->bindParam(':date',  $this->date,  \PDO::PARAM_STR);
+       $this->insert_stmt->bindParam(':city',  $this->city,  \PDO::PARAM_STR);
+       $this->insert_stmt->bindParam(':state',  $this->state,  \PDO::PARAM_STR);
+       $this->insert_stmt->bindParam(':country',  $this->country,  \PDO::PARAM_STR);
+       $this->insert_stmt->bindParam(':comments',  $this->comments,  \PDO::PARAM_STR);
 
        $this->insert_count = 0;
        $this->txt_line_count = 0;
    }
 
-   protected function setUp()
-   { 
-       // Get array of signee_nos from mdrfoi
-       $select_query = "SELECT DISTINCT signee_no from mdrfoi ORDER BY signee_no";
-
-       $select_stmt = $this->getPDO()->query($select_query);
-
-       if ($select_stmt === FALSE) {
-
-            throw new Exception("SELECT DISTINCT signee_no from mdrfoi ORDER BY signee_no failed. Has MdrFileInserter.php been run?\n");
-            return;
-       } 
-      
-       // array of signee_nos from mdrfoi table 
-       $this->mdrfoi_signee_nos = $select_stmt->fetchAll(\PDO::FETCH_COLUMN, 0);
-      
-       sort($this->mdrfoi_signee_nos);
-      
-       $this->prior_signee_no = $this->mdrfoi_signee_nos[0]; // use the first in the array as the "prior" 
-
-       /*
-        * Make make sure the prospective signee_nos in the foitext files ( and its text) are not already in the foitext table. Since we know that the 
-        * signee_no is unique in foitext. Therefore simply query it for the max signee_no. Any more recent signee_nos
-        * will be greater than prior, existing mdr report keys already in foitext.
-        */ 
-
-       $max_select_stmt = $this->getPDO()->query("SELECT MAX(signee_no) from foitext"); 
-       $this->max_signee_no_in_foitext = (int) $max_select_stmt->fetch(\PDO::FETCH_COLUMN, 0); 
-   }
-
- 
    public function processLine($text, $line_number)
    {
           /*
