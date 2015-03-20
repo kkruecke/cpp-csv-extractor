@@ -36,6 +36,8 @@ int main(int argc, char** argv)
 
     string line;
     
+    vector<int> failed_lines;
+    
     /* 
      * The raw regex below
      * 
@@ -50,7 +52,7 @@ int main(int argc, char** argv)
             
     if (inp.is_open()) {
        
-        int regex_failed = 0;   
+        bool regex_failed = false;   
 
         int line_no = 0;
  
@@ -73,16 +75,18 @@ int main(int argc, char** argv)
                 
                 for(size_t i = 1; i < match.size(); ++i) {
                        
-                    cout << "submatch " << i << " is: " << endl;
+                    //cout << "submatch " << i << " is: " << endl;
                       
-                    cout << match[i] << endl;
+                    //cout << match[i] << endl;
                 }
                 
             } else {
                 
-               cout << "---- Regex Failed on line " << line_no << " ------------\n" << adjusted_line << "\n---------------" << endl;
-               failed_log << "---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << endl;
-               regex_failed++; 
+               //cout << "---- Regex Failed on line " << line_no << " ------------\n" << adjusted_line << "\n---------------" << endl;
+               //failed_log << "---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << endl;
+               regex_failed = true;
+               
+               failed_lines.push_back(line_no);
                 
             }
                              
@@ -93,15 +97,17 @@ int main(int argc, char** argv)
                return 0;
           }
         }
-
-        cout << string("There were ") << regex_failed << string(" total missing hits") << endl;
+        
+        if (regex_failed > 0) {
+            
+            cout << string("Regex failed on ") << regex_failed << string(" lines: ");
+            copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, ", "));
+        }
     }
     
-
     inp.close();
     output.close();
 
-       
     return(0);
 }
 
