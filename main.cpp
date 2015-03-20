@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
     inp.open(argv[1]);
     
-    ofstream output(string("outputput.txt"));
+    ofstream output(string("output.txt"));
     ofstream failed_log(string("Failed_lines.txt"));
 
     string line;
