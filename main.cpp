@@ -19,6 +19,7 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
+                        
     if (argc != 2) {
 
         cerr << "You must enter the input file name as the first parameter. Please rerun\n";
@@ -30,10 +31,8 @@ int main(int argc, char** argv)
     ifstream inp;
 
     inp.open(argv[1]);
-    
-    ofstream output(string("output.txt"));
-    ofstream failed_log(string("Failed_lines.txt"));
-
+    ofstream output_file(string("output.txt", ofstream::out));
+        
     string line;
     
     vector<int> failed_lines;
@@ -75,10 +74,10 @@ int main(int argc, char** argv)
                 
                 for(size_t i = 1; i < match.size(); ++i) {
                     
-                    //TODO: This line fails when I replace cout with output, which is an ofstream. Why?
-                    cout << match.str(i) << Latin_E << endl;
-                      
+                    output_file << match.str(i) << Latin_E;
                 }
+                
+                output_file << "\n";
                 
             } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will return an empty string, so we 
                                                       // that the input was not empty and we are not at eof.
@@ -97,9 +96,8 @@ int main(int argc, char** argv)
     }
     
     inp.close();
-    output.close();
-    failed_log.close();
-
+    output_file.close();
+    
     cout << line_no << " Total lines read.\n";
 
     if (regex_failed) {
