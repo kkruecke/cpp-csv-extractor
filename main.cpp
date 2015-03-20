@@ -43,16 +43,18 @@ int main(int argc, char** argv)
      * 
          ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*),("[^"]*"|[^,]*)$
      * 
-     * becomes, when the backslash and quotes are escaped, this c-style string:
+     * becomes, when both the backslash and quotes are escaped, this c-style string:
      * 
        "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"
      */
    
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
-            
+    
+    bool regex_failed = false;   
+    
     if (inp.is_open()) {
        
-        bool regex_failed = false;   
+        
 
         int line_no = 0;
  
@@ -81,13 +83,10 @@ int main(int argc, char** argv)
                 }
                 
             } else {
-                
-               //cout << "---- Regex Failed on line " << line_no << " ------------\n" << adjusted_line << "\n---------------" << endl;
-               //failed_log << "---- Regex Failed on line " << line_no << "------------\n" << adjusted_line << endl;
+                              
                regex_failed = true;
                
                failed_lines.push_back(line_no);
-                
             }
                              
           } catch (exception & e) {
@@ -97,16 +96,17 @@ int main(int argc, char** argv)
                return 0;
           }
         }
-        
-        if (regex_failed > 0) {
-            
-            cout << string("Regex failed on ") << regex_failed << string(" lines: ");
-            copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, ", "));
-        }
     }
     
     inp.close();
     output.close();
+    failed_log.close();
+    
+    if (regex_failed > 0) {
+            
+            cout << string("Regex failed on ") << regex_failed << string(" lines:\n");
+            copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
+    }
 
     return(0);
 }
