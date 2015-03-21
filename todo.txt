@@ -1,8 +1,7 @@
 TODOes
 ======
 
- Line 78 fails when I replace cout with output, which is an ofstream. Why?
-
+Finish DbInserter.php. Run it to populate the database.
 
 C++11 regex library tutorial
 ============================
