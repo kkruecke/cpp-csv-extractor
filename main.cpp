@@ -22,16 +22,19 @@ int main(int argc, char** argv)
                         
     if (argc != 2) {
 
-        cerr << "You must enter the input file name as the first parameter. Please rerun\n";
+        cerr << "Please re-run with the input file name as the first parameter.\n";
         return 0;
     }
 
-    string Latin_E = "Ž";  // Latin captial letter Z with caron: Ž. See: http://www.ascii-code.com/
+    // Latin captial letter Z with caron: Ž. See: http://www.ascii-code.com/
+    // It will replace comma as the delimeter in output.txt
+    string Latin_E = "Ž";  
+
+    ofstream output_file(string("output.txt", ofstream::out));
 
     ifstream inp;
 
     inp.open(argv[1]);
-    ofstream output_file(string("output.txt", ofstream::out));
         
     string line;
     
@@ -60,6 +63,8 @@ int main(int argc, char** argv)
           ++line_no;  
 
           getline(inp, line);
+
+          // Replace two consecutive double quotes within quoted, comma-separated segments with the single quote mark.
           
           regex two_dbl_quotes{"(\"\")"};
           
@@ -79,8 +84,8 @@ int main(int argc, char** argv)
                 
                 output_file << "\n";
                 
-            } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will return an empty string, so we 
-                                                      // that the input was not empty and we are not at eof.
+            } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will be an empty string; so we 
+                                                      // check that the input was not empty, and we are not at eof.
                regex_failed = true;
                
                failed_lines.push_back(line_no);
@@ -105,8 +110,13 @@ int main(int argc, char** argv)
         cerr << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
         
         copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
+
+        cerr << "Please manually corrected these lines and re-run\n";
     }
+
+    /*
+     *  Read and re-parse output.txt and write data to database using MySQL++.
+     */
 
     return(0);
 }
-
