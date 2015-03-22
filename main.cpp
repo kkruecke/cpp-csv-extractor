@@ -7,6 +7,8 @@
 #include <iostream>
 #include <exception>
 
+// MySQL++ headers
+
 using namespace std;
 
 /*
@@ -117,6 +119,14 @@ int main(int argc, char** argv)
     /*
      *  Read and re-parse output.txt and write data to database using MySQL++.
      */
+
+    mysqlpp::Connection conn("petition", "localhost", "user", "password", 3306);
+
+    // Template query
+    mysqlpp::Query query = con.query("INSERT INTO petition(signee_no, date, city, state, country, comments)
+                                                 VALUES(%0, %1, %2, %3, %4, %4)");
+
+    query.parse();
 
     return(0);
 }
