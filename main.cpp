@@ -10,7 +10,7 @@
 // MySQL++ headers
 /*
  *  Be sure that /usr/include/mysql, the mysql client headers, and /usr/inluce/msql++ paths are specified in the projects's configuration
- *  Be sure that /usr/lib is part of the projects library paths.
+ *  Note: By default, /usr/lib is part of the projects library paths.
  */ 
 #include <mysql++.h> 
 #include <ssqls.h>
@@ -99,8 +99,7 @@ int main(int argc, char** argv)
                     
                     output_file << match.str(i) << Latin_E;
                     // TODO: Set output template variables and run insert query.
-    
-                  
+                      
                 }
                 
                 output_file << "\n";
