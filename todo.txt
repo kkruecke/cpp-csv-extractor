@@ -13,15 +13,18 @@ See:
 
 TODO: The regex is not capturing each comma separated match rather it is matching the whole line.
 
-MySQL Connector for C++ Notes
-=============================
+MySQL++
+=======
 
-I built the MySQL Connector for C++, libmysqlcppconn7, and its development package, libmysqlcppconn-dev, from source by doing:
+1. Download into source code into /usr/local/src
+2. Followed README instructions to build of:
 
-~ $ sudo mkdir /usr/local/src
-~ $ chown -R root:kurt /usr/local/src
+   $ mkdir build; cd build
+   $ cmake ..
+   $ make
+   $ make install // sudo make install?
 
-/usr/local/src $ sudo apt-get source --compile mysql-connector-c++
+This adds the mysql++ headers in the /usr/include/mysql++, and it adds the dlls--actual and synmlinks--in /usr/lib/// sudo make install. both of which are system paths. 
 
 Lucene++
 ========
