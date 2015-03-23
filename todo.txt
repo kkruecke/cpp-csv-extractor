@@ -33,3 +33,10 @@ Links on How make and make install work
 
 1. http://www.codecoffee.com/tipsforlinux/articles/27.html
 2. http://stackoverflow.com/questions/528399/what-should-linux-unix-make-install-consist-of
+
+Links on compiling, linking, includle and dll-library paths
+-----------------------------------------------------------
+
+1. https://www.gnu.org/software/gsl/manual/html_node/Using-the-library.html#Using-the-library
+2. http://unix.stackexchange.com/questions/67781/use-shared-libraries-in-usr-local-lib
+3. http://unix.stackexchange.com/questions/67781/use-shared-libraries-in-usr-local-lib
