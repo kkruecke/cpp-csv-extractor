@@ -7,10 +7,6 @@
 #include <iostream>
 #include <exception>
 
-// MySQL++ headers
-#include <mysql++.h> // TODO: Make sure that /usr/local/include/ contains the MySQL++ headers and the system include path also points there.
-#include <ssqls.h>
-
 using namespace std;
 
 /*
@@ -61,12 +57,7 @@ int main(int argc, char** argv)
     int line_no = 0;
     
     if (inp.is_open()) {
-        
-        mysqlpp::Connection conn("petition", "localhost", "user", "password", 3306);
-        
-        // Begin transaction
-        mysqlpp::Transaction trans(con); // TODO: adjust input params.
-     
+ 
         while(inp.good()) {
          
           ++line_no;  
@@ -89,9 +80,6 @@ int main(int argc, char** argv)
                 for(size_t i = 1; i < match.size(); ++i) {
                     
                     output_file << match.str(i) << Latin_E;
-                    // TODO: Set output template variables and run insert query.
-    
-                  
                 }
                 
                 output_file << "\n";
@@ -103,27 +91,7 @@ int main(int argc, char** argv)
                failed_lines.push_back(line_no);
             }
                              
-            /*
-             * Note: Exceptions take from MySQL++ example, transaction.cpp
-             */
-          } catch (const mysqlpp::BadQuery& er) { 
-		// Handle any query errors
-		cerr << "Query error: " << er.what() << endl;
-		return -1;
-	    } 
-	    catch (const mysqlpp::BadConversion& er) {	
-		// Handle bad conversions
-		cerr << "Conversion error: " << er.what() << endl <<
-				"\tretrieved data size: " << er.retrieved <<
-				", actual size: " << er.actual_size << endl;
-		return -1;
-	    }
-	    catch (const mysqlpp::Exception& er) {
-		// Catch-all for any other MySQL++ exceptions
-		cerr << "Error: " << er.what() << endl;
-		return -1;
-	    }
-            catch (exception & e) {
+          } catch (exception & e) {
                 
                cerr << "exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
@@ -150,7 +118,7 @@ int main(int argc, char** argv)
      *  Read and re-parse output.txt and write data to database using MySQL++.
      */
 
-    
+    mysqlpp::Connection conn("petition", "localhost", "user", "password", 3306);
 
     // Template query
     mysqlpp::Query query = con.query("INSERT INTO petition(signee_no, date, city, state, country, comments)
