@@ -8,7 +8,11 @@
 #include <exception>
 
 // MySQL++ headers
-#include <mysql++.h> // TODO: Make sure that /usr/local/include/ contains the MySQL++ headers and the system include path also points there.
+/*
+ *  Be sure that /usr/include/mysql, the mysql client headers, and /usr/inluce/msql++ paths are specified in the projects's configuration
+ *  Be sure that /usr/lib is part of the projects library paths.
+ */ 
+#include <mysql++.h> 
 #include <ssqls.h>
 
 using namespace std;
