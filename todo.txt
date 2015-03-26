@@ -24,6 +24,15 @@ $ sudo dpkg -i libmysql++3_3.2.0+pristine-1_amd64.deb
 $ sudo dpkg -i libmysql++-dev_3.2.0+pristine-1_amd64.deb
 $ sudo dpkg -i libmysql++-doc_3.2.0+pristine-1_all.deb 
 
+After installing update the apt and aptitude caches:
+
+$ sudo apt-get update 
+$ sudo aptitude update
+
+Then do the folowing to see files locations:
+
+$ sudo dkpg -L <package-name>
+
 Lucene++
 ========
 
