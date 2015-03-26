@@ -94,8 +94,10 @@ int main(int argc, char** argv)
                 for(size_t i = 1; i < match.size(); ++i) {
                     
                     output_file << match.str(i) << Latin_E;
-                    // TODO: Set output template variables and run insert query.
-                      
+                    /*
+                     * TODO: 1. Check whether signee_no exists in database. 
+                             2. If not, insert new record, converting dates and strings to MySQL dates and strings, respectively.
+                     */ 
                 }
                 
                 output_file << "\n";
