@@ -39,6 +39,8 @@ Lucene++
 $ sudo apt-get install  libboost-date-time-dev libboost-test-dev
 $ sudo apt-get source --compile liblucene++-dev 
 
+TODO: install generated .deb files.
+
 Links on Compiling and Linking
 ==============================
 
