@@ -36,7 +36,7 @@ $ sudo dkpg -L <package-name>
 Lucene++
 ========
 
-clone from https://github.com/luceneplusplus/LucenePlusPlus
+$ sudo apt-get source --compile liblucene++-dev (or ppa that has latest version)
 
 Links on Compiling and Linking
 ==============================
