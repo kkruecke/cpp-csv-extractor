@@ -74,10 +74,12 @@ int main(int argc, char** argv)
          
           ++line_no;  
 
-          getline(inp, line);
+          /*
+           * TODO:  Replace ::getline() with a class that gets the complete comments, reading ahead to check whether the signers comments continue onto the next line.            *
+           * and replacing double quotes in comments with single quotes. 
+           */
+          getline(inp, line); 
 
-          // Replace two consecutive double quotes within quoted, comma-separated segments with the single quote mark.
-          
           regex two_dbl_quotes{"(\"\")"};
           
           string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
@@ -102,7 +104,7 @@ int main(int argc, char** argv)
                 
             } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will be an empty string; so we 
                                                       // check that the input was not empty, and we are not at eof.
-               failed_lines.push_back(line_no);
+               failed_lines.push_back(line_no); // TODO: get rid of this when the line-reader class is done.
             }
                              
             /*
