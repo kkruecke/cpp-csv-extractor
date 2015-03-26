@@ -29,17 +29,18 @@ After installing update the apt and aptitude caches:
 $ sudo apt-get update 
 $ sudo aptitude update
 
-Then do the folowing to see files locations:
-
-$ sudo dkpg -L <package-name>
-
 Lucene++
 ========
 
 $ sudo apt-get install  libboost-date-time-dev libboost-test-dev
 $ sudo apt-get source --compile liblucene++-dev 
 
-TODO: install generated .deb files.
+Then do the folowing: 
+
+$ sudo dpkg -i liblucene++0_3.0.4-0ubuntu3_amd64.deb 
+$ sudo dpkg -i liblucene++-contrib0_3.0.4-0ubuntu3_amd64.deb 
+$ sudo dpkg -i liblucene++-dev_3.0.4-0ubuntu3_amd64.deb 
+$ sudo dpkg -i liblucene++-doc_3.0.4-0ubuntu3_all.deb 
 
 Links on Compiling and Linking
 ==============================
