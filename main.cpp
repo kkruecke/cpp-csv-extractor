@@ -56,8 +56,6 @@ int main(int argc, char** argv)
    
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
     
-    bool regex_failed = false;   
-    
     int line_no = 0;
     
     if (inp.is_open()) {
@@ -100,12 +98,10 @@ int main(int argc, char** argv)
                      */ 
                 }
                 
-                output_file << "\n";
+                output_file << "\n"; 
                 
             } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will be an empty string; so we 
                                                       // check that the input was not empty, and we are not at eof.
-               regex_failed = true;
-               
                failed_lines.push_back(line_no);
             }
                              
@@ -147,7 +143,7 @@ int main(int argc, char** argv)
     
     cout << line_no << " Total lines read.\n";
 
-    if (regex_failed) {
+    if (failed_lines.size() > 0) {
             
         cerr << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
         
