@@ -1,7 +1,7 @@
 TODOes
 ======
 
-Finish DbInserter.php. Run it to populate the database.
+Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
 
 C++11 regex library tutorial
 ============================
@@ -13,8 +13,8 @@ See:
 
 TODO: The regex is not capturing each comma separated match rather it is matching the whole line.
 
-MySQL++
-=======
+MySQL++ Class Library
+=====================
 
 $ sudo apt-get source --compile libmysql++-dev
 
@@ -37,6 +37,9 @@ Lucene++
 ========
 
 clone from https://github.com/luceneplusplus/LucenePlusPlus
+
+Links on Compiling and Linking
+==============================
 
 Links on How make and make install work
 ---------------------------------------

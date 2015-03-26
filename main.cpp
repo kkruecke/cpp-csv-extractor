@@ -8,10 +8,6 @@
 #include <exception>
 
 // MySQL++ headers
-/*
- *  Be sure that /usr/include/mysql, the mysql client headers, and /usr/inluce/msql++ paths are specified in the projects's configuration
- *  Note: By default, /usr/lib is part of the projects library paths.
- */ 
 #include <mysql++.h> 
 #include <ssqls.h>
 
@@ -27,7 +23,7 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
-                        
+    
     if (argc != 2) {
 
         cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -115,11 +111,13 @@ int main(int argc, char** argv)
              * Note: Exceptions take from MySQL++ example, transaction.cpp
              */
           } catch (const mysqlpp::BadQuery& er) { 
+              
 		// Handle any query errors
 		cerr << "Query error: " << er.what() << endl;
 		return -1;
 	    } 
-	    catch (const mysqlpp::BadConversion& er) {	
+	    catch (const mysqlpp::BadConversion& er) {
+                
 		// Handle bad conversions
 		cerr << "Conversion error: " << er.what() << endl <<
 				"\tretrieved data size: " << er.retrieved <<
@@ -127,13 +125,15 @@ int main(int argc, char** argv)
 		return -1;
 	    }
 	    catch (const mysqlpp::Exception& er) {
+                
 		// Catch-all for any other MySQL++ exceptions
 		cerr << "Error: " << er.what() << endl;
 		return -1;
 	    }
             catch (exception & e) {
                 
-               cerr << "exception caught: " << e.what() << '\n';
+               // catch-all for C++11 exceptions 
+               cerr << "C++11 exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
                return 0;
           }
