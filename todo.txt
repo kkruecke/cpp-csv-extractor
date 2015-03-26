@@ -36,7 +36,8 @@ $ sudo dkpg -L <package-name>
 Lucene++
 ========
 
-$ sudo apt-get source --compile liblucene++-dev (or ppa that has latest version)
+$ sudo apt-get install  libboost-date-time-dev libboost-test-dev
+$ sudo apt-get source --compile liblucene++-dev 
 
 Links on Compiling and Linking
 ==============================
