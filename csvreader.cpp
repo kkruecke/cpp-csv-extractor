@@ -1,4 +1,5 @@
 #include "csvreader.h"
+#include <iostream>
 
 using namespace std;
 
@@ -43,7 +44,31 @@ sregex_iterator CsvReader::getIterator()
        if (!line.empty()) {
            
        
-          // TODO: Consider changing from regex_search() to regex_iterator or maybe returning a vector<string> -- or whatever is right. 
+          /*
+           * For sregex_iterator example, see:
+           *   http://en.cppreference.com/w/cpp/regex
+           * 
+           * See also:
+           * https://www.topcoder.com/community/data-science/data-science-tutorials/using-regular-expressions-2/
+           */ 
+            
+          auto matches_iter = sregex_iterator(line.begin(), line.end(), csv_regex);
+
+          auto matches_end = sregex_iterator();
+    
+          auto match_count = distance(matches_iter, matches_end);
+        
+          cout << "==> There are " << match_count << "sregex_iterator matches " << endl;
+        
+          for(; matches_iter != matches_end; ++matches_iter){
+            
+             smatch match = *matches_iter;
+             
+            
+            cout << "Iterator matches: " <<  match.str() << endl;
+            
+          }
+        
           if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
            
              for(size_t i = 1; i < match.size(); ++i) {
