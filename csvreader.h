@@ -1,22 +1,18 @@
-/* 
- * File:   csvreader.h
- * Author: kurt
- *
- * Created on March 26, 2015, 6:09 PM
- */
-
 #ifndef CSVREADER_H
 #define	CSVREADER_H
+
+#include <regex>
 class CsvReader {
     
     ifstream input;
     string   line;
     string   next_line;
     int      line_number;
+    std::regex csv_regex;
         
 public:
     
-    CsvReader(std::string file_name);
+    CsvReader(std::string file_name, std::regex reg);
     std::string getNextSigner();
     
     int getLine() const;
@@ -24,4 +20,3 @@ public:
 
 
 #endif	/* CSVREADER_H */
-
