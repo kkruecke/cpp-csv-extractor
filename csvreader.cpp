@@ -3,16 +3,12 @@
 
 using namespace std;
 
-bool CsvReader::eof() const
-{
-    return true;
-}
 
 /*
 Read and concatenate while regex does not fail
 Return iterator or vector containing each field
 */
-CsvReader::CsvReader(string file_name, regex rgexp) : csv_regex(rgexp), line_no(0)
+CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), line_no(0)
 {
     input.open(file_name);
 
@@ -41,7 +37,7 @@ sregex_iterator CsvReader::getIterator()
        smatch  match;
        string  output;
 
-       if (!line.empty()) {
+       if (!adjusted_line.empty()) {
            
        
           /*
@@ -51,14 +47,14 @@ sregex_iterator CsvReader::getIterator()
            * See also:
            * https://www.topcoder.com/community/data-science/data-science-tutorials/using-regular-expressions-2/
            */ 
-            
-          auto matches_iter = sregex_iterator(line.begin(), line.end(), csv_regex);
+          /* No matches are being found 
+          auto matches_iter = sregex_iterator(adjusted_line.begin(), adjusted_line.end(), csv_regex);
 
           auto matches_end = sregex_iterator();
     
           auto match_count = distance(matches_iter, matches_end);
         
-          cout << "==> There are " << match_count << "sregex_iterator matches " << endl;
+          cout << "==> There are " << match_count << " sregex_iterator matches " << endl;
         
           for(; matches_iter != matches_end; ++matches_iter){
             
@@ -68,13 +64,17 @@ sregex_iterator CsvReader::getIterator()
             cout << "Iterator matches: " <<  match.str() << endl;
             
           }
+           */ 
         
           if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
            
+             
              for(size_t i = 1; i < match.size(); ++i) {
-               
+                    
+                cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
+             }
                 
-              }
+             cout << "\n"; // cout was output_file
            
            
            } else {

@@ -11,16 +11,21 @@ class CsvReader {
     std::string   line;
     std::string   next_line;
     int      line_no;
-    std::regex csv_regex;
+    const std::regex& csv_regex;
         
 public:
     
-    CsvReader(std::string file_name, std::regex reg);
+    CsvReader(std::string file_name, const std::regex& reg);
     
     std::sregex_iterator getIterator();
     bool eof() const;
         
 };
+
+inline bool CsvReader::eof() const
+{
+    return input.eof();
+}
 
 
 #endif	/* CSVREADER_H */
