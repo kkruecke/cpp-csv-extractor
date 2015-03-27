@@ -1,11 +1,12 @@
-#include <csvreader.h>
+#include "csvreader.h"
 
-CsvReader::eof()
+using namespace std;
+
+bool CsvReader::eof() const
 {
+    return true;
 }
 
-CsvReader::getNextIterator()
-{
 /*
 Read and concatenate while regex does not fail
 Return iterator or vector containing each field
@@ -20,16 +21,12 @@ CsvReader::CsvReader(string file_name, regex rgexp) : csv_regex(rgexp), line_no(
     }	    
 }
 
-CsvReader::getIterator()
+sregex_iterator CsvReader::getIterator() 
 {    
   if (input.good()) {
     
      ++line_no;  
-
-     /*
-      * TODO:  Replace ::getline() with a class that gets the complete comments, reading ahead to check whether the signers comments continue onto the next line.            *
-      * and replacing double quotes in comments with single quotes. 
-      */
+    
      string line;
 
      getline(input, line); 
@@ -44,15 +41,14 @@ CsvReader::getIterator()
        string  output;
 
        if (!line.empty()) {
-          // TODO: Change code from regex_search() to regex_iterator 
+           
+       
+          // TODO: Consider changing from regex_search() to regex_iterator or maybe returning a vector<string> -- or whatever is right. 
           if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
            
              for(size_t i = 1; i < match.size(); ++i) {
                
-               /*
-                * TODO: 1. Check whether signee_no exists in database. 
-                        2. If not, insert new record, converting dates and strings to MySQL dates and strings, respectively.
-                */ 
+                
               }
            
            
@@ -65,4 +61,5 @@ CsvReader::getIterator()
      } catch (exception& e) {
 
      }
+   }  // endif
 }	  
