@@ -20,19 +20,21 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
 
 sregex_iterator CsvReader::getIterator() 
 {    
-  if (input.good()) {
+   ++line_no;  
     
-     ++line_no;  
-    
-     string line;
+   string line;
 
-     getline(input, line); 
+   getline(input, line); 
 
-     regex two_dbl_quotes{"(\"\")"};
-     
-     string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
+   regex two_dbl_quotes{"(\"\")"};
+   
+   string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
+   
+   bool search_result = false;
                         
-     try {
+   try {
+
+     while (!search_result)  {
            
        smatch  match;
        string  output;
@@ -81,11 +83,12 @@ sregex_iterator CsvReader::getIterator()
            } else {
 
                // concatenate with prior line, continue loop                                    
+               cout << "regex_search() failed" << endl;
 
            }
-       }
+       } // endif
+      }  // end while
      } catch (exception& e) {
 
      }
-   }  // endif
 }	  
