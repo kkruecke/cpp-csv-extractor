@@ -65,8 +65,9 @@ sregex_iterator CsvReader::getIterator()
             
           }
            */ 
-        
-          if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
+           auto xxx =regex_search(adjusted_line, match, csv_regex); // debug
+           
+           if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
            
              
              for(size_t i = 1; i < match.size(); ++i) {
