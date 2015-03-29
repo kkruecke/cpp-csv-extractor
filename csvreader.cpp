@@ -66,14 +66,32 @@ sregex_iterator CsvReader::getIterator()
           }
            */ 
          cout << "Line: " << line << endl;
-                                
-         bool hits = regex_search(line, match, csv_regex) ;
-           
+
+         auto matches_iter = sregex_iterator(line.begin(), line.end(), csv_regex);
+
+         auto matches_end = sregex_iterator();
+    
+         auto match_count = distance(matches_iter, matches_end);
+        
+         cout << "==> There are " << match_count << " sregex_iterator matches " << endl;
+        
+       /*                         
+         bool hits = regex_search(line, match, csv_regex);
+
          if (!hits) {
+          */   
+         if (matches_iter == matches_end) {   
                
              prior_line = line;
                
          } else {
+             // TODO: This is not working. Only one hit is returned. Why?
+             for (auto iter2 = matches_iter; iter2 != matches_end; ++iter2) { 
+                 
+                 string str = iter2->str();
+                 
+                 cout << str << endl; // debug 
+             }
                
              break;
          }
