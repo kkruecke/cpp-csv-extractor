@@ -18,7 +18,6 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
     }	   
 }
 
-// TODO: Design main getline/search_regex loop(s). 
 sregex_iterator CsvReader::getIterator() 
 {    
  ++line_no;  
@@ -81,10 +80,10 @@ sregex_iterator CsvReader::getIterator()
            
     } // end inner while(1)     
            
- // We now have the line            
+    // We now have the line. What do we want to return?            
     for(size_t i = 1; i < match.size(); ++i) {
                     
-           cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
+         cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
                     
     }     // end for
     
