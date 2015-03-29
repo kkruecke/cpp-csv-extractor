@@ -35,10 +35,11 @@ int main(int argc, char** argv)
         
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
-    
+    smatch matches;
+ 
     while (!reader.eof()) {
         
-        sregex_iterator iter = reader.getIterator();
+        matches = reader.getMatches();
         int debug = 10;
     }
 

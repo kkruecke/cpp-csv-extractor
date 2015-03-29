@@ -17,9 +17,8 @@ public:
     
     CsvReader(std::string file_name, const std::regex& reg);
     
-    std::sregex_iterator getIterator();
+    std::smatch getMatches();
     bool eof() const;
-        
 };
 
 inline bool CsvReader::eof() const

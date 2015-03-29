@@ -1,8 +1,8 @@
 #include "csvreader.h"
 #include <iostream>
+#include <utility>
 
 using namespace std;
-
 
 /*
 Read and concatenate while regex does not fail
@@ -11,23 +11,24 @@ Return iterator or vector containing each field
 CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), line_no(0)
 {
     input.open(file_name);
-
+ 
     if (input.is_open()) {
 
        // TODO: Check for errors.
     }	   
 }
 
-sregex_iterator CsvReader::getIterator() 
+smatch CsvReader::getMatches() 
 {    
  ++line_no;  
     
  string line;
  regex two_dbl_quotes{"(\"\")"};
                            
+ smatch  match;
+
  try {
                
-    smatch  match;
     string line, prior_line;
        
     while (1) {
@@ -56,7 +57,7 @@ sregex_iterator CsvReader::getIterator()
         
           cout << "==> There are " << match_count << " sregex_iterator matches " << endl;
         
-          for(; matches_iter != matches_end; ++matches_iter){
+          for(; matches_iter != matches_end; ++matches_iter){ // TODO: Could not get this to work.
             
              smatch match = *matches_iter;
              
@@ -64,34 +65,15 @@ sregex_iterator CsvReader::getIterator()
             cout << "Iterator matches: " <<  match.str() << endl;
             
           }
-           */ 
-         cout << "Line: " << line << endl;
-
-         auto matches_iter = sregex_iterator(line.begin(), line.end(), csv_regex);
-
-         auto matches_end = sregex_iterator();
-    
-         auto match_count = distance(matches_iter, matches_end);
-        
-         cout << "==> There are " << match_count << " sregex_iterator matches " << endl;
-        
-       /*                         
+         */ 
+                                
          bool hits = regex_search(line, match, csv_regex);
 
          if (!hits) {
-          */   
-         if (matches_iter == matches_end) {   
                
              prior_line = line;
                
          } else {
-             // TODO: This is not working. Only one hit is returned. Why?
-             for (auto iter2 = matches_iter; iter2 != matches_end; ++iter2) { 
-                 
-                 string str = iter2->str();
-                 
-                 cout << str << endl; // debug 
-             }
                
              break;
          }
@@ -105,7 +87,10 @@ sregex_iterator CsvReader::getIterator()
                     
     }     // end for
     
+    
   } catch (exception& e) {
 
   }
+
+  return std::move(match);
 }	  
