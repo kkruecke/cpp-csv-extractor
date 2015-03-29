@@ -11,7 +11,7 @@ class CsvReader {
     std::string   line;
     std::string   next_line;
     int      line_no;
-    const std::regex& csv_regex;
+    std::regex csv_regex;
         
 public:
     

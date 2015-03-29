@@ -15,33 +15,32 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
     if (input.is_open()) {
 
        // TODO: Check for errors.
-    }	    
+    }	   
 }
 
+// TODO: Design main getline/search_regex loop(s). 
 sregex_iterator CsvReader::getIterator() 
 {    
    ++line_no;  
     
    string line;
-
-   getline(input, line); 
-
    regex two_dbl_quotes{"(\"\")"};
-   
-   string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
    
    bool search_result = false;
                         
    try {
 
-     while (!search_result)  {
+    while (!search_result)  {
            
        smatch  match;
        string  output;
 
-       if (!adjusted_line.empty()) {
-           
-       
+       getline(input, line); 
+   
+       if (!line.empty()) {
+
+         string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
+
           /*
            * For sregex_iterator example, see:
            *   http://en.cppreference.com/w/cpp/regex
