@@ -67,9 +67,11 @@ sregex_iterator CsvReader::getIterator()
             
           }
            */ 
-           auto xxx =regex_search(adjusted_line, match, csv_regex); // debug
+           cout << "Line: " << adjusted_line << endl;
            
-           if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
+           search_result = regex_search(adjusted_line, match, csv_regex); // debug
+           
+           if (search_result && match.size() > 1) {
            
              
              for(size_t i = 1; i < match.size(); ++i) {
@@ -78,8 +80,7 @@ sregex_iterator CsvReader::getIterator()
              }
                 
              cout << "\n"; // cout was output_file
-           
-           
+                      
            } else {
 
                // concatenate with prior line, continue loop                                    
