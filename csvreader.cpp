@@ -21,25 +21,25 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
 // TODO: Design main getline/search_regex loop(s). 
 sregex_iterator CsvReader::getIterator() 
 {    
-   ++line_no;  
+ ++line_no;  
     
-   string line;
-   regex two_dbl_quotes{"(\"\")"};
-   
-   bool search_result = false;
-                        
-   try {
-
-    while (!search_result)  {
-           
-       smatch  match;
-       string  output;
+ string line;
+ regex two_dbl_quotes{"(\"\")"};
+                           
+ try {
+               
+    smatch  match;
+    string line, prior_line;
+       
+    while (1) {
 
        getline(input, line); 
    
-       if (!line.empty()) {
-
-         string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
+       if (line.empty()) {
+           break;
+       }
+       
+       line = regex_replace(line, two_dbl_quotes, string{"'"});
 
           /*
            * For sregex_iterator example, see:
@@ -66,29 +66,29 @@ sregex_iterator CsvReader::getIterator()
             
           }
            */ 
-           cout << "Line: " << adjusted_line << endl;
+         cout << "Line: " << line << endl;
+                                
+         bool hits = regex_search(line, match, csv_regex) ;
            
-           search_result = regex_search(adjusted_line, match, csv_regex); // debug
+         if (!hits) {
+               
+             prior_line = line;
+               
+         } else {
+               
+             break;
+         }
            
-           if (search_result && match.size() > 1) {
+    } // end inner while(1)     
            
-             
-             for(size_t i = 1; i < match.size(); ++i) {
+ // We now have the line            
+    for(size_t i = 1; i < match.size(); ++i) {
                     
-                cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
-             }
-                
-             cout << "\n"; // cout was output_file
-                      
-           } else {
+           cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
+                    
+    }     // end for
+    
+  } catch (exception& e) {
 
-               // concatenate with prior line, continue loop                                    
-               cout << "regex_search() failed" << endl;
-
-           }
-       } // endif
-      }  // end while
-     } catch (exception& e) {
-
-     }
+  }
 }	  
