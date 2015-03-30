@@ -1,7 +1,8 @@
 TODOes
 ======
 
-Read a C++11 regex tutorial and examples.
+Read a C++11 regex tutorial on regex_iterator.
+Read about move semantics to decide about "return" line of CsvReader::getMatches().
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
 
 C++11 regex library tutorial

@@ -35,10 +35,6 @@ smatch CsvReader::getMatches()
 
        getline(input, line); 
    
-       if (line.empty()) {
-           break;
-       }
-       
        line = regex_replace(line, two_dbl_quotes, string{"'"});
 
           /*
@@ -80,17 +76,18 @@ smatch CsvReader::getMatches()
            
     } // end inner while(1)     
            
-    // We now have the line. What do we want to return?            
+    // TODO: Remove this debug code.
+    //Start Debug code
     for(size_t i = 1; i < match.size(); ++i) {
                     
          cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
                     
-    }     // end for
-    
+    }   // End Debug code
+   
     
   } catch (exception& e) {
 
   }
 
-  return std::move(match);
+  return std::move(match); // Is this implicit?
 }	  
