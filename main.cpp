@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     smatch matches;
  
     while (!reader.eof()) {
-        
+            
         matches = reader.getMatches();
         int debug = 10;
     }

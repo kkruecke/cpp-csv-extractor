@@ -18,13 +18,11 @@ public:
     CsvReader(std::string file_name, const std::regex& reg);
     
     std::smatch getMatches();
-    bool eof() const;
+    bool eof() const; // Mimic ifstream calls
 };
 
 inline bool CsvReader::eof() const
 {
     return input.eof();
 }
-
-
 #endif	/* CSVREADER_H */

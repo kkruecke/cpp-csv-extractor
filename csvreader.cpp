@@ -34,7 +34,7 @@ smatch CsvReader::getMatches()
     while (1) {
 
         // TODO: fails when end of file encountered, which results in infinite loop on last line.
-        
+        // Why does getline return an empty string on eof?
         getline(input, line); 
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
