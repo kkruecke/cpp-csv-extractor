@@ -1,6 +1,9 @@
 TODOes
 ======
 
+
+Don't know why I get perl locale error messages in Netbeans.
+
 The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy. Is it due to unicode somehow?
 
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
