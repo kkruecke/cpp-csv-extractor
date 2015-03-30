@@ -33,6 +33,7 @@ smatch CsvReader::getMatches()
        
     while (1) {
 
+        // TODO: fails to check for eof(), which results in infinite loop on last line.
         getline(input, line); 
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
@@ -42,7 +43,7 @@ smatch CsvReader::getMatches()
         bool hits = regex_search(line, match, csv_regex);
         auto size = match.size();
 
-        if (!hits) { // TODO: This works even on the first line that has extended-line comments.
+        if (!hits) { // TODO: retest
                
              prior_line = line;
                
