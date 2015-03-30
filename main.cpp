@@ -23,8 +23,24 @@ int main(int argc, char** argv)
         cerr << "Please re-run with the input file name as the first parameter.\n";
         return 0;
     }
-    
-    CsvReader reader(argv[1], regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"});
+
+   /*
+    * Format of csv file: 
+    * Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+    *
+    * Prospective regex for above format:
+    *
+    *  ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),($|"[^"]+"$|[^"]+$)    
+    *
+    * And as a C string:
+    *
+    *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"$|[^\"]+$)"
+    */ 
+
+    regex prospective_regex {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"$|[^\"]+$)"};
+                            
+    //--CsvReader reader(argv[1], regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"});
+    CsvReader reader(argv[1], prospective_regex); 
     
     mysqlpp::Connection conn("petition", "localhost", "petition", "kk0457", 3306);
     
