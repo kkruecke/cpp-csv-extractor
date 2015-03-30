@@ -34,6 +34,8 @@ smatch CsvReader::getRegexMatches()
     while (1) {
         
         getline(input, line); 
+        
+        cout << line << endl; // debug
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
         

@@ -1,8 +1,9 @@
 TODOes
 ======
 
-https://www.youtube.com/watch?v=U6mgsPqV32A
+The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy.
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
+
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
 
 C++11 regex library tutorial

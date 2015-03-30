@@ -40,6 +40,7 @@ int main(int argc, char** argv)
     */ 
 
     regex csv_regex {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
+    //--regex csv_regex{"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(?:($)|(\"[^\"]+\"|[^\"]+)$)"};
                             
     CsvReader reader(argv[1], csv_regex); 
     
@@ -54,7 +55,9 @@ int main(int argc, char** argv)
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
 
     while (reader.moreLines()) {
-            
+
+        cout << "-----------------------\n"; // Debug code
+    
         smatch matches = reader.getRegexMatches();
         
         try {
@@ -62,6 +65,7 @@ int main(int argc, char** argv)
            for(size_t i = 1; i < matches.size(); ++i) {
                     
               // TODO: Write to database.
+               
               cout << matches.str(i) << endl; 
                     
            }  
