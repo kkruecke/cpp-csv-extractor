@@ -1,7 +1,8 @@
 TODOes
 ======
 
-The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy.
+The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy. Is it due to unicode somehow?
+
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.

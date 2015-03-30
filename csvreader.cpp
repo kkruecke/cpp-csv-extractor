@@ -34,14 +34,14 @@ smatch CsvReader::getRegexMatches()
     while (1) {
         
         getline(input, line); 
-        
-        cout << line << endl; // debug
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
         
         line = prior_line + line;
 
         bool hits = regex_search(line, match, csv_regex);
+
+        cout << line << endl; // debug code
         
         if (!hits) { 
                
