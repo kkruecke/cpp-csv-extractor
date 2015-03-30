@@ -33,7 +33,8 @@ smatch CsvReader::getMatches()
        
     while (1) {
 
-        // TODO: fails to check for eof(), which results in infinite loop on last line.
+        // TODO: fails when end of file encountered, which results in infinite loop on last line.
+        
         getline(input, line); 
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
