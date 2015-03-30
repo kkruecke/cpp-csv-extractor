@@ -33,48 +33,25 @@ smatch CsvReader::getMatches()
        
     while (1) {
 
-       getline(input, line); 
+        getline(input, line); 
    
-       line = regex_replace(line, two_dbl_quotes, string{"'"});
-
-          /*
-           * For sregex_iterator example, see:
-           *   http://en.cppreference.com/w/cpp/regex
-           * 
-           * See also:
-           * https://www.topcoder.com/community/data-science/data-science-tutorials/using-regular-expressions-2/
-           */ 
-          /* No matches are being found 
-          auto matches_iter = sregex_iterator(adjusted_line.begin(), adjusted_line.end(), csv_regex);
-
-          auto matches_end = sregex_iterator();
-    
-          auto match_count = distance(matches_iter, matches_end);
+        line = regex_replace(line, two_dbl_quotes, string{"'"});
         
-          cout << "==> There are " << match_count << " sregex_iterator matches " << endl;
-        
-          for(; matches_iter != matches_end; ++matches_iter){ // TODO: Could not get this to work.
-            
-             smatch match = *matches_iter;
-             
-            
-            cout << "Iterator matches: " <<  match.str() << endl;
-            
-          }
-         */ 
-                                
-         bool hits = regex_search(line, match, csv_regex);
+        line = prior_line + line;
 
-         if (!hits) {
+        bool hits = regex_search(line, match, csv_regex);
+        auto size = match.size();
+
+        if (!hits) { // TODO: This works even on the first line that has extended-line comments.
                
              prior_line = line;
                
-         } else {
+        } else {
                
              break;
-         }
+        }
            
-    } // end inner while(1)     
+    } 
            
     // TODO: Remove this debug code.
     //Start Debug code
