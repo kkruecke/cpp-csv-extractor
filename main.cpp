@@ -53,73 +53,20 @@ int main(int argc, char** argv)
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
     smatch matches;
  
-    while (!reader.eof()) {
+    while (reader.moreLines()) {
             
         matches = reader.getMatches();
-        int debug = 10;
-    }
-
-    // Latin captial letter Z with caron: Ž. See: http://www.ascii-code.com/
-    // It will replace comma as the delimeter in output.txt
-    /*
-    string Latin_E = "Ž";  
-
-    ofstream output_file(string("output.txt", ofstream::out));
-
-    ifstream inp;
-
-    inp.open(argv[1]);
         
-    string line;
-    
-    vector<int> failed_lines;
-          
-    regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*),(\"[^\"]*\"|[^,]*)$"};
-    
-    int line_no = 0;
-    
-    if (inp.is_open()) {
-        
-        mysqlpp::Connection conn("petition", "localhost", "user", "password", 3306);
-        
-        // Template query
-        mysqlpp::Query query = conn.query(string("INSERT INTO petition(signee_no, date, city, state, country, comments) VALUES(%0, %1, %2, %3, %4, %4)"));
+        try {
 
-        query.parse();
-        
-        // Begin transaction
-        mysqlpp::Transaction trans(conn); // TODO: adjust input params.
-     
-        while(inp.good()) {
-         
-          ++line_no;  
-
-          getline(inp, line); 
-
-          regex two_dbl_quotes{"(\"\")"};
-          
-          string adjusted_line = regex_replace(line, two_dbl_quotes, string{"'"});
-                             
-          try {
-                
-            smatch  match;
-            string  output;
-               
-            if (regex_search(adjusted_line, match, csv_regex) && match.size() > 1) {
-                
-                for(size_t i = 1; i < match.size(); ++i) {
+           for(size_t i = 1; i < match.size(); ++i) {
                     
-                    output_file << match.str(i) << Latin_E;
-                }
-                
-                output_file << "\n"; 
-                
-            } else if (!line.empty() && inp.good()) { // if regex failed, it may be due to reading the last line, which will be an empty string; so we 
-                                                      // check that the input was not empty, and we are not at eof.
-               failed_lines.push_back(line_no); // TODO: get rid of this when the line-reader class is done.
-            }
-    
-          } catch (const mysqlpp::BadQuery& er) { 
+              // TODO: Write to database.
+              cout << match.str(i) << endl; 
+                    
+           }  
+
+        } catch (const mysqlpp::BadQuery& er) { 
               
 		// Handle any query errors
 		cerr << "Query error: " << er.what() << endl;
@@ -146,23 +93,8 @@ int main(int argc, char** argv)
                cerr << "Terminating" << "\n";
                return 0;
           }
-        }
-    }
-    
-    inp.close();
-    output_file.close();
-    
-    cout << line_no << " Total lines read.\n";
 
-    if (failed_lines.size() > 0) {
-            
-        cerr << string("Regex failed on ") << failed_lines.size() << string(" lines:\n");
-        
-        copy(failed_lines.begin(), failed_lines.end(), ostream_iterator<int>(cout, "\n"));
-
-        cerr << "Please manually corrected these lines and re-run\n";
-    }
-    */ 
+    }  // end while    
 
     
     return(0);

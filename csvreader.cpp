@@ -32,9 +32,7 @@ smatch CsvReader::getMatches()
     string line, prior_line;
        
     while (1) {
-
-        // TODO: fails when end of file encountered, which results in infinite loop on last line.
-        // Why does getline return an empty string on eof?
+        
         getline(input, line); 
    
         line = regex_replace(line, two_dbl_quotes, string{"'"});
@@ -42,9 +40,8 @@ smatch CsvReader::getMatches()
         line = prior_line + line;
 
         bool hits = regex_search(line, match, csv_regex);
-        auto size = match.size();
-
-        if (!hits) { // TODO: retest
+        
+        if (!hits) { 
                
              prior_line = line;
                
@@ -55,7 +52,7 @@ smatch CsvReader::getMatches()
            
     } 
            
-    // TODO: Remove this debug code.
+    // TODO: Remove this debug code:
     //Start Debug code
     for(size_t i = 1; i < match.size(); ++i) {
                     

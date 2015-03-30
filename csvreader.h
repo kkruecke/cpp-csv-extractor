@@ -9,20 +9,27 @@ class CsvReader {
     
     std::ifstream input;
     std::string   line;
-    std::string   next_line;
-    int      line_no;
-    std::regex csv_regex;
+    int           line_no;
+    std::regex    csv_regex;
         
 public:
     
     CsvReader(std::string file_name, const std::regex& reg);
     
     std::smatch getMatches();
-    bool eof() const; // Mimic ifstream calls
+    bool moreLines();
 };
 
-inline bool CsvReader::eof() const
+inline bool CsvReader::moreLines() 
 {
-    return input.eof();
+    char c;
+    bool bResult = input >> c;
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult;
 }
 #endif	/* CSVREADER_H */
