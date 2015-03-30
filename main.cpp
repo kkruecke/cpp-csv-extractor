@@ -55,14 +55,14 @@ int main(int argc, char** argv)
  
     while (reader.moreLines()) {
             
-        matches = reader.getMatches();
+        matches = reader.getRegexMatches();
         
         try {
 
-           for(size_t i = 1; i < match.size(); ++i) {
+           for(size_t i = 1; i < matches.size(); ++i) {
                     
               // TODO: Write to database.
-              cout << match.str(i) << endl; 
+              cout << matches.str(i) << endl; 
                     
            }  
 
