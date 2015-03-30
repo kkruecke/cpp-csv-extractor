@@ -50,17 +50,8 @@ smatch CsvReader::getRegexMatches()
              break;
         }
            
-    } 
+    } // end while 
            
-    // TODO: Remove this debug code:
-    //Start Debug code
-    for(size_t i = 1; i < match.size(); ++i) {
-                    
-         cout << match.str(i) << endl; //Latin_E; cout was cout was output_file
-                    
-    }   // End Debug code
-   
-    
   } catch (exception& e) {
 
   }

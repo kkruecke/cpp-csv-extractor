@@ -26,13 +26,14 @@ int main(int argc, char** argv)
 
    /*
     * Format of csv file: 
+    *
     * Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
     *
-    * Prospective regex for above format:
+    * regex for above format:
     *
     *  ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),($|"[^"]+"|[^"]+)$
     *
-    * And as a C string:
+    * as a C string:
     *
     *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"
     *
@@ -51,11 +52,10 @@ int main(int argc, char** argv)
         
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
-    smatch matches;
- 
+
     while (reader.moreLines()) {
             
-        matches = reader.getRegexMatches();
+        smatch matches = reader.getRegexMatches();
         
         try {
 
@@ -95,7 +95,6 @@ int main(int argc, char** argv)
           }
 
     }  // end while    
-
     
     return(0);
 }
