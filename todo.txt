@@ -2,7 +2,8 @@ TODOes
 ======
 
 
-Don't know why I get perl locale error messages in Netbeans.
+Don't know why the last submatch sometimes has garbage characters. Try writing the same query in PHP using PCRE and
+testing it.
 
 The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy. Is it due to unicode somehow?
 
