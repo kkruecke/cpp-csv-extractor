@@ -4,13 +4,24 @@ TODOes
 big bug
 -------
 
-There may be a C++11 regex bug or it may be a Unicode issue as
+While it appears there may be a C++11 regex bug, it may be a Unicode issue as doing
 
 $ file petition.csv
 
-returns:
+yields:
 
 petition.csv: UTF-8 Unicode text, with very long lines
+
+This makes sense as there are Chinese characters in the file. 
+
+Questions
+~~~~~~~~~
+
+* What does Unicode means exactly? 
+* What does ASCII mean? 
+* How does C++11 support reading a Unicode file? 
+* What regex functions does one use with Unicode?
+* Do I need to store that textual data as Unicode strings in the database since there are Chinese and potentially other complex-character languages.
 
 Note:
 
