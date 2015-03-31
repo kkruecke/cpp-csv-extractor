@@ -35,9 +35,9 @@ smatch CsvReader::getRegexMatches()
         
         getline(input, line); 
    
-        line = regex_replace(line, two_dbl_quotes, string{"'"});
-        
-        line = prior_line + line;
+        auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+               
+        line = prior_line + transformed_line;
 
         bool hits = regex_search(line, match, csv_regex);
 

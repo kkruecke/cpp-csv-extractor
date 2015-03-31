@@ -61,19 +61,22 @@ int main(int argc, char** argv)
 
     while (reader.moreLines()) {
 
-        cout << "-----------------------\n"; // Debug code
-    
         smatch matches = reader.getRegexMatches();
         
         try {
-
+           /*  
            for(size_t i = 1; i < matches.size(); ++i) {
                     
               // TODO: Write to database.
-               
+                            
               cout << matches.str(i) << endl; 
                     
-           }  
+           }
+            */
+            auto index = matches.size() - 1;
+            
+            cout << "~~~~~~~~~~~~~~~~\n" << matches.str(index) << "\n~~~~~~~~~~~\n" << endl; 
+                    
 
         } catch (const mysqlpp::BadQuery& er) { 
               
