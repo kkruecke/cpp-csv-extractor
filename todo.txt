@@ -23,12 +23,11 @@ Questions
 * What regex functions does one use with Unicode?
 * Do I need to store that textual data as Unicode strings in the database since there are Chinese and potentially other complex-character languages.
 
-Note:
+Sources of Help
+~~~~~~~~~~~~~~~
 
-1. Writing a php version didn't work because the double quotes in a file cause it to be read differently than in C++11.
-   see if the php analogue works.
-
-2. Post the "bug" on stackoverflow and the C++ usenet newsgroup.
+* http://www.joelonsoftware.com/articles/Unicode.html
+* http://stackoverflow.com/questions/15473051/reading-writing-printing-utf-8-in-c11
 
 Other todoes
 ------------
