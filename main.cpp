@@ -43,10 +43,9 @@ int main(int argc, char** argv)
        
     
     //--regex csv_regex_alternative {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
-    
-    
+        
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
-                            
+                                    
     CsvReader reader(argv[1], csv_regex); 
     
     mysqlpp::Connection conn("petition", "localhost", "petition", "kk0457", 3306);
@@ -74,8 +73,8 @@ int main(int argc, char** argv)
            }
             */
             auto index = matches.size() - 1;
-            
-            cout << "~~~~~~~~~~~~~~~~\n" << matches.str(index) << "\n~~~~~~~~~~~\n" << endl; 
+            string x{ matches.str(index)};
+            cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
                     
 
         } catch (const mysqlpp::BadQuery& er) { 
