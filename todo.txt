@@ -1,13 +1,26 @@
 TODOes
 ======
 
+big bug
+-------
 
-There may be a C++11 regex bug. 
+There may be a C++11 regex bug or it may be a Unicode issue as
 
-1. Try similar php code. I don't know why the last submatch sometimes has garbage characters in the C++11 code. To "debug"
+$ file petition.csv
+
+returns:
+
+petition.csv: UTF-8 Unicode text, with very long lines
+
+Note:
+
+1. Writing a php version didn't work because the double quotes in a file cause it to be read differently than in C++11.
    see if the php analogue works.
 
 2. Post the "bug" on stackoverflow and the C++ usenet newsgroup.
+
+Other todoes
+------------
 
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 

@@ -1,27 +1,26 @@
 <?php
+require_once("loader/SplClassLoader.php");
+use Csv\CsvReader as CsvReader;
+
+ $spl_loader = new SplClassLoader('Csv', 'src');
+
+ $spl_loader->register();
    
-// See Maude source code.
+ $regex = '/^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$/m'; 
+  
+ $reader = new CsvReader("/home/kurt/public_html/petition/petition.csv", $regex); 
 
-  $this->LogFile = new \SplFileObject("error-log.txt", "w");
-      
-  $this->LogFile->setFlags(\SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY);
+ while (!$reader->moreLines()) {
 
-  $matches = array();
+     $matches = $reader->getMatches();
 
-  while ($file as $line_no => $text) {
+     echo "=======================\n";
 
-      $regex = '/^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$/m'; 
+     for ($i = 1; $i < count($matches) - 1; ++$i) {
 
-      $hit_count = preg_match_all($regex, $text, $matches);
+         echo "  " . $matches[$i]  . "\n";          
 
-      if ($hit_count != 8) {
+     }
 
-      }
-
-      if (count($matches[1]) < 8)  {
-   
-         echo "matches[1] count is " . count($matches[1]) . " on line $line_count \n";
-   
-         echo "$line_count : match count less than 8 (8th column is data_received). Match count equals " . count($matches[1]) . "\n");
-      }
-  }
+     echo "\n=======================\n";
+ }
