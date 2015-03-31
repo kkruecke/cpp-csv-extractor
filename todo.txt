@@ -1,18 +1,14 @@
 TODOes
 ======
 
-big bug
--------
 
-While it appears there may be a C++11 regex bug, it may be a Unicode issue as doing
+The petition.csv is a Unicode UTF-8 file. Doing 
 
 $ file petition.csv
 
 yields:
 
-petition.csv: UTF-8 Unicode text, with very long lines
-
-This makes sense as there are Chinese characters in the file. 
+petition.csv: UTF-8 Unicode text, with very long lines. I used "iconv" to convert it ot UTF-16 and UTF-32 as well, naming the files utf-XX-petition.csv.
 
 Questions
 ~~~~~~~~~
@@ -23,8 +19,8 @@ Questions
 * What regex functions does one use with Unicode?
 * Do I need to store that textual data as Unicode strings in the database since there are Chinese and potentially other complex-character languages.
 
-Sources of Help
-~~~~~~~~~~~~~~~
+links to help
+~~~~~~~~~~~~~
 
 * http://www.joelonsoftware.com/articles/Unicode.html
 * http://stackoverflow.com/questions/15473051/reading-writing-printing-utf-8-in-c11
@@ -35,16 +31,6 @@ Other todoes
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
-
-C++11 regex library tutorial
-============================
-
-See:
-
-1. http://www.regular-expressions.info/stdregex.html
-2. http://www.informit.com/articles/article.aspx?p=2079020
-
-TODO: The regex is not capturing each comma separated match rather it is matching the whole line.
 
 MySQL++ Class Library
 =====================
