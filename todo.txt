@@ -23,6 +23,7 @@ links to help
 ~~~~~~~~~~~~~
 
 * http://www.joelonsoftware.com/articles/Unicode.html
+* http://www.unicode.org/
 * http://stackoverflow.com/questions/15473051/reading-writing-printing-utf-8-in-c11
 
 Other todoes
