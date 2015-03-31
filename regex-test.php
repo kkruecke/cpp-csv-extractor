@@ -18,4 +18,10 @@
 
       }
 
+      if (count($matches[1]) < 8)  {
+   
+         echo "matches[1] count is " . count($matches[1]) . " on line $line_count \n";
+   
+         echo "$line_count : match count less than 8 (8th column is data_received). Match count equals " . count($matches[1]) . "\n");
+      }
   }
