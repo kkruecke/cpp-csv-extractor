@@ -2,10 +2,12 @@ TODOes
 ======
 
 
-Don't know why the last submatch sometimes has garbage characters. Try writing the same query in PHP using PCRE and
-testing it.
+There may be a C++11 regex bug. 
 
-The regex submatch for the comments field returns garbage characters, but I don't know why. The regex checks out ok in regexbuddy. Is it due to unicode somehow?
+1. Try similar php code. I don't know why the last submatch sometimes has garbage characters in the C++11 code. To "debug"
+   see if the php analogue works.
+
+2. Post the "bug" on stackoverflow and the C++ usenet newsgroup.
 
 Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 
