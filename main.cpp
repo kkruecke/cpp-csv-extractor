@@ -1,9 +1,12 @@
 #include <cstdlib>
+#include <iostream>
 #include "csvreader.h"
 
 // MySQL++ headers
+/*
 #include <mysql++.h> 
 #include <ssqls.h>
+*/
 
 // debug only
 #include <locale>
@@ -44,10 +47,12 @@ int main(int argc, char** argv)
     
     //--regex csv_regex_alternative {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
         
-    regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
+    csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                     
     CsvReader reader(argv[1], csv_regex); 
     
+    /* For now
+     * 
     mysqlpp::Connection conn("petition", "localhost", "petition", "kk0457", 3306);
     
     // Template query
@@ -57,7 +62,8 @@ int main(int argc, char** argv)
         
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
-
+    */
+    
     while (reader.moreLines()) {
 
         smatch matches = reader.getRegexMatches();
@@ -77,7 +83,9 @@ int main(int argc, char** argv)
             cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
                     
 
-        } catch (const mysqlpp::BadQuery& er) { 
+        } 
+        /*
+        catch (const mysqlpp::BadQuery& er) { 
               
 		// Handle any query errors
 		cerr << "Query error: " << er.what() << endl;
@@ -97,6 +105,7 @@ int main(int argc, char** argv)
 		cerr << "Error: " << er.what() << endl;
 		return -1;
 	    }
+         */ 
             catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
