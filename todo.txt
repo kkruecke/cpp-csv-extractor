@@ -29,7 +29,11 @@ links to read
 ideas
 ~~~~~
 
-The foreign language occuring in the petition can't be understood, so we won't keep it.
+The foreign language occuring in the petition can't be understood, so we won't keep it. Therefore try
+
+$ iconv -f UTF-8 -t ISO-8859-1  modified-petition.csv > xxx.csv
+
+If it has trouble converting a character, it will tell you its offset. I just need a editor that will let me move to a given byte-offset.  
 
 Other todoes
 ------------
