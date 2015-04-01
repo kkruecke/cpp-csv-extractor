@@ -47,7 +47,7 @@ int main(int argc, char** argv)
     
     //--regex csv_regex_alternative {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
         
-    csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+    regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                     
     CsvReader reader(argv[1], csv_regex); 
     
@@ -63,25 +63,28 @@ int main(int argc, char** argv)
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
     */
-    
+
+    int lineno = 1;
+
     while (reader.moreLines()) {
+
+        cout << lineno++ << endl; 
 
         smatch matches = reader.getRegexMatches();
         
         try {
-           /*  
+             
            for(size_t i = 1; i < matches.size(); ++i) {
                     
               // TODO: Write to database.
                             
-              cout << matches.str(i) << endl; 
+              //--cout << matches.str(i) << endl; 
                     
            }
-            */
+            
             auto index = matches.size() - 1;
             string x{ matches.str(index)};
             cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
-                    
 
         } 
         /*
