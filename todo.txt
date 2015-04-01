@@ -8,7 +8,7 @@ $ file petition.csv
 
 yields:
 
-petition.csv: UTF-8 Unicode text, with very long lines. I used "iconv" to convert it ot UTF-16 and UTF-32 as well, naming the files utf-XX-petition.csv.
+petition.csv: UTF-8 Unicode text, with very long lines. 
 
 Questions
 ~~~~~~~~~
@@ -19,12 +19,17 @@ Questions
 * What regex functions does one use with Unicode?
 * Do I need to store that textual data as Unicode strings in the database since there are Chinese and potentially other complex-character languages.
 
-links to help
+links to read
 ~~~~~~~~~~~~~
 
 * http://www.joelonsoftware.com/articles/Unicode.html
 * http://www.unicode.org/
 * http://stackoverflow.com/questions/15473051/reading-writing-printing-utf-8-in-c11
+
+ideas
+~~~~~
+
+The foreign language occuring in the petition can't be understood, so we won't keep it.
 
 Other todoes
 ------------
