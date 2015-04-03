@@ -25,7 +25,7 @@ The foreign language occuring in the petition (in the comments at least) can't b
 Other todoes
 ------------
 
-* Read the mysql++ documentation at http://localhost/doc/libmysql++-doc/html/
+* Read the mysql++ documentation at http://localhost/doc/libmysql++-doc/html/. Then try using a template query to do the insert.
 * Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
