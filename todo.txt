@@ -10,17 +10,8 @@ yields:
 
 petition.csv: UTF-8 Unicode text, with very long lines. 
 
-Questions
-~~~~~~~~~
-
-* What does Unicode means exactly? 
-* What does ASCII mean? 
-* How does C++11 support reading a Unicode file? 
-* What regex functions does one use with Unicode?
-* Do I need to store that textual data as Unicode strings in the database since there are Chinese and potentially other complex-character languages.
-
-links to read
-~~~~~~~~~~~~~
+links to read to understand Unicode better
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * http://www.joelonsoftware.com/articles/Unicode.html
 * http://www.unicode.org/
@@ -29,12 +20,13 @@ links to read
 ideas
 ~~~~~
 
-The foreign language occuring in the petition can't be understood, so we won't keep it. Therefore just eliminate it.
+The foreign language occuring in the petition (in the comments at least) can't be understood, so we won't keep it. Therefore just eliminate it.
 
 Other todoes
 ------------
 
-Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
+* Read the mysql++ documentation at http://localhost/doc/libmysql++-doc/html/
+* Read about move semantics to decide about "return" line at end of CsvReader::getMatches().
 
 Finish C++11 version of database insert using mysql++3 to insert records and populate the petition database.
 
@@ -66,6 +58,7 @@ $ sudo dpkg -i liblucene++0_3.0.4-0ubuntu3_amd64.deb
 $ sudo dpkg -i liblucene++-contrib0_3.0.4-0ubuntu3_amd64.deb 
 $ sudo dpkg -i liblucene++-dev_3.0.4-0ubuntu3_amd64.deb 
 $ sudo dpkg -i liblucene++-doc_3.0.4-0ubuntu3_all.deb 
+$ sudo dpkg -i <any others I forgot>
 
 Links on Compiling and Linking
 ==============================
