@@ -82,9 +82,19 @@ int main(int argc, char** argv)
                     
               /* 
                * TODO: Write to database:
-               * 
-               * 1. Set values into both template queries...
+               * Idea 1
+                 ======
+               * 1. Get the values for both template queries...
                * 2. converting the data in them to the MySQL-compatible format.
+               *
+               * TODO: Review MySQL escaping and quoting rules.
+               * According to http://tangentsoft.net/mysql++/doc/html/userman/tutorial.html, we can convert our raw data into mysql++ types that are in the MySQL   
+               * format, properly escaped and or quoted.
+               *
+               * Idea 2 
+                 ======
+               * The support for inserting classes that represent fields seems the easiest, better documented technique to use. 
+               * 
                * 
                * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
                */ 
