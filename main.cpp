@@ -55,10 +55,14 @@ int main(int argc, char** argv)
      * 
     mysqlpp::Connection conn("petition", "localhost", "petition", "kk0457", 3306);
     
-    // Template query
-    mysqlpp::Query query = conn.query(string("INSERT INTO petition(signee_no, date, city, state, country, comments) VALUES(%0, %1, %2, %3, %4, %4)"));
+    // Template queries
+    mysqlpp::Query query_signee_info = conn.query(string("INSERT INTO signee_info(signee_no??, date, city, state, country) VALUES(%0, %1, %2, %3, %4)"));
+      
+    mysqlpp::Query query_signee_comments = conn.query(string("INSERT INTO signee_comments(signee_no, comments) VALUES(%0, %1, %2, %3, %4)"));
 
-    query.parse();
+    query_signee_info.parse();
+      
+    query signee_comments.parse();  
         
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
@@ -70,17 +74,21 @@ int main(int argc, char** argv)
 
         cout << lineno++ << endl; 
 
-        smatch matches = reader.getRegexMatches();
+        smatch matches = reader.getNextRegexMatches();
         
         try {
              
            for(size_t i = 1; i < matches.size(); ++i) {
                     
-              // TODO: Write to database.
-                            
-              //--cout << matches.str(i) << endl; 
+              /* 
+               * TODO: Write to database:
+               * 
+               * 1. Set values into both template queries...
+               * 2. converting the data in them to the MySQL-compatible format.
+               */ 
+                          
                     
-           }
+            }
             
             auto index = matches.size() - 1;
             string x{ matches.str(index)};

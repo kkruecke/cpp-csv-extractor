@@ -9,10 +9,11 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
    input.open(file_name);
 
    if (input.is_open()) {
+       
       // TODO: Check for errors.
    }
 }
-smatch CsvReader::getRegexMatches()
+smatch CsvReader::getNextRegexMatches()
 {
    ++line_no;
 
@@ -38,14 +39,14 @@ smatch CsvReader::getRegexMatches()
    
          //--cout << line << endl; // debug code
    
-         if (!hits) {
+        if (!hits) {
    
                prior_line = line;
 
-         } else {
+        } else {
    
                break;
-         }
+        }
 
       } // end while
    } catch (exception& e) {
