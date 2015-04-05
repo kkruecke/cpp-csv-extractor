@@ -27,5 +27,6 @@ CREATE TABLE IF NOT EXISTS `signer_comments` (
   `comments` text,
   PRIMARY KEY (`id`),
   FOREIGN KEY fk_signee_no(signee_no)
-   REFERENCES signer_info(signee_no)
+# The foreign key below could be the signer_info(id) as well
+  REFERENCES signer_info(signee_no) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
