@@ -85,6 +85,8 @@ int main(int argc, char** argv)
                * 
                * 1. Set values into both template queries...
                * 2. converting the data in them to the MySQL-compatible format.
+               * 
+               * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
                */ 
                query_signee_info.execute(/* %01 data, %1 data, and so on */);                      
 
