@@ -4,7 +4,7 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `petition`
 --
-CREATE DATABASE IF NOT EXIST  peition;
+CREATE DATABASE IF NOT EXISTS  petition;
 
 use petition;
 
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `signer_info` (
   `comments` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `signee_no` (`signee_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1, SET AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS `signer_comments` (
@@ -26,5 +26,6 @@ CREATE TABLE IF NOT EXISTS `signer_comments` (
   `signee_no` int(10) unsigned NOT NULL,
   `comments` text,
   PRIMARY KEY (`id`),
-  CONSTRAINT fk_SigneeReference   FOREIGN KEY `signee_no` REFERENCES `signer_info` (`signee_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1, SET AUTO_INCREMENT=1;
+  FOREIGN KEY fk_signee_no(signee_no)
+   REFERENCES signer_info(signee_no)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
