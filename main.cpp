@@ -86,8 +86,9 @@ int main(int argc, char** argv)
                * 1. Set values into both template queries...
                * 2. converting the data in them to the MySQL-compatible format.
                */ 
-                          
-                    
+               query_signee_info.execute(/* %01 data, %1 data, and so on */);                      
+
+               query_signee_comments.execute(/* %01 data, %1 data, and so on */);                      
             }
             
             auto index = matches.size() - 1;
