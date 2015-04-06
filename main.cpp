@@ -62,24 +62,7 @@ int main(int argc, char** argv)
                                     
     CsvReader reader(argv[1], csv_regex); 
     
-    /* For now
-     * 
-    mysqlpp::Connection conn("petition", "localhost", "petition", "kk0457", 3306);
-    
-    // Template queries
-    mysqlpp::Query query_signee_info = conn.query(string("INSERT INTO signee_info(signee_no??, date, city, state, country) VALUES(%0, %1, %2, %3, %4)"));
-      
-    mysqlpp::Query query_signee_comments = conn.query(string("INSERT INTO signee_comments(signee_no, comments) VALUES(%0, %1, %2, %3, %4)"));
-
-    query_signee_info.parse();
-      
-    query signee_comments.parse();  
-        
-    // Begin transaction
-    mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
-    */
-
- // TODO: A transaction support later.
+   // TODO: A transaction support later.
 
   // Credentials: (url, user, password)
   unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
@@ -103,30 +86,7 @@ int main(int argc, char** argv)
            
          for(size_t i = 1; i < matches.size(); ++i) {
                   
-            /* 
-             * TODO: Write to database:
-             * Idea 1
-               ======
-             * 1. Get the values for both template queries...
-             * 2. converting the data in them to the MySQL-compatible format.
-             *
-             * TODO: Review MySQL escaping and quoting rules.
-             * According to http://tangentsoft.net/mysql++/doc/html/userman/tutorial.html, we can convert our raw data into mysql++ types that are in the MySQL   
-             * format, properly escaped and or quoted.
-             *
-             * Idea 2 
-               ======
-             * The support for inserting classes that represent fields seems the easiest, better documented technique to use. 
-             * 
-             * 
-             * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
-             */ 
-             /*
-             query_signee_info.execute(%01 data, %1 data, and so on );                      
-
-             query_signee_comments.execute( %01 data, %1 data, and so on);                      
-             */
-/* 
+  /* 
   From
   <cppconn/prepared_statement.h>
 
@@ -161,63 +121,70 @@ int main(int argc, char** argv)
           {
             int signee_no = stoi(submatch);
             
-           pre_stmt->setInt(2, signee_no);
+           pre_stmt->setInt(1, signee_no);
           }
-           break;
+          break;
               
           case 2:    
-              // DATE YYY-MM-DD
-          {
+          { // DATE: YYY-MM-DD
               string date { submatch.substr(6, 4) + "-" + submatch.substr(0, 2) + "-" + submatch.substr(3, 2) };
               
-              cout << "The date is " << date << endl;
-              
-              pre_stmt->setDateTime(3, date);
+              pre_stmt->setDateTime(2, date);
           }
-              //date
+          break; 
+          /*
+            TODO: 
+                  When a field can be empty/NULL fields, check for this.
+
+                  Do I need to remove leading/ending double quotes?
+
+                  Do I need to do anything with embedded single quotes?
+                  Answer: As far as embedded single or double quotes goes, according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html        
+           */ 
+
+          case 3:    
+          {   // First Name 
               
-              break; 
+              
+              pre_stmt->setString(3, submatch);
+          }
+          break; 
+
+          case 4:    
+          {  // Last Name 
+              
+              
+              pre_stmt->setString(4, submatch);
+          }
+          break; 
+
+          case 5:    
+          {   // City 
+              
+              
+              pre_stmt->setString(5, submatch);
+          }
+          break; 
+
+          case 6:    
+          {   // Comments 
+              
+              pre_stmt->setString(5, submatch);
+          }
+          break; 
+
       } // end switch
        
-       /*
-        * TODO: 
-        Do any leading and ending double quote pairs, if present, remain in the C++11 string? Do I therefore need to remove them?
+       
+    } // end for 
          
-        As far as embedded single or double quotes goes, according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html        
-               
-         
-      A “'” inside a string quoted with “"” needs no special treatment and need not be doubled or escaped. In the same way, “"” inside a string quoted
-      with “'” needs no special treatment. 
-        
-       
-       SQLString date_time { };
-       
-       signee_info->setDateTime(3, date_time); // date
-
-       SQLString city { };
-       signee_info->setString(4, city); // city
-       
-       SQLString state { };
-       
-       signee_info->setString(5, state);  // state
-       
-       SQLString country { };
-       
-       signee_info->setString(6, country);  // country
-
-       signee_comments-> 
-       signee_comments->setBlob(3, istr); // setBlob is recommended for TEXT columns  
-       */
-       
-      } // end for 
-         
-      auto rc = pre_stmt->execute(); 
+    auto rc = pre_stmt->execute(); 
       
-      cout << "Result of pre_stmt->execute() = " << rc << endl;
+    cout << "Result of pre_stmt->execute() = " << rc << endl;
     //--prepared_stmt->execute();     
            
-      } 
-      /*
+    } // end try 
+      /* TODO: Check these exceptions that are Mysql++ exceptions to libmysqlcppconn7 exceptions.
       catch (const mysqlpp::BadQuery& er) { 
             
       	// Handle any query errors
