@@ -37,21 +37,28 @@ int main(int argc, char** argv)
   unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
   // Do I need to specify signee_no below?
-  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no) VALUES(?)");
-/*
+  unique_ptr< Statement > stmt(conn->createStatement());
+  
+  stmt->execute("USE petition");
+  
+  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(an_int) VALUES(?)") };
+
   string str_int { "235" };
 
   int x = stoi(str_int);
 
-  pre_stmt->setInt(2, x);
   
   for (int i = 0; i != 10; ++i) {
- 	pstmt->setInt(1, i);
- 	pstmt->executeUpdate();     // Always inserts 0.
+      
+ 	pre_stmt->setInt(1, i);
+        
+ 	//pre_stmt->executeUpdate();     // Always inserts 0.
   }
 
-  auto rc = pre_stmt->execut();  
-*/
+  auto rc = pre_stmt->execute();  
+  cout << "Value of pre_stmt->execute() = " << rc << endl;
+  return 0;
+  
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -170,7 +177,7 @@ int main(int argc, char** argv)
        *    cout << matches.str(i) << endl; 
        */
              
-      string submatch = matches.str(index);       
+      string submatch = matches[i].str();       
       
       switch(i) {
           
@@ -217,7 +224,7 @@ int main(int argc, char** argv)
 
     }  // end for
          
-    prepared_stmt->execute();     
+    //--prepared_stmt->execute();     
            
       } 
       /*
