@@ -6,13 +6,20 @@ Trying C++ connector for MySQL.
 $ sudo aptitude install libmysqlcppconn7 libmysqlcppconn-dev
 $ ldconfig (to rebuild dynamic link library cache)
 
-libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with 
--lmysql
+libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with:
 
-Try MySQL Connection++. Does it require a static library to link the mysql_driver.h methods?
+   -lmysql and -lmysqlcppconn
 
+The example code is in the source package
 
-The petition.csv is a Unicode UTF-8 file. Doing 
+   $ sudo apt-get source libmysqlcppconn-dev
+
+The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
+
+The petition.csv is a Unicode UTF-8 file. 
+----------------------------------------
+
+Doing 
 
 $ file petition.csv
 
