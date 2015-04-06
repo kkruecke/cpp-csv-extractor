@@ -8,9 +8,10 @@
 #include <ssqls.h>
 */
 
-// MySQL Connector for C++
 #include "mysql_driver.h" 
+#include "mysql_connection.h" 
 
+// MySQL Connector for C++
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
@@ -31,7 +32,8 @@ using namespace std;
 int main(int argc, char** argv) 
 {
   
-  /* Create a connection */
+  /* Create a connection. Note the get_drive_instance call requires -lmysqlcppconn-static after the object files.
+ */
   sql::Driver *driver = get_driver_instance();
     
   sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "petition", "kk0457");

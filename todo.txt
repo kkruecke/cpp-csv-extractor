@@ -1,6 +1,14 @@
 TODOes
 ======
 
+Trying C++ connector for MySQL.
+
+$ sudo aptitude install libmysqlcppconn7 libmysqlcppconn-dev
+$ ldconfig (to rebuild dynamic link library cache)
+
+libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with 
+-lmysql
+
 Try MySQL Connection++. Does it require a static library to link the mysql_driver.h methods?
 
 
