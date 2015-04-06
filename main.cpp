@@ -34,19 +34,24 @@ using namespace sql;
  */
 int main(int argc, char** argv) 
 {
-   unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
   // Do I need to specify signee_no below?
-  PreparedStatement pre_stmt = con->prepareStatement("INSERT INTO test(signee_no) VALUES(?)");
-
+  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no) VALUES(?)");
+/*
   string str_int { "235" };
 
   int x = stoi(str_int);
 
   pre_stmt->setInt(2, x);
+  
+  for (int i = 0; i != 10; ++i) {
+ 	pstmt->setInt(1, i);
+ 	pstmt->executeUpdate();     // Always inserts 0.
+  }
 
   auto rc = pre_stmt->execut();  
-
+*/
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";

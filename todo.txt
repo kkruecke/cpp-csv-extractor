@@ -11,8 +11,8 @@ Purge any previously installed versions
 
 Install the just-built .deb versions
 
- kurt@kurt-QAL51:/usr/local/src$ sudo dpkg -i libmysqlcppconn7_1.1.3-5_amd64.deb
- kurt@kurt-QAL51:/usr/local/src$ sudo dpkg -i libmysqlcppconn-dev_1.1.3-5_amd64.deb
+ kurt@kurt-QAL51:/usr/local/src$ ls libmysqlcppconn* | xargs sudo dpkg -i
+
 
 libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with:
 
