@@ -82,7 +82,8 @@ int main(int argc, char** argv)
   unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
   // Do I need to specify signee_no below?
-  PreparedStatement signee_info = con->prepareStatement("INSERT INTO signee_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)"); 
+  PreparedStatement signee_info = con->prepareStatement("INSERT INTO signee_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)");
+  
   PreparedStatement signee_comments = con->prepareStatement("INSERT INTO signee_comments(signee_no, comments) VALUES(?, ?)"); 
  
   int lineno = 1;
@@ -146,28 +147,55 @@ int main(int argc, char** argv)
 
       virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
 */
-       signee_info->set
-
-       int signee_no =  str->atoi();
-       signee_info->setUInt 64??(2, 
-       
-       SQLString date_time { };
-       signee_info->setDateTime(3, date_time);
-
-       signee_info-> likewise
-       signee_info->
-
-       signee_comments-> 
-       signee_comments-> 
-
-       prepared_stmt->execute();
-
-          }
+      /*
+       * Debug code:
+       * 
+       *    cout << matches.str(i) << endl; 
+       */
+             
+      string submatch = matches.str(index);       
+      
+      switch(i) {
           
-          auto index = matches.size() - 1;
-          string x{ matches.str(index)};
-          cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
+          case 1:
+              int signee_no = stoi(submatch);
+              signee_info->setInt(2, signee_no);
+              break;
+              
+          case 2:    
 
+       
+       /*
+        * TODO: 
+        * 1. Trim leading and ending double quotes if present.
+        * 2. What to do about embedded single quotes? What does MySQL require for embedded single quotes within a string?
+        * 3  Does anything need to be done about whitespace within strings?
+        */
+       SQLString date_time { };
+       
+       signee_info->setDateTime(3, date_time); // date
+
+       SQLString city { };
+       signee_info->setString(4, city); // city
+       
+       SQLString state { };
+       
+       signee_info->setString(5, state);  // state
+       
+       SQLString country { };
+       
+       signee_info->setString(6, country);  // country
+
+       signee_comments-> 
+       signee_comments->setBlob(3, istr); // setBlob is recommended for TEXT columns  
+       
+      } // end switch 
+       
+
+    }  // end for
+         
+    prepared_stmt->execute();     
+           
       } 
       /*
       catch (const mysqlpp::BadQuery& er) { 
