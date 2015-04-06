@@ -34,7 +34,19 @@ using namespace sql;
  */
 int main(int argc, char** argv) 
 {
-     
+   unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+
+  // Do I need to specify signee_no below?
+  PreparedStatement pre_stmt = con->prepareStatement("INSERT INTO test(signee_no) VALUES(?)");
+
+  string str_int { "235" };
+
+  int x = stoi(str_int);
+
+  pre_stmt->setInt(2, x);
+
+  auto rc = pre_stmt->execut();  
+
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -78,14 +90,14 @@ int main(int argc, char** argv)
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
     */
-        
+/*        
   unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
   // Do I need to specify signee_no below?
   PreparedStatement signee_info = con->prepareStatement("INSERT INTO signee_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)");
   
   PreparedStatement signee_comments = con->prepareStatement("INSERT INTO signee_comments(signee_no, comments) VALUES(?, ?)"); 
- 
+*/ 
   int lineno = 1;
 
   while (reader.moreLines()) {
@@ -158,12 +170,12 @@ int main(int argc, char** argv)
       switch(i) {
           
           case 1:
-              int signee_no = stoi(submatch);
-              signee_info->setInt(2, signee_no);
+           //--   int signee_no = stoi(submatch);
+           //--   signee_info->setInt(2, signee_no);
               break;
               
           case 2:    
-
+              break; 
        
        /*
         * TODO: 
@@ -174,7 +186,8 @@ int main(int argc, char** argv)
          
       A “'” inside a string quoted with “"” needs no special treatment and need not be doubled or escaped. In the same way, “"” inside a string quoted
       with “'” needs no special treatment. 
-        */
+        
+       
        SQLString date_time { };
        
        signee_info->setDateTime(3, date_time); // date
@@ -192,6 +205,7 @@ int main(int argc, char** argv)
 
        signee_comments-> 
        signee_comments->setBlob(3, istr); // setBlob is recommended for TEXT columns  
+       */
        
       } // end switch 
        
