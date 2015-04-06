@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>     // for unique_ptr, etc
 #include "csvreader.h"
+#include "utility.h"
 
 // MySQL++ headers
 /*
@@ -113,7 +114,18 @@ int main(int argc, char** argv)
       virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
 */
  
-      string submatch = matches[i].str();       
+      string submatch = matches[i].str();   
+         
+      
+      /*
+       * Remove any enclosing double quotes
+       */
+      
+      if (submatch.front() == '"' && submatch.back() == '"') {
+        
+        submatch = submatch.substr(1, submatch.end() - submatch.begin() - 2);
+             
+      } 
       
       switch(i) {
           
@@ -145,6 +157,9 @@ int main(int argc, char** argv)
           case 3:    
           {   // First Name 
               
+              if (submatch.empty()) {
+                  
+              }
               
               pre_stmt->setString(3, submatch);
           }
@@ -153,7 +168,9 @@ int main(int argc, char** argv)
           case 4:    
           {  // Last Name 
               
-              
+              if (submatch.empty()) {
+                  
+              }
               pre_stmt->setString(4, submatch);
           }
           break; 
@@ -161,14 +178,18 @@ int main(int argc, char** argv)
           case 5:    
           {   // City 
               
-              
+              if (submatch.empty()) {
+                  
+              }
               pre_stmt->setString(5, submatch);
           }
           break; 
 
           case 6:    
           {   // Comments 
-              
+              if (submatch.empty()) {
+                  
+              }
               pre_stmt->setString(5, submatch);
           }
           break; 
