@@ -49,14 +49,17 @@ int main(int argc, char** argv)
     *
     * regex for above format:
     *
-    *  ^(\d+),(\d\d-\d\d-\d\d\d\d),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),($|"[^"]+"|[^"]+)$
+    *  ^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),($|"[^"]+"|[^"]+)$
     *
+    * Note: we don't capture the first and last name.
     * as a C string:
     *
     *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"
     *
     */ 
-          
+    /*
+     
+     */      
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                     
     CsvReader reader(argv[1], csv_regex); 
@@ -71,7 +74,7 @@ int main(int argc, char** argv)
   
   stmt->execute("USE petition");
   
-  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?") };
+  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
   int lineno = 1;
 
