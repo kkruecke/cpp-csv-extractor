@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS `test` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `signee_no` int(11) unsigned NOT NULL,
   `date` date NOT NULL,
-#  `city` varchar(25) DEFAULT NULL,
-#  `state` varchar(25) DEFAULT NULL,
-#  `country` varchar(25) DEFAULT NULL,
+   `city` varchar(25) DEFAULT NULL,
+   `state` varchar(25) DEFAULT NULL,
+   `country` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `signee_no` (`signee_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;

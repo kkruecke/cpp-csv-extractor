@@ -71,7 +71,7 @@ int main(int argc, char** argv)
   
   stmt->execute("USE petition");
   
-  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date) VALUES(?, ?)") };
+  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?") };
 
   int lineno = 1;
 
@@ -181,15 +181,18 @@ int main(int argc, char** argv)
               pre_stmt->setString(5, submatch);
           }
           break; 
-
+          /* 
           case 6:    
           {   // Comments 
               if (submatch.empty()) {
                   
               }
-              pre_stmt->setString(5, submatch);
+              pre_stmt->setString(6, submatch);
           }
           break; 
+          */
+          default:
+           break;  
 
       } // end switch
        
@@ -224,13 +227,20 @@ int main(int argc, char** argv)
 		return -1;
 	    }
          */ 
-            catch (exception & e) {
+       catch (SQLException & e) {
+           
+         cerr << "Error code = " << e.getErrorCode() << endl;
+         
+         cerr << "MySQL State message = " << e.getSQLState() << endl;
+         
+       }
+       catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
                cerr << "C++11 exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
                return 0;
-          }
+       }
 
     }  // end while    
     
