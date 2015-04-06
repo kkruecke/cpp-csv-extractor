@@ -167,9 +167,13 @@ int main(int argc, char** argv)
        
        /*
         * TODO: 
-        * 1. Trim leading and ending double quotes if present.
-        * 2. What to do about embedded single quotes? What does MySQL require for embedded single quotes within a string?
-        * 3  Does anything need to be done about whitespace within strings?
+        Do any leading and ending double quote pairs, if present, remain in the C++11 string? Do I therefore need to remove them?
+         
+        As far as embedded single or double quotes goes, according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html        
+               
+         
+      A “'” inside a string quoted with “"” needs no special treatment and need not be doubled or escaped. In the same way, “"” inside a string quoted
+      with “'” needs no special treatment. 
         */
        SQLString date_time { };
        
