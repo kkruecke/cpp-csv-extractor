@@ -27,7 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-The last name is being captured as the state--why?
+Check for NULL in text fields. Finish code.
 
 The petition.csv is a Unicode UTF-8 file. 
 ----------------------------------------
