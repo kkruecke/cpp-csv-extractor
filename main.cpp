@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <memory>     // for unique_ptr, etc
 #include "csvreader.h"
 
 // MySQL++ headers
@@ -15,11 +16,13 @@
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
-#include <cppconn/statement.h>
+//--#include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 
 // debug only
 #include <locale>
 using namespace std;
+using namespace sql;
 
 /*
  * 
@@ -31,15 +34,12 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
+        
+  unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
   
-  /* Create a connection. Note the get_drive_instance call requires -lmysqlcppconn-static after the object files.
- */
-  sql::Driver *driver = get_driver_instance();
-    
-  sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "petition", "kk0457");
+  PreparedStatement prep_stmt = con->prepareStatement("INSERT INTO signee_info(signee_no??, date, city, state, country) VALUES(%0, %1, %2, %3, %4)");
 
-  delete con;
-    
+      
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
