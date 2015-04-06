@@ -34,31 +34,7 @@ using namespace sql;
  */
 int main(int argc, char** argv) 
 {
-  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
-
-  // Do I need to specify signee_no below?
-  unique_ptr< Statement > stmt(conn->createStatement());
-  
-  stmt->execute("USE petition");
-  
-  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(an_int) VALUES(?)") };
-
-  string str_int { "235" };
-
-  int x = stoi(str_int);
-
-  
-  for (int i = 0; i != 10; ++i) {
-      
- 	pre_stmt->setInt(1, i);
-        
- 	//pre_stmt->executeUpdate();     // Always inserts 0.
-  }
-
-  auto rc = pre_stmt->execute();  
-  cout << "Value of pre_stmt->execute() = " << rc << endl;
-  return 0;
-  
+    
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -102,14 +78,19 @@ int main(int argc, char** argv)
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
     */
-/*        
-  unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
-  // Do I need to specify signee_no below?
-  PreparedStatement signee_info = con->prepareStatement("INSERT INTO signee_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)");
+ // TODO: A transaction support later.
+
+  // Credentials: (url, user, password)
+  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+
+  // Set database to use.
+  unique_ptr< Statement > stmt(conn->createStatement());
   
-  PreparedStatement signee_comments = con->prepareStatement("INSERT INTO signee_comments(signee_no, comments) VALUES(?, ?)"); 
-*/ 
+  stmt->execute("USE petition");
+  
+  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date) VALUES(?, ?)") };
+
   int lineno = 1;
 
   while (reader.moreLines()) {
@@ -171,23 +152,32 @@ int main(int argc, char** argv)
 
       virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
 */
-      /*
-       * Debug code:
-       * 
-       *    cout << matches.str(i) << endl; 
-       */
-             
+ 
       string submatch = matches[i].str();       
       
       switch(i) {
           
           case 1:
-           //--   int signee_no = stoi(submatch);
-           //--   signee_info->setInt(2, signee_no);
-              break;
+          {
+            int signee_no = stoi(submatch);
+            
+           pre_stmt->setInt(2, signee_no);
+          }
+           break;
               
           case 2:    
+              // DATE YYY-MM-DD
+          {
+              string date { submatch.substr(6, 4) + "-" + submatch.substr(0, 2) + "-" + submatch.substr(3, 2) };
+              
+              cout << "The date is " << date << endl;
+              
+              pre_stmt->setDateTime(3, date);
+          }
+              //date
+              
               break; 
+      } // end switch
        
        /*
         * TODO: 
@@ -219,11 +209,11 @@ int main(int argc, char** argv)
        signee_comments->setBlob(3, istr); // setBlob is recommended for TEXT columns  
        */
        
-      } // end switch 
-       
-
-    }  // end for
+      } // end for 
          
+      auto rc = pre_stmt->execute(); 
+      
+      cout << "Result of pre_stmt->execute() = " << rc << endl;
     //--prepared_stmt->execute();     
            
       } 

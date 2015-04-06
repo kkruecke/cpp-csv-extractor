@@ -39,7 +39,7 @@ smatch CsvReader::getNextRegexMatches()
    
          //--cout << line << endl; // debug code
    
-        if (!hits) {
+        if (!hits) { // TODO: Why is the regex not working suddently????????
    
                prior_line = line;
 
