@@ -8,6 +8,14 @@
 #include <ssqls.h>
 */
 
+// MySQL Connector for C++
+#include "mysql_driver.h" 
+
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+
 // debug only
 #include <locale>
 using namespace std;
@@ -22,12 +30,19 @@ using namespace std;
  */
 int main(int argc, char** argv) 
 {
+  
+  /* Create a connection */
+  sql::Driver *driver = get_driver_instance();
     
-    if (argc != 2) {
+  sql::Connection *con = driver->connect("tcp://127.0.0.1:3306", "petition", "kk0457");
 
-        cerr << "Please re-run with the input file name as the first parameter.\n";
-        return 0;
-    }
+  delete con;
+    
+  if (argc != 2) {
+
+      cerr << "Please re-run with the input file name as the first parameter.\n";
+      return 0;
+  }
 
    /*
     * Format of csv file: 
@@ -43,8 +58,7 @@ int main(int argc, char** argv)
     *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"
     *
     */ 
-       
-    
+         
     //--regex csv_regex_alternative {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
         
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
@@ -98,9 +112,11 @@ int main(int argc, char** argv)
                * 
                * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
                */ 
-               query_signee_info.execute(/* %01 data, %1 data, and so on */);                      
+               /*
+               query_signee_info.execute(%01 data, %1 data, and so on );                      
 
-               query_signee_comments.execute(/* %01 data, %1 data, and so on */);                      
+               query_signee_comments.execute( %01 data, %1 data, and so on);                      
+               */
             }
             
             auto index = matches.size() - 1;

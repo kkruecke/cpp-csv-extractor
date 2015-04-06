@@ -1,6 +1,8 @@
 TODOes
 ======
 
+Try MySQL Connection++. Does it require a static library to link the mysql_driver.h methods?
+
 
 The petition.csv is a Unicode UTF-8 file. Doing 
 
