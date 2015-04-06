@@ -34,12 +34,7 @@ using namespace sql;
  */
 int main(int argc, char** argv) 
 {
-        
-  unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
-  
-  PreparedStatement prep_stmt = con->prepareStatement("INSERT INTO signee_info(signee_no??, date, city, state, country) VALUES(%0, %1, %2, %3, %4)");
-
-      
+     
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -83,58 +78,106 @@ int main(int argc, char** argv)
     // Begin transaction
     mysqlpp::Transaction trans(conn); // TODO: adjust input params. 
     */
-
-    int lineno = 1;
-
-    while (reader.moreLines()) {
-
-        cout << lineno++ << endl; 
-
-        smatch matches = reader.getNextRegexMatches();
         
-        try {
-             
-           for(size_t i = 1; i < matches.size(); ++i) {
-                    
-              /* 
-               * TODO: Write to database:
-               * Idea 1
-                 ======
-               * 1. Get the values for both template queries...
-               * 2. converting the data in them to the MySQL-compatible format.
-               *
-               * TODO: Review MySQL escaping and quoting rules.
-               * According to http://tangentsoft.net/mysql++/doc/html/userman/tutorial.html, we can convert our raw data into mysql++ types that are in the MySQL   
-               * format, properly escaped and or quoted.
-               *
-               * Idea 2 
-                 ======
-               * The support for inserting classes that represent fields seems the easiest, better documented technique to use. 
-               * 
-               * 
-               * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
-               */ 
-               /*
-               query_signee_info.execute(%01 data, %1 data, and so on );                      
+  unique_ptr<Connection> con { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
-               query_signee_comments.execute( %01 data, %1 data, and so on);                      
-               */
-            }
+  // Do I need to specify signee_no below?
+  PreparedStatement signee_info = con->prepareStatement("INSERT INTO signee_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)"); 
+  PreparedStatement signee_comments = con->prepareStatement("INSERT INTO signee_comments(signee_no, comments) VALUES(?, ?)"); 
+ 
+  int lineno = 1;
+
+  while (reader.moreLines()) {
+
+      cout << lineno++ << endl; 
+
+      smatch matches = reader.getNextRegexMatches();
+      
+      try {
+           
+         for(size_t i = 1; i < matches.size(); ++i) {
+                  
+            /* 
+             * TODO: Write to database:
+             * Idea 1
+               ======
+             * 1. Get the values for both template queries...
+             * 2. converting the data in them to the MySQL-compatible format.
+             *
+             * TODO: Review MySQL escaping and quoting rules.
+             * According to http://tangentsoft.net/mysql++/doc/html/userman/tutorial.html, we can convert our raw data into mysql++ types that are in the MySQL   
+             * format, properly escaped and or quoted.
+             *
+             * Idea 2 
+               ======
+             * The support for inserting classes that represent fields seems the easiest, better documented technique to use. 
+             * 
+             * 
+             * See:   http://tangentsoft.net/mysql++/doc/html/userman/tquery.html
+             */ 
+             /*
+             query_signee_info.execute(%01 data, %1 data, and so on );                      
+
+             query_signee_comments.execute( %01 data, %1 data, and so on);                      
+             */
+/* 
+  From
+  <cppconn/prepared_statement.h>
+
+      virtual void setBigInt(unsigned int parameterIndex, const sql::SQLString& value) = 0;
+
+      virtual void setBlob(unsigned int parameterIndex, std::istream * blob) = 0;
+
+      virtual void setBoolean(unsigned int parameterIndex, bool value) = 0;
+
+      virtual void setDateTime(unsigned int parameterIndex, const sql::SQLString& value) = 0;
+
+      virtual void setDouble(unsigned int parameterIndex, double value) = 0;
+
+      virtual void setInt(unsigned int parameterIndex, int32_t value) = 0;
+
+      virtual void setUInt(unsigned int parameterIndex, uint32_t value) = 0;
+
+      virtual void setInt64(unsigned int parameterIndex, int64_t value) = 0;
+
+      virtual void setUInt64(unsigned int parameterIndex, uint64_t value) = 0;
+
+      virtual void setNull(unsigned int parameterIndex, int sqlType) = 0;
+
+      virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
+*/
+       signee_info->set
+
+       int signee_no =  str->atoi();
+       signee_info->setUInt 64??(2, 
+       
+       SQLString date_time { };
+       signee_info->setDateTime(3, date_time);
+
+       signee_info-> likewise
+       signee_info->
+
+       signee_comments-> 
+       signee_comments-> 
+
+       prepared_stmt->execute();
+
+          }
+          
+          auto index = matches.size() - 1;
+          string x{ matches.str(index)};
+          cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
+
+      } 
+      /*
+      catch (const mysqlpp::BadQuery& er) { 
             
-            auto index = matches.size() - 1;
-            string x{ matches.str(index)};
-            cout << "~~~~~~~~~~~~~~~~\n" << x << "\n~~~~~~~~~~~\n" << endl; 
-
-        } 
-        /*
-        catch (const mysqlpp::BadQuery& er) { 
+      	// Handle any query errors
+      	cerr << "Query error: " << er.what() << endl;
+      	return -1;
+          } 
+          catch (const mysqlpp::BadConversion& er) {
               
-		// Handle any query errors
-		cerr << "Query error: " << er.what() << endl;
-		return -1;
-	    } 
-	    catch (const mysqlpp::BadConversion& er) {
-                
 		// Handle bad conversions
 		cerr << "Conversion error: " << er.what() << endl <<
 				"\tretrieved data size: " << er.retrieved <<
