@@ -56,9 +56,7 @@ int main(int argc, char** argv)
     *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"
     *
     */ 
-         
-    //--regex csv_regex_alternative {"^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"};
-        
+          
     regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                     
     CsvReader reader(argv[1], csv_regex); 
@@ -113,6 +111,14 @@ int main(int argc, char** argv)
 
       virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
 */
+             
+   /*
+        TODO: 
+        When a field can be empty/NULL fields, check for this.
+
+        Do I need to do anything with embedded single quotes?
+        Answer: according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html, no.
+    */
  
       string submatch = matches[i].str();   
          
@@ -133,7 +139,7 @@ int main(int argc, char** argv)
           {
             int signee_no = stoi(submatch);
             
-           pre_stmt->setInt(1, signee_no);
+            pre_stmt->setInt(1, signee_no);
           }
           break;
               
@@ -144,15 +150,6 @@ int main(int argc, char** argv)
               pre_stmt->setDateTime(2, date);
           }
           break; 
-          /*
-            TODO: 
-                  When a field can be empty/NULL fields, check for this.
-
-                  Do I need to remove leading/ending double quotes?
-
-                  Do I need to do anything with embedded single quotes?
-                  Answer: As far as embedded single or double quotes goes, according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html        
-           */ 
 
           case 3:    
           {   // First Name 
