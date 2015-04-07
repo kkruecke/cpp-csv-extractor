@@ -27,7 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-Check for NULL in text fields. Finish code.
+The quote removal code is not working.
 
 The petition.csv is a Unicode UTF-8 file. 
 ----------------------------------------

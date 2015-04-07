@@ -60,9 +60,9 @@ int main(int argc, char** argv)
     /*
      
      */      
-    regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+  regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                         
-    CsvReader reader(argv[1], csv_regex); 
+  CsvReader reader(argv[1], csv_regex); 
     
    // TODO: A transaction support later.
 
@@ -126,6 +126,7 @@ int main(int argc, char** argv)
     */
  
       string submatch = matches[i].str();   
+      cout << submatch << endl;
          
       
       /*
