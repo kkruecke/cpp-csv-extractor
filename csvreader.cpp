@@ -13,6 +13,7 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
       // TODO: Check for errors.
    }
 }
+
 smatch CsvReader::getNextRegexMatches()
 {
    ++line_no;
@@ -29,30 +30,38 @@ smatch CsvReader::getNextRegexMatches()
 
       while (1) {
 
-         getline(input, line);
+        getline(input, line);
    
-         auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+        auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
    
-         line = prior_line + transformed_line;
+        line = prior_line + transformed_line;
    
-         bool hits = regex_search(line, match, csv_regex);
+        bool hits = regex_search(line, match, csv_regex);
    
-         //--cout << line << endl; // debug code
-   
-        if (!hits) { // TODO: Why is the regex not working suddently????????
-   
-               prior_line = line;
-
+        cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
+            
+        if (hits) { // TODO: Why is the regex not working suddently????????
+            
+           for (auto &x : match ) {     // DEBUG START
+          
+              cout <<  x.str()  << endl;   
+           }   
+           
+           cout << "--------------" << endl;// DEBUG END
+            
+           break;    
+  
         } else {
    
-               break;
+            prior_line = line;
         }
 
       } // end while
    } catch (exception& e) {
 
    }
-
-   return std::move(match); // Is this implicit?
+   
+   return match;
+   // return std::move(match); // Is this implicit?
 }
 

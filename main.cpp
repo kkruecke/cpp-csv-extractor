@@ -2,7 +2,6 @@
 #include <iostream>
 #include <memory>     // for unique_ptr, etc
 #include "csvreader.h"
-#include "utility.h"
 
 // MySQL++ headers
 /*
@@ -81,64 +80,44 @@ int main(int argc, char** argv)
   int lineno = 1;
 
   while (reader.moreLines()) {
-
-      cout << lineno++ << endl; 
-
-      smatch matches = reader.getNextRegexMatches();
+      
+      cout << "\n---------------------\n"; // DEBUG
+      
+      smatch matches { reader.getNextRegexMatches() };
+      
+      cout << "In main.cpp printing out returned matches:" << endl; // debug code
+      
+      for (auto &x : matches ) {     // DEBUG START
+          
+           cout <<  x.str()  << endl;   
+      }
+      
+      continue; // DEBUG END
       
       try {
            
          for(size_t i = 1; i < matches.size(); ++i) {
                   
-  /* 
-  From
-  <cppconn/prepared_statement.h>
-
-      virtual void setBigInt(unsigned int parameterIndex, const sql::SQLString& value) = 0;
-
-      virtual void setBlob(unsigned int parameterIndex, std::istream * blob) = 0;
-
-      virtual void setBoolean(unsigned int parameterIndex, bool value) = 0;
-
-      virtual void setDateTime(unsigned int parameterIndex, const sql::SQLString& value) = 0;
-
-      virtual void setDouble(unsigned int parameterIndex, double value) = 0;
-
-      virtual void setInt(unsigned int parameterIndex, int32_t value) = 0;
-
-      virtual void setUInt(unsigned int parameterIndex, uint32_t value) = 0;
-
-      virtual void setInt64(unsigned int parameterIndex, int64_t value) = 0;
-
-      virtual void setUInt64(unsigned int parameterIndex, uint64_t value) = 0;
-
-      virtual void setNull(unsigned int parameterIndex, int sqlType) = 0;
-
-      virtual void setString(unsigned int parameterIndex, const sql::SQLString& value) = 0;
-*/
-             
-   /*
-        TODO: 
-        When a field can be empty/NULL fields, check for this.
-
-        Do I need to do anything with embedded single quotes?
-        Answer: according to https://dev.mysql.com/doc/refman/5.0/en/string-literals.html, no.
-    */
  
-      string submatch = matches[i].str();   
-      cout << submatch << endl;
+           string submatch = matches[i].str();   
+           cout << submatch << endl;
          
       
       /*
        * Remove any enclosing double quotes
        */
+      cout << "Before:   " << submatch << endl;
       
       if (submatch.front() == '"' && submatch.back() == '"') {
         
         submatch = submatch.substr(1, submatch.end() - submatch.begin() - 2);
              
       } 
-        
+      
+      cout << "After:   " << submatch << endl;     
+      
+      continue; // DEBUG skip switch
+      
       switch(i) {
           
           case 1:
@@ -222,6 +201,8 @@ int main(int argc, char** argv)
        
     } // end for 
          
+    return 0; // DEBUG
+    
     auto rc1 = signer_info_stmt->execute(); 
     auto rc2 = signer_comments_stmt->execute(); 
       
