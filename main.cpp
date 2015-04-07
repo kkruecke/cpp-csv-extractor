@@ -74,7 +74,9 @@ int main(int argc, char** argv)
   
   stmt->execute("USE petition");
   
-  unique_ptr<PreparedStatement> pre_stmt { conn->prepareStatement("INSERT INTO test(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
+  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
+
+  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
   int lineno = 1;
 
@@ -135,14 +137,15 @@ int main(int argc, char** argv)
         submatch = submatch.substr(1, submatch.end() - submatch.begin() - 2);
              
       } 
-      
+        
       switch(i) {
           
           case 1:
           {
             int signee_no = stoi(submatch);
             
-            pre_stmt->setInt(1, signee_no);
+            signer_info_stmt->setInt(1, signee_no);
+            signer_comments_stmt->setInt(1, signee_no);
           }
           break;
               
@@ -150,7 +153,7 @@ int main(int argc, char** argv)
           { // DATE: YYY-MM-DD
               string date { submatch.substr(6, 4) + "-" + submatch.substr(0, 2) + "-" + submatch.substr(3, 2) };
               
-              pre_stmt->setDateTime(2, date);
+              signer_info_stmt->setDateTime(2, date);
           }
           break; 
 
@@ -158,10 +161,13 @@ int main(int argc, char** argv)
           {   // First Name 
               
               if (submatch.empty()) {
-                  
+                      
+	           signer_info_stmt->setNull(3, ???int sqlType);
+
+              } else {
+
+                  signer_info_stmt->setString(3, submatch);
               }
-              
-              pre_stmt->setString(3, submatch);
           }
           break; 
 
@@ -171,7 +177,7 @@ int main(int argc, char** argv)
               if (submatch.empty()) {
                   
               }
-              pre_stmt->setString(4, submatch);
+              signer_info_stmt->setString(4, submatch);
           }
           break; 
 
@@ -181,19 +187,21 @@ int main(int argc, char** argv)
               if (submatch.empty()) {
                   
               }
-              pre_stmt->setString(5, submatch);
+              signer_info_stmt->setString(5, submatch);
           }
           break; 
-          /* 
+           
           case 6:    
-          {   // Comments 
+          {   
+              // Comments 
               if (submatch.empty()) {
                   
               }
-              pre_stmt->setString(6, submatch);
+
+            signer_comments_stmt->setInt(2, submatch);
           }
           break; 
-          */
+          
           default:
            break;  
 
@@ -202,9 +210,11 @@ int main(int argc, char** argv)
        
     } // end for 
          
-    auto rc = pre_stmt->execute(); 
+    auto rc1 = signer_info_stmt->execute(); 
+    auto rc2 = signer_comments_stmt->execute(); 
       
-    cout << "Result of pre_stmt->execute() = " << rc << endl;
+    cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
+    cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     //--prepared_stmt->execute();     
            
     } // end try 
