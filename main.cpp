@@ -161,8 +161,8 @@ int main(int argc, char** argv)
           {   // First Name 
               
               if (submatch.empty()) {
-                      
-	           signer_info_stmt->setNull(3, 2); // TODO: What should the second parameter be?
+                   // Per http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter cab be be 0.   
+	           signer_info_stmt->setNull(3, 0); 
 
               } else {
 
@@ -175,9 +175,13 @@ int main(int argc, char** argv)
           {  // Last Name 
               
               if (submatch.empty()) {
+
+                 signer_info_stmt->setNull(4, 0);
                   
+              } else {
+
+                 signer_info_stmt->setString(4, submatch);
               }
-              signer_info_stmt->setString(4, submatch);
           }
           break; 
 
@@ -185,9 +189,13 @@ int main(int argc, char** argv)
           {   // City 
               
               if (submatch.empty()) {
+
+                 signer_info_stmt->setNull(5, 0);
                   
+              } else {
+
+                 signer_info_stmt->setString(5, submatch);
               }
-              signer_info_stmt->setString(5, submatch);
           }
           break; 
            
@@ -195,10 +203,13 @@ int main(int argc, char** argv)
              
               // Comments 
               if (submatch.empty()) {
+
+                 signer_comments_stmt->setNull(2, 0);
                   
-              }
+              } else {
           
-            signer_comments_stmt->setString(2, submatch);
+                 signer_comments_stmt->setString(2, submatch);
+              }
           
           break; 
           
@@ -206,7 +217,7 @@ int main(int argc, char** argv)
            break;  
 
       } // end switch
-       
+        
        
     } // end for 
          
