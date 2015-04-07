@@ -78,12 +78,14 @@ int main(int argc, char** argv)
   unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
   int lineno = 1;
+  smatch matches;
 
   while (reader.moreLines()) {
       
       cout << "\n---------------------\n"; // DEBUG
       
-      smatch matches { reader.getNextRegexMatches() };
+      //--smatch matches { reader.getNextRegexMatches() }; COMMENTED OUT WHILE DEBUGGING
+      reader.getNextRegexMatches(matches); 
       
       cout << "In main.cpp printing out returned matches:" << endl; // debug code
       

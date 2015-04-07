@@ -17,6 +17,7 @@ public:
     CsvReader(std::string file_name, const std::regex& reg);
     
     std::smatch getNextRegexMatches();
+    void getNextRegexMatches(std::smatch&);
     bool moreLines();
 };
 

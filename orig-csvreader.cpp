@@ -31,11 +31,11 @@ smatch CsvReader::getNextRegexMatches()
       while (1) {
 
         getline(input, line);
-   
+
         auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
    
         line = prior_line + transformed_line;
-   
+
         bool hits = regex_search(line, match, csv_regex);
    
         cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
@@ -52,7 +52,7 @@ smatch CsvReader::getNextRegexMatches()
            break;    
   
         } else {
-   
+             
             prior_line = line;
         }
 
@@ -65,3 +65,17 @@ smatch CsvReader::getNextRegexMatches()
    // return std::move(match); // Is this implicit?
 }
 
+bool CsvReader::moreLines() 
+{
+    char c;
+    
+    input >> c;
+    bool bResult = input.good();
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult;
+}
