@@ -162,7 +162,7 @@ int main(int argc, char** argv)
               
               if (submatch.empty()) {
                       
-	           signer_info_stmt->setNull(3, ???int sqlType);
+	           signer_info_stmt->setNull(3, 2); // TODO: What should the second parameter be?
 
               } else {
 
@@ -192,14 +192,14 @@ int main(int argc, char** argv)
           break; 
            
           case 6:    
-          {   
+             
               // Comments 
               if (submatch.empty()) {
                   
               }
-
-            signer_comments_stmt->setInt(2, submatch);
-          }
+          
+            signer_comments_stmt->setString(2, submatch);
+          
           break; 
           
           default:
