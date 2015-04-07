@@ -65,3 +65,17 @@ smatch CsvReader::getNextRegexMatches()
    // return std::move(match); // Is this implicit?
 }
 
+bool CsvReader::moreLines() 
+{
+    char c;
+    
+    input >> c;
+    bool bResult = input.good();
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult;
+}

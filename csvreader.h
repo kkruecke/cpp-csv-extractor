@@ -20,16 +20,4 @@ public:
     bool moreLines();
 };
 
-inline bool CsvReader::moreLines() 
-{
-    char c;
-    bool bResult = input >> c;
-    
-    if (bResult) {
-        
-        input.putback(c);
-    }
-    
-    return bResult;
-}
 #endif	/* CSVREADER_H */
