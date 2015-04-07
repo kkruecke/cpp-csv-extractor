@@ -31,11 +31,11 @@ smatch CsvReader::getNextRegexMatches()
       while (1) {
 
         getline(input, line);
-  /* DEBUG START 
+   
         auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
    
         line = prior_line + transformed_line;
-     DEBUG END */
+   
         bool hits = regex_search(line, match, csv_regex);
    
         cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
@@ -52,7 +52,7 @@ smatch CsvReader::getNextRegexMatches()
            break;    
   
         } else {
-             
+   
             prior_line = line;
         }
 
