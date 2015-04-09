@@ -276,15 +276,12 @@ while (reader.moreLines()) {
        
     } // end for 
          
-   /*  UNComment out later
     auto rc1 = signer_info_stmt->execute(); 
     auto rc2 = signer_comments_stmt->execute(); 
       
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
-    */ 
-    prepared_stmt->execute();     
-           
+     
     } catch (SQLException & e) {
            
          cerr << "Error code = " << e.getErrorCode() << endl;
