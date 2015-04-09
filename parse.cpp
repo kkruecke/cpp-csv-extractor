@@ -7,7 +7,7 @@ string line;
 
 string s {line};
 
-int index = 0;
+int start = index = 0;
 
 while (1) {
 
@@ -16,23 +16,28 @@ while (1) {
     case 0:
             for(; s[index] !=','; index++);
             ++comma_cnt; 
-            string seq_no_str = s.substr(0, index);              
+            string str = s.substr(start, index);              
             seq_no = atoi(seq_no_str);
             break;  
    
     case 1:  
+        string str = s.substr(start, index);  
         break;
    
     case 2:  
+        string str = s.substring str(start, index);  
         break;
    
     case 3:  
+        string str = s.substring str(start, index);  
         break;
    
     case 4:  
+        string str = s.substring str(start, index);  
         break;
    
     case 5:  
+        s = s.substring str(start, index);  
         break;
 
     case 6:  
