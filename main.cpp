@@ -218,10 +218,13 @@ try {
   cout << " Regex match count is " << matches.size() << endl;
       
   for(size_t i = 1; i < matches.size(); ++i) {
+      
+          ssub_match submatch = matches[i];
           
-          string submatch = matches[i].str();        
+          //TODO: Test length of string within submatch
+          str = ? 
+          cout << str << endl;
           
-          cout << submatch << endl;
          
       /*
        * Remove any enclosing double quotes
@@ -229,13 +232,13 @@ try {
       cout << "Before:\n" << submatch << endl;
       
       
-      if (submatch.front() == '"' && submatch.back() == '"') {
+      if (str.front() == '"' && str.back() == '"') {
         
-        submatch = submatch.substr(1, submatch.end() - submatch.begin() - 2);
+        str = str.substr(1, str.end() - str.begin() - 2);
              
       } 
       
-      cout << "After:\n" << submatch << endl;     
+      cout << "After:\n" << str << endl;     
       
       continue; // DEBUG skip switch
      /* 
@@ -329,13 +332,19 @@ try {
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     */ 
   } // end for
+} catch (std::length_error &e) {
+    
+       cerr << "length_error exception caught: " << e.what() << '\n';
+       cerr << "Terminating" << "\n";
+       throw e;
+
 } catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
                cerr << "C++11 exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
-               return 0;
-      }
+               throw e;
+}
 /* catch (SQLException & e) { Make this the first exception
            
          cerr << "Error code = " << e.getErrorCode() << endl;
