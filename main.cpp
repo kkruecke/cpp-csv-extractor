@@ -212,20 +212,19 @@ while (moreLines(input)) {
  } // end while
   
   try {
-      cout << " ==> main after return <== \n";
-      
-    
+
+      cout << " Regex match count is " << matches.size() << endl;
       
       for(size_t i = 1; i < matches.size(); ++i) {
           
-          string submatch {matches[i].str()};        
+          string submatch = matches[i].str();        
           
           cout << submatch << endl;
          
       /*
        * Remove any enclosing double quotes
        */
-      cout << "Before:   " << submatch << endl;
+      cout << "Before:\n" << submatch << endl;
       
       
       if (submatch.front() == '"' && submatch.back() == '"') {
@@ -234,7 +233,7 @@ while (moreLines(input)) {
              
       } 
       
-      cout << "After:   " << submatch << endl;     
+      cout << "After:\n" << submatch << endl;     
       
       continue; // DEBUG skip switch
       
@@ -320,13 +319,13 @@ while (moreLines(input)) {
         
        
     } // end for 
-         
+    /*     
     auto rc1 = signer_info_stmt->execute(); 
     auto rc2 = signer_comments_stmt->execute(); 
       
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
-     
+    */ 
     } catch (SQLException & e) {
            
          cerr << "Error code = " << e.getErrorCode() << endl;
