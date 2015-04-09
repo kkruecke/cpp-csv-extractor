@@ -51,11 +51,11 @@ smatch CsvReader::getNextRegexMatches()
      line = prior_line + transformed_line;
 
      bool hits = regex_search(line, match, csv_regex);
-   
-     cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
          
      if (hits) { // TODO: Why is the regex not working suddently????????
-         
+              
+        cout << " --> In CsvReader::getNextRegexMatches() <-- " << endl; // debug code
+
         for (auto &x : match ) {     // DEBUG START
        
            cout <<  x.str()  << endl;   
