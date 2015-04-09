@@ -166,7 +166,8 @@ while (reader.moreLines()) {
 
 //smatch matches { reader.test(str) };
     
-  smatch matches { reader.getNextRegexMatches() };  
+  smatch matches;
+  reader.getNextRegexMatches();  
   
   try {
       cout << " ==> main after return <== \n";
