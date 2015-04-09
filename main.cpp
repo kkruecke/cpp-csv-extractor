@@ -1,23 +1,24 @@
 #include <cstdlib>
 #include <iostream>
 #include <memory>     // for unique_ptr, etc
+#include <exception>
 #include <vector> // DEBUG ONLY
 #include "csvreader.h"
 
-#include "mysql_driver.h" 
-#include "mysql_connection.h" 
+//--#include "mysql_driver.h" 
+//--#include "mysql_connection.h" 
 
 // MySQL Connector for C++
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/resultset.h>
-#include <cppconn/statement.h>
-#include <cppconn/prepared_statement.h>
-
+//--#include <cppconn/driver.h>
+//--#include <cppconn/exception.h>
+//--#include <cppconn/resultset.h>
+//--#include <cppconn/statement.h>
+//--#include <cppconn/prepared_statement.h>
+//--
 // debug only
 #include <locale>
 using namespace std;
-using namespace sql;
+//--using namespace sql;
 
 bool moreLines(ifstream& input) 
 {
@@ -88,16 +89,16 @@ int main(int argc, char** argv)
    // TODO: A transaction support later.
 
   // Credentials: (url, user, password)
-  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
-
-  // Set database to use.
-  unique_ptr< Statement > stmt(conn->createStatement());
-  
-  stmt->execute("USE petition");
-  
-  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
-
-  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
+  //--unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+//--
+  //--// Set database to use.
+  //--unique_ptr< Statement > stmt(conn->createStatement());
+  //--
+  //--stmt->execute("USE petition");
+  //--
+  //--unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
+//--
+  //--unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
    
   
@@ -182,8 +183,6 @@ vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",
 //while (reader.moreLines()) {
 while (moreLines(input)) {  
 
-//for(auto& str: v) {  // The code worked fine with the array above.
-
 //smatch matches { reader.test(str) };
     
  smatch matches;
@@ -236,7 +235,7 @@ while (moreLines(input)) {
       cout << "After:\n" << submatch << endl;     
       
       continue; // DEBUG skip switch
-      
+     /* 
       switch(i) {
           
           case 1:
@@ -319,28 +318,28 @@ while (moreLines(input)) {
         
        
     } // end for 
-    /*     
+         
     auto rc1 = signer_info_stmt->execute(); 
     auto rc2 = signer_comments_stmt->execute(); 
       
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     */ 
-    } catch (SQLException & e) {
-           
-         cerr << "Error code = " << e.getErrorCode() << endl;
-         
-         cerr << "MySQL State message = " << e.getSQLState() << endl;
-         
-     }
-     catch (exception & e) {
+    } catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
                cerr << "C++11 exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
                return 0;
       }
-
+/* catch (SQLException & e) { Make this the first exception
+           
+         cerr << "Error code = " << e.getErrorCode() << endl;
+         
+         cerr << "MySQL State message = " << e.getSQLState() << endl;
+         
+     }*/
+     
     }  // end while    
     
     return(0);
