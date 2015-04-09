@@ -83,7 +83,7 @@ int main(int argc, char** argv)
   
   regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
                                         
-  CsvReader reader(argv[1], csv_regex); 
+  //--CsvReader reader(argv[1], csv_regex); 
     
    // TODO: A transaction support later.
 
@@ -99,10 +99,8 @@ int main(int argc, char** argv)
 
   unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
-  int lineno = 1;
+   
   
-  
-
 /*
 vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",\"I have friends whose eyes have been permanently disfigured and lenses marred by this surgery - resulting in chronic dry-eye and irreparable poor vision.\"",
 "2,01-11-2011,Paula,Cofer,Mango,Florida,\"United States\",\"I suffered permanent, life-altering complications from LASIK.  I know of thousands of people who also had a bad outcome from LASIK.  Medical studies demonstrate that LASIK 'side effects' are common, and that adverse effects are universal.  LASIK surgeons do not fully inform potential patients, and are engaged in a cover-up. Clinical trials that the FDA relied upon were tainted by dishonest investigators.\"",
@@ -216,17 +214,19 @@ while (moreLines(input)) {
   try {
       cout << " ==> main after return <== \n";
       
-      for(size_t i = 1; i < matches.size(); ++i) {
-                  
- 
-           string submatch = matches[i].str();   
-           cout << submatch << endl;
-         
+    
       
+      for(size_t i = 1; i < matches.size(); ++i) {
+          
+          string submatch {matches[i].str()};        
+          
+          cout << submatch << endl;
+         
       /*
        * Remove any enclosing double quotes
        */
       cout << "Before:   " << submatch << endl;
+      
       
       if (submatch.front() == '"' && submatch.back() == '"') {
         
