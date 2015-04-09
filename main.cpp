@@ -192,7 +192,8 @@ while (moreLines(input)) {
  while (1) {
 
      getline(input, line);
-
+     cout << "Line:\n" << line << endl;
+     
      string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
    
      line = prior_line + transformed_line;

@@ -27,7 +27,10 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-Use no-names-xxxx.csv file. It has been:
+
+Go through regex tutorial. Clang code is not finding hits.
+
+Use working.csv or no-names-xxxx.csv file. Both are the same. They have been:
 
 1. Doing dos2unix on file
 2. Removing first and last name by importing into excel then exporting them back into a csv file.
