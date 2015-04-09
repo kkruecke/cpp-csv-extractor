@@ -29,6 +29,10 @@ TODOes
 
 getNextRegexMatch() works correctly, but the returned smatch value is corrupted for some reason. I could try using boost regex, to see if it has the problem.
 
+It could be due to funny characters. Try"
+1. Doing dos2unix on file
+2. Removing first and last name by importing into excel then exporting them back into a csv file.
+2. Running iconv -f UTF-8 -t ASCII and looking for characters that could not be converted.
 
 The petition.csv is a Unicode UTF-8 file. 
 ----------------------------------------
