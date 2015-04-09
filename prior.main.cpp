@@ -4,6 +4,12 @@
 #include <vector> // DEBUG ONLY
 #include "csvreader.h"
 
+// MySQL++ headers
+/*
+#include <mysql++.h> 
+#include <ssqls.h>
+*/
+
 #include "mysql_driver.h" 
 #include "mysql_connection.h" 
 
@@ -19,22 +25,6 @@
 using namespace std;
 using namespace sql;
 
-bool moreLines(ifstream& input) 
-{
-    char c;
-    
-    input >> c;
-    
-    bool bResult = input.good();
-    
-    if (bResult) {
-        
-        input.putback(c);
-    }
-    
-    return bResult;
-}
-
 /*
  * 
  * Format of CSV file:
@@ -45,20 +35,10 @@ bool moreLines(ifstream& input)
  */
 int main(int argc, char** argv) 
 {
-  ifstream  input;
-  
+    
   if (argc != 2) {
 
       cerr << "Please re-run with the input file name as the first parameter.\n";
-      return 0;
-      
-  } 
-      
-  input.open(argv[1]);
-  
-  if (!input.is_open()) {
-      
-      cerr << "Could not open file " << argv[1] << "\n";
       return 0;
   }
 
@@ -100,8 +80,6 @@ int main(int argc, char** argv)
   unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
   int lineno = 1;
-  
-  
 
 /*
 vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",\"I have friends whose eyes have been permanently disfigured and lenses marred by this surgery - resulting in chronic dry-eye and irreparable poor vision.\"",
@@ -181,37 +159,15 @@ vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",
 "76,01-12-2011,Samer,Morcos,Danville,California,\"United States\",\"I developed corneal ectasia in the left eye post Lasik plus have severe image distortion at night with halos, double vision and depth misperception. Now I wear RGP contact in the left\"",
 "77,01-12-2011,\"Rose An n\",Coville,Cortland,\"New York\",\"United States\",\"I am left permanently disable due to PRK surgery triggering the late Zoster Virus in my body.  This has the potential to cause damage to a great many people.  The doctors don't even speak poorly about each other, buiy222, Tid\""};
 */
-//while (reader.moreLines()) {
-while (moreLines(input)) {  
+while (reader.moreLines()) {
 
 //for(auto& str: v) {  // The code worked fine with the array above.
 
+
 //smatch matches { reader.test(str) };
     
- smatch matches;
-
- string line, prior_line;
-
- while (1) {
-
-     getline(input, line);
-
-     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
-   
-     line = prior_line + transformed_line;
-
-     bool hits = regex_search(line, matches, csv_regex);
-         
-     if (hits) { 
-              
-        break;    
-  
-     } else {
-          
-         prior_line = line;
-     }
-
- } // end while
+  smatch matches;
+  reader.getNextRegexMatches();  
   
   try {
       cout << " ==> main after return <== \n";
