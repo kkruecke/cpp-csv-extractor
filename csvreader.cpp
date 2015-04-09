@@ -46,13 +46,13 @@ smatch CsvReader::getNextRegexMatches()
 
      getline(input, line);
 
-     auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+     string transformed_line = regex_replace(line, two_dbl_quotes, string{"'"}); 
    
      line = prior_line + transformed_line;
 
      bool hits = regex_search(line, match, csv_regex);
          
-     if (hits) { // TODO: Why is the regex not working suddently????????
+     if (hits) { 
               
         cout << " --> In CsvReader::getNextRegexMatches() <-- " << endl; // debug code
 
