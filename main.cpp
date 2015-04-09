@@ -180,7 +180,7 @@ vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",
 "76,01-12-2011,Samer,Morcos,Danville,California,\"United States\",\"I developed corneal ectasia in the left eye post Lasik plus have severe image distortion at night with halos, double vision and depth misperception. Now I wear RGP contact in the left\"",
 "77,01-12-2011,\"Rose An n\",Coville,Cortland,\"New York\",\"United States\",\"I am left permanently disable due to PRK surgery triggering the late Zoster Virus in my body.  This has the potential to cause damage to a great many people.  The doctors don't even speak poorly about each other, buiy222, Tid\""};
 */
-//while (reader.moreLines()) {
+
 while (moreLines(input)) {  
 
 //smatch matches { reader.test(str) };
@@ -210,11 +210,11 @@ while (moreLines(input)) {
 
  } // end while
   
-  try {
+try {
 
-      cout << " Regex match count is " << matches.size() << endl;
+  cout << " Regex match count is " << matches.size() << endl;
       
-      for(size_t i = 1; i < matches.size(); ++i) {
+  for(size_t i = 1; i < matches.size(); ++i) {
           
           string submatch = matches[i].str();        
           
@@ -325,7 +325,8 @@ while (moreLines(input)) {
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     */ 
-    } catch (exception & e) {
+  } // end for
+} catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
                cerr << "C++11 exception caught: " << e.what() << '\n';
