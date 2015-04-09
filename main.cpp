@@ -17,7 +17,7 @@
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
-//--#include <cppconn/statement.h>
+#include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
 // debug only
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
   int lineno = 1;
 
-
+/*
 vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",\"I have friends whose eyes have been permanently disfigured and lenses marred by this surgery - resulting in chronic dry-eye and irreparable poor vision.\"",
 "2,01-11-2011,Paula,Cofer,Mango,Florida,\"United States\",\"I suffered permanent, life-altering complications from LASIK.  I know of thousands of people who also had a bad outcome from LASIK.  Medical studies demonstrate that LASIK 'side effects' are common, and that adverse effects are universal.  LASIK surgeons do not fully inform potential patients, and are engaged in a cover-up. Clinical trials that the FDA relied upon were tainted by dishonest investigators.\"",
 "3,01-11-2011,carmen,Fogliano,\"West Chester\",Pennsylvania,\"United States\",\"I had LASIK on 10-23-10. Since then ( and prior to! ) had dry eyes. Burning in my one eye. Starbursts and halos too... It's important to stop this cause of present problems and future unknown problems! My doctor said I was a good candidate.  Well I was not and he doesn't wanna hear about my ' problems'.\"",
@@ -158,7 +158,7 @@ vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",
 "75,01-12-2011,Katie,\"Van Sloten\",Macomb,Illinois,\"United States\",\"My friend has daily pain thanks to Lasik as well as other challenges.  When will the well being of people trump corporate greed? Enough is enough!\"",
 "76,01-12-2011,Samer,Morcos,Danville,California,\"United States\",\"I developed corneal ectasia in the left eye post Lasik plus have severe image distortion at night with halos, double vision and depth misperception. Now I wear RGP contact in the left\"",
 "77,01-12-2011,\"Rose An n\",Coville,Cortland,\"New York\",\"United States\",\"I am left permanently disable due to PRK surgery triggering the late Zoster Virus in my body.  This has the potential to cause damage to a great many people.  The doctors don't even speak poorly about each other, buiy222, Tid\""};
-
+*/
 while (reader.moreLines()) {
 
 //for(auto& str: v) {  // The code worked fine with the array above.
@@ -283,7 +283,7 @@ while (reader.moreLines()) {
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     */ 
-    //--prepared_stmt->execute();     
+    prepared_stmt->execute();     
            
     } catch (SQLException & e) {
            
