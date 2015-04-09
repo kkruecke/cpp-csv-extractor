@@ -21,22 +21,36 @@ while (1) {
             break;  
    
     case 1:  
+    case 2:  
+    case 3:  
+    case 4:  
+    case 5:  // Skip comma, if starting double quote.
+         for (*++s == '"') {
+
+            while(*s++ != '"'); // go to enclosing double quote.
+
+            if (*s++ != ',') {
+
+                 throw badly_formed;
+            }  
+
+         } else {
+
+            while(*s++ != ',');
+         } 
+
         string str = s.substr(start, index);  
         break;
    
-    case 2:  
         string str = s.substring str(start, index);  
         break;
    
-    case 3:  
         string str = s.substring str(start, index);  
         break;
    
-    case 4:  
         string str = s.substring str(start, index);  
         break;
    
-    case 5:  
         s = s.substring str(start, index);  
         break;
 
