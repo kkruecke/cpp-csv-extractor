@@ -14,7 +14,7 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
    }
 }
 
-smatch CsvReader::test(const string &line, const regex& csv_regex)
+smatch CsvReader::test(const string &line) 
 {
    smatch match;
 
