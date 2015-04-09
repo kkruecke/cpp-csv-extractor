@@ -2,7 +2,6 @@
 #include <iostream>
 #include <memory>     // for unique_ptr, etc
 #include <vector> // DEBUG ONLY
-#include <regex>  // DEBUG ONLY
 #include "csvreader.h"
 
 // MySQL++ headers
@@ -25,30 +24,6 @@
 #include <locale>
 using namespace std;
 using namespace sql;
-
-/* The expression: 
-
-   test();
-
-   is an rvalue */
-
-smatch test(const string& input, const regex& csv_regex) 
-{
-   smatch match;
-
-   auto transformed_line = regex_replace(input, regex{"(\"\")"}, string{"'"});
-
-   bool hits = regex_search(transformed_line, match, csv_regex);
-
-   cout << "---> In test(const string& line) <---" << "\n";
-
-   for (auto &x : match ) {     // DEBUG START
-          
-        cout <<  x.str()  << endl;   
-   }   
- 
-   return match;
-}
 
 /*
  * 
@@ -107,7 +82,7 @@ int main(int argc, char** argv)
   int lineno = 1;
   smatch matches;
 
-  while (reader.moreLines()) {
+  //--while (reader.moreLines()) {
 /*
   vector<string> v{ "3,01-11-2011,carmen,Fogliano,\"West Chester\",Pennsylvania,\"United States\",\"I had LASIK on 10-23-10. Since then ( and prior to! ) had dry eyes. Burning in my one eye. Starbursts and halos too... It's important to stop this cause of present problems and future unknown problems! My doctor said I was a good candidate.  Well I was not and he doesn't wanna hear about my \"\" problems\"\".\"",
 "5,01-11-2011,belinda,brown,knoxville,Tennessee,\"United States\",\"My eyes were ruined from lasik\"",
@@ -120,39 +95,23 @@ int main(int argc, char** argv)
 
  vector<string> v{ "28,01-11-2011,Laura,Lelievre,\"Fall City\",Washington,\"United States\",\"Because of my unfortunate knowledge of doing anything to the eyes permanently which result in pain and less visible spectrum.\"" ,
  "29,01-11-2011,Laura,Lelievre,\"Fall City\",Washington,\"United States\",\"Because of my unfortunate knowledge of doing anything to the eyes permanently which result in pain and less visible spectrum.\"" };
-
- /*
   for(const auto & str : v) { //DEBUG    
       
      //-- smatch matches { reader.getNextRegexMatches() }; RE-ENABLE
-
-      cout << " test(): \n" << str << endl;
-
-      smatch matches = test(str, csv_regex); 
+      cout << " THE STRING IS: \n" << str << endl;
+      smatch matches = reader.test(str); 
 
       //reader.getNextRegexMatches(matches); 
       cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"; // DEBUG
       
-      cout << "==> main.cpp test() <==" << endl; // debug code
-      
-      for (auto &x : matches ) {     // DEBUG START
-          
-           cout <<  x.str()  << endl;   
-      }
-  */
- 
-      smatch matches = reader.getNextRegexMatches(csv_regex);  
-
-      cout << "==> main.cpp reader.test(str) <==" << endl; // debug code
+      cout << "==> main.cpp <==" << endl; // debug code
       
       for (auto &x : matches ) {     // DEBUG START
           
            cout <<  x.str()  << endl;   
       }
       
-
       continue; // DEBUG END
-   
       
       try {
            

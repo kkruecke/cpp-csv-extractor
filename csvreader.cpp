@@ -14,6 +14,24 @@ CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), l
    }
 }
 
+smatch CsvReader::test(const string &line, const regex& csv_regex)
+{
+   smatch match;
+
+   auto transformed_line = regex_replace(line,regex {"(\"\")"}, string{"'"});
+
+   bool hits = regex_search(transformed_line, match, csv_regex);
+
+   cout << "---> CsvReader::test(const string& line) <---" << "\n";
+
+   for (auto &x : match ) {     // DEBUG START
+          
+        cout <<  x.str()  << endl;   
+   }   
+ 
+   return match;
+}
+
 smatch CsvReader::getNextRegexMatches()
 {
    ++line_no;
@@ -47,8 +65,6 @@ smatch CsvReader::getNextRegexMatches()
               cout <<  x.str()  << endl;   
            }   
            
-           cout << "--------------" << endl;// DEBUG END
-            
            break;    
   
         } else {
@@ -65,14 +81,14 @@ smatch CsvReader::getNextRegexMatches()
    // return std::move(match); // Is this implicit?
 }
 
-void CsvReader::getNextRegexMatches(smatch& match_ref)
+smatch CsvReader::getNextRegexMatches(const regex& param_regex)
 {
    ++line_no;
 
    string line;
 
    regex two_dbl_quotes{"(\"\")"};
-   
+
    smatch match;
 
    try {
@@ -87,7 +103,7 @@ void CsvReader::getNextRegexMatches(smatch& match_ref)
    
         line = prior_line + transformed_line;
 
-        bool hits = regex_search(line, match, csv_regex);
+        bool hits = regex_search(line, match, param_regex);
    
         cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
             
@@ -98,8 +114,6 @@ void CsvReader::getNextRegexMatches(smatch& match_ref)
               cout <<  x.str()  << endl;   
            }   
            
-           cout << "--------------" << endl;// DEBUG END
-            
            break;    
   
         } else {
@@ -111,8 +125,9 @@ void CsvReader::getNextRegexMatches(smatch& match_ref)
    } catch (exception& e) {
 
    }
-   match_ref = match;
-   return; 
+   
+   return match;
+   // return std::move(match); // Is this implicit?
 }
 
 bool CsvReader::moreLines() 
