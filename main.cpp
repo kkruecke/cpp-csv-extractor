@@ -80,7 +80,6 @@ int main(int argc, char** argv)
   unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
   int lineno = 1;
-  
 
 
 vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",\"I have friends whose eyes have been permanently disfigured and lenses marred by this surgery - resulting in chronic dry-eye and irreparable poor vision.\"",

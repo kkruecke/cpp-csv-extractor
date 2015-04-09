@@ -36,46 +36,39 @@ smatch CsvReader::getNextRegexMatches()
 {
    ++line_no;
 
-   string line;
-
    regex two_dbl_quotes{"(\"\")"};
 
    smatch match;
 
-   try {
+   string line, prior_line;
 
-      string line, prior_line;
+   while (1) {
 
-      while (1) {
+     getline(input, line);
 
-        getline(input, line);
-
-        auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+     auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
    
-        line = prior_line + transformed_line;
+     line = prior_line + transformed_line;
 
-        bool hits = regex_search(line, match, csv_regex);
+     bool hits = regex_search(line, match, csv_regex);
    
-        cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
-            
-        if (hits) { // TODO: Why is the regex not working suddently????????
-            
-           for (auto &x : match ) {     // DEBUG START
-          
-              cout <<  x.str()  << endl;   
-           }   
-           
-           break;    
+     cout << "In CsvReader::getNextRegexMatches():" << endl; // debug code
+         
+     if (hits) { // TODO: Why is the regex not working suddently????????
+         
+        for (auto &x : match ) {     // DEBUG START
+       
+           cout <<  x.str()  << endl;   
+        }   
+        
+        break;    
   
-        } else {
-             
-            prior_line = line;
-        }
+     } else {
+          
+         prior_line = line;
+     }
 
-      } // end while
-   } catch (exception& e) {
-
-   }
+   } // end while
    
    return match;
    // return std::move(match); // Is this implicit?

@@ -18,7 +18,7 @@ public:
     
     CsvReader(std::string file_name, const std::regex& reg);
     
-    std::smatch test(const std::string& s, const std::regex& r); // DEBUG
+    std::smatch test(const std::string& s);
 
     std::smatch getNextRegexMatches();
      std::smatch getNextRegexMatches(const std::regex& r);
