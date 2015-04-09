@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>     // for unique_ptr, etc
 #include <vector> // DEBUG ONLY
+#include <regex>  // DEBUG ONLY
 #include "csvreader.h"
 
 // MySQL++ headers
@@ -9,21 +10,45 @@
 #include <mysql++.h> 
 #include <ssqls.h>
 */
-
-#include "mysql_driver.h" 
-#include "mysql_connection.h" 
-
-// MySQL Connector for C++
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/resultset.h>
-//--#include <cppconn/statement.h>
-#include <cppconn/prepared_statement.h>
-
+//--
+//--#include "mysql_driver.h" 
+//--#include "mysql_connection.h" 
+//--
+//--// MySQL Connector for C++
+//--#include <cppconn/driver.h>
+//--#include <cppconn/exception.h>
+//--#include <cppconn/resultset.h>
+//--//--#include <cppconn/statement.h>
+//--#include <cppconn/prepared_statement.h>
+//--
 // debug only
 #include <locale>
 using namespace std;
-using namespace sql;
+//--using namespace sql;
+
+/* The expression: 
+
+   test();
+
+   is an rvalue */
+
+smatch test(const string& input, const regex& csv_regex) 
+{
+   smatch match;
+
+   auto transformed_line = regex_replace(input, regex{"(\"\")"}, string{"'"});
+
+   bool hits = regex_search(transformed_line, match, csv_regex);
+
+   cout << "---> In test(const string& line) <---" << "\n";
+
+   for (auto &x : match ) {     // DEBUG START
+          
+        cout <<  x.str()  << endl;   
+   }   
+ 
+   return match;
+}
 
 /*
  * 
@@ -68,19 +93,19 @@ int main(int argc, char** argv)
    // TODO: A transaction support later.
 
   // Credentials: (url, user, password)
-  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+//--  unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
 
   // Set database to use.
-  unique_ptr< Statement > stmt(conn->createStatement());
+//--  unique_ptr< Statement > stmt(conn->createStatement());
   
-  stmt->execute("USE petition");
+//--  stmt->execute("USE petition");
   
-  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
+//--  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
-  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
+//--  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
   int lineno = 1;
-  
+  smatch matches;
 
   while (reader.moreLines()) {
 /*
@@ -92,16 +117,50 @@ int main(int argc, char** argv)
 "35,01-11-2011,Scott,Schulz,Kennesaw,Georgia,\"United States\",\"My girlfriend of 3 years has had her life turned upside down by this awful surgery.  She scouted one of the top locations in the region and paid top dollar only to be left with seemingly permanent after effects.  Down with LASIK and my support to your petition.\"",
 "40,01-11-2011,Jacques,Oyharcabal,Burlingame,California,\"United States\",\"I am having many complications as a result of LASIK\"" };
 */
-  smatch matches { reader.getNextRegexMatches() };
-  
-  try {
+
+ vector<string> v{ "28,01-11-2011,Laura,Lelievre,\"Fall City\",Washington,\"United States\",\"Because of my unfortunate knowledge of doing anything to the eyes permanently which result in pain and less visible spectrum.\"" ,
+ "29,01-11-2011,Laura,Lelievre,\"Fall City\",Washington,\"United States\",\"Because of my unfortunate knowledge of doing anything to the eyes permanently which result in pain and less visible spectrum.\"" };
+
+ /*
+  for(const auto & str : v) { //DEBUG    
+      
+     //-- smatch matches { reader.getNextRegexMatches() }; RE-ENABLE
+
+      cout << " test(): \n" << str << endl;
+
+      smatch matches = test(str, csv_regex); 
+
+      //reader.getNextRegexMatches(matches); 
+      cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"; // DEBUG
+      
+      cout << "==> main.cpp test() <==" << endl; // debug code
+      
+      for (auto &x : matches ) {     // DEBUG START
+          
+           cout <<  x.str()  << endl;   
+      }
+  */
+ 
+      smatch matches = reader.getNextRegexMatches(csv_regex);  
+
+      cout << "==> main.cpp reader.test(str) <==" << endl; // debug code
+      
+      for (auto &x : matches ) {     // DEBUG START
+          
+           cout <<  x.str()  << endl;   
+      }
+      
+
+   continue; // DEBUG END
+   
+   try {
            
       for(size_t i = 1; i < matches.size(); ++i) {
                   
  
            string submatch = matches[i].str();   
            cout << submatch << endl;
-         
+                 
       
       /*
        * Remove any enclosing double quotes
@@ -116,8 +175,7 @@ int main(int argc, char** argv)
       
       cout << "After:   " << submatch << endl;     
       
-      continue; // DEBUG skip switch
-      
+/*      
       switch(i) {
           
           case 1:
@@ -201,31 +259,53 @@ int main(int argc, char** argv)
        
     } // end for 
          
-   /*  UNComment out later
+    return 0; // DEBUG
+    
     auto rc1 = signer_info_stmt->execute(); 
     auto rc2 = signer_comments_stmt->execute(); 
       
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
-    */ 
     //--prepared_stmt->execute();     
-           
-    } catch (SQLException & e) {
-           
-         cerr << "Error code = " << e.getErrorCode() << endl;
-         
-         cerr << "MySQL State message = " << e.getSQLState() << endl;
-         
-     }
-     catch (exception & e) {
+*/  
+      } // end for
+    } catch (exception & e) {
                 
                // catch-all for C++11 exceptions 
                cerr << "C++11 exception caught: " << e.what() << '\n';
                cerr << "Terminating" << "\n";
                return 0;
-      }
+    }
+      /* TODO: Check these exceptions that are Mysql++ exceptions to libmysqlcppconn7 exceptions.
+      catch (const mysqlpp::BadQuery& er) { 
+            
+      	// Handle any query errors
+      	cerr << "Query error: " << er.what() << endl;
+      	return -1;
+          } 
+          catch (const mysqlpp::BadConversion& er) {
+              
+		// Handle bad conversions
+		cerr << "Conversion error: " << er.what() << endl <<
+				"\tretrieved data size: " << er.retrieved <<
+				", actual size: " << er.actual_size << endl;
+		return -1;
+	    }
+	    catch (const mysqlpp::Exception& er) {
+                
+		// Catch-all for any other MySQL++ exceptions
+		cerr << "Error: " << er.what() << endl;
+		return -1;
+	    }
+         */ 
+//--        catch (SQLException & e) {
+//--            
+//--          cerr << "Error code = " << e.getErrorCode() << endl;
+//--          
+//--          cerr << "MySQL State message = " << e.getSQLState() << endl;
+//--          
+//--        
 
-    }  // end while    
-    
+    } // end while
     return(0);
 }
