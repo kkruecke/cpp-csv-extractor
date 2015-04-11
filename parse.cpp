@@ -1,3 +1,5 @@
+vector<string> results(8);
+
 int comman_cnt = 0;
 int substr_length = 0;
 
@@ -17,7 +19,7 @@ while (1) {
             for(; s[index] !=','; index++);
             ++comma_cnt; 
             string str = s.substr(start, index);              
-            seq_no = atoi(seq_no_str);
+            //seq_no = atoi(seq_no_str);
             break;  
    
     case 1:  
