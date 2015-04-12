@@ -1,28 +1,34 @@
-vector<string> results(8);
 
-int comman_cnt = 0;
+vector<<pair<int>> indecies(8);
+
+int comma_cnt = 0;
 int substr_length = 0;
 
-int seq_no;
+const int date_length = 10;
 
 string line;
 
-string s {line};
-
-int start = index = 0;
+int start = current_index = 0;
 
 while (1) {
 
   switch (comma_cnt) {
 
     case 0:
-            for(; s[index] !=','; index++);
+            for(; s[index] !=','; current_index++);
+
             ++comma_cnt; 
-            string str = s.substr(start, index);              
-            //seq_no = atoi(seq_no_str);
+
+            indecies[0] = make_pair(start, current_index);              
+
             break;  
    
-    case 1:  
+    case 1: // date is a fixed length and can therefore be calculated 
+                          
+            indecies[1] = make_pair(indecies[1].last + 1, date_length);              
+
+            break;
+
     case 2:  
     case 3:  
     case 4:  
