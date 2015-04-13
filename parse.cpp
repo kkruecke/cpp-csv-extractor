@@ -10,10 +10,6 @@ vector<string> parse(string line)
 {
 vector<string> strings;
 
-/*
- * Replace ""stuff"" with 'stuff'
- */
-
  string::const_iterator iter = line.begin();
  string::const_iterator end = line.end();
  

@@ -57,7 +57,11 @@ int main(int argc, char** argv)
 vector<string> result;
 
 for (auto& line : v) {
-    
+
+   /*
+    * Replace ""stuff"" with 'stuff'
+    */
+   
     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
     
     vector<string> results = parse(transformed_line);
