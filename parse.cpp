@@ -15,7 +15,8 @@ vector<string> strings;
  string::const_iterator iter = line.begin();
  string::const_iterator end = line.end();
  
-   int comma_cnt = 0;
+ int comma_cnt = 0;
+ try {  // for debug
 
    while (iter != end) {
    
@@ -45,7 +46,14 @@ vector<string> strings;
            // Question: Does good properly handle empty strings?
        
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
+           
+           if (iter == end) { // Are we at the end of the string?
+               strings.push_back(string{""}); // insert an empty string
+               break;
+           }
           
+           // Question: Are we handling empty strings correctly?
+           
            if (*++iter == '"') { // ... and check for enclosing quotes.
    
                while(*iter++ != '"'); // If string is enclosed in quotes, go to terminating double quote...
@@ -63,6 +71,7 @@ vector<string> strings;
                if (comma_cnt == 6) {
                    auto debug = 10;
                }
+               
                for(;iter != end; ++iter) {
                                
                    if (*iter == ',') {
@@ -91,6 +100,12 @@ vector<string> strings;
 
       ++comma_cnt; 
     } // end while   
+ }  catch(exception& e) {// end try  
+     
+        // catch-all for C++11 exceptions 
+        cerr << "Exception caught in parse(line): " << e.what() << '\n';
+                  
+ }
    
    return strings;
    
