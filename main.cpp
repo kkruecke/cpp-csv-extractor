@@ -58,12 +58,16 @@ vector<string> result;
 
 for (auto& line : v) {
     
-    vector<string> results = parse(line);
+    string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
     
-    cout << "Substrings are:\n\n";
+    vector<string> results = parse(transformed_line);
     
-    for (auto& s : results)  {     // debug
+    cout << "Substrings are:\n";
+    int size = results.size();
+    
+    for (auto iter = results.begin(); iter != results.end(); ++iter)  {     // debug
         
+        string s = *iter;
         cout << s << endl;    
     }
     
