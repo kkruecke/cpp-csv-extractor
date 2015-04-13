@@ -22,30 +22,30 @@ vector<string> strings;
    
        case 0:
        {
-               while( *iter++ !=',');
-               
-               auto length =  iter - line.begin();
+          while( *iter++ !=',');
+          
+          auto length =  iter - line.begin();
    
-               strings.push_back(line.substr(0, length));
+          strings.push_back(line.substr(0, length));
        }       
    
-               break;  
+          break;  
       
        case 1: // date is a fixed length and can therefore be calculated 
-             {
-               auto start = ++iter; // for debugging
-               
-               string str = line.substr(iter - line.begin(), date_length);
-               
-               strings.push_back( str );
+       {
+          auto start = ++iter; // for debugging
+          
+          string str = line.substr(iter - line.begin(), date_length);
+          
+          strings.push_back( str );
    
-               iter += 10; // Does it point to comma now or the next string?
-              }
-               break;
+          iter += 10; // Does it point to comma now or the next string?
+       }
+          break;
 
        default:
               // All other cases are identical
-          {
+       {
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
           
             if (*++iter == '"') { // ... and check fo enclosing quotes.
@@ -66,16 +66,10 @@ vector<string> strings;
             } 
    
            strings.push_back( line.substr(start_offset, ???iter - start) );  
-          }
+       }
            break;
       
-  
-        case 6:  
-           break;
-   
-        default:
-           break;
-      }
+      } // end switch
 
       ++comma_cnt; 
     } // end while   
