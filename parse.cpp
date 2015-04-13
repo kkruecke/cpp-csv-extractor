@@ -1,75 +1,83 @@
+#include "parse.h"
+#include <stdexcept>
 
-vector<<pair<int>> indecies(8);
+using namespace std;
 
-int comma_cnt = 0;
-int substr_length = 0;
+static const int date_length = 10;
 
-const int date_length = 10;
+vector<string> parse(string line)
+{
+vector<string> strings;
 
-string line;
+ string::const_iterator iter = line.begin();
+ string::const_iterator end = line.end();
+ 
+   //--for(int comma_cnt = 0; comma_cnt < 8; ++comma_cnt) { // OR while(*iter) {
 
-int start = current_index = 0;
+   int comma_cnt = 0;
 
-while (1) {
-
-  switch (comma_cnt) {
-
-    case 0:
-            for(; s[index] !=','; current_index++);
-
-            ++comma_cnt; 
-
-            indecies[0] = make_pair(start, current_index);              
-
-            break;  
+   while (iter != end) {
    
-    case 1: // date is a fixed length and can therefore be calculated 
-                          
-            indecies[1] = make_pair(indecies[1].last + 1, date_length);              
-
-            break;
-
-    case 2:  
-    case 3:  
-    case 4:  
-    case 5:  // Skip comma, if starting double quote.
-         for (*++s == '"') {
-
-            while(*s++ != '"'); // go to enclosing double quote.
-
-            if (*s++ != ',') {
-
-                 throw badly_formed;
-            }  
-
-         } else {
-
-            while(*s++ != ',');
-         } 
-
-        string str = s.substr(start, index);  
-        break;
+     switch (comma_cnt) {
    
-        string str = s.substring str(start, index);  
-        break;
+       case 0:
+       {
+               while( *iter++ !=',');
+               
+               auto length =  iter - line.begin();
    
-        string str = s.substring str(start, index);  
-        break;
+               strings.push_back(line.substr(0, length));
+       }       
    
-        string str = s.substring str(start, index);  
-        break;
+               break;  
+      
+       case 1: // date is a fixed length and can therefore be calculated 
+             {
+               auto start = ++iter; // for debugging
+               
+               string str = line.substr(iter - line.begin(), date_length);
+               
+               strings.push_back( str );
    
-        s = s.substring str(start, index);  
-        break;
+               iter += 10; // Does it point to comma now or the next string?
+              }
+               break;
 
-    case 6:  
-        break;
+       default:
+              // All other cases are identical
+          {
+           auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
+          
+            if (*++iter == '"') { // ... and check fo enclosing quotes.
+   
+               while(*iter++ != '"'); // If string is enclosed in quotes, go to ending double quote...
+   
+               if (*iter++ != ',') { // ...and check for comma or end of string, or ...
+   
+               } else if (!*iter) { // end-of-string.
 
+                    throw domain_error("string is not a proper csv string");
+               }
+   
+            } else {
 
+               // otherwise go to comma or end of string 
+               while(*iter++ || *iter != ',');
+            } 
+   
+           strings.push_back( line.substr(start_offset, ???iter - start) );  
+          }
+           break;
+      
+  
+        case 6:  
+           break;
+   
+        default:
+           break;
+      }
 
-
-     default:
-        break;
-  }
-while(*s++ != ','); // advance to next comma or end of string
-
+      ++comma_cnt; 
+    } // end while   
+   
+} // end function

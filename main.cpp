@@ -5,7 +5,7 @@
 #include <vector> // DEBUG ONLY
 #include <regex>
 #include <fstream>
-//#include "csvreader.h"
+#include "parse.h"
 
 //--#include "mysql_driver.h" 
 //--#include "mysql_connection.h" 
@@ -48,6 +48,30 @@ bool moreLines(ifstream& input)
  */
 int main(int argc, char** argv) 
 {
+  vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",\"I have friends whose eyes have been permanently disfigured and lenses marred by this surgery - resulting in chronic dry-eye and irreparable poor vision.\"",
+"2,01-11-2011,Paula,Cofer,Mango,Florida,\"United States\",\"I suffered permanent, life-altering complications from LASIK.  I know of thousands of people who also had a bad outcome from LASIK.  Medical studies demonstrate that LASIK 'side effects' are common, and that adverse effects are universal.  LASIK surgeons do not fully inform potential patients, and are engaged in a cover-up. Clinical trials that the FDA relied upon were tainted by dishonest investigators.\"",
+"3,01-11-2011,carmen,Fogliano,\"West Chester\",Pennsylvania,\"United States\",\"I had LASIK on 10-23-10. Since then ( and prior to! ) had dry eyes. Burning in my one eye. Starbursts and halos too... It's important to stop this cause of present problems and future unknown problems! My doctor said I was a good candidate.  Well I was not and he doesn't wanna hear about my ' problems'.\"",
+"4,01-11-2011,Brent,Russo,Alhambra,California,\"United States\",",
+"5,01-11-2011,belinda,brown,knoxville,Tennessee,\"United States\",\"My eyes were ruined from lasik\""};
+
+vector<string> result;
+
+for (auto& line : v) {
+    
+    vector<string> results = parse(line);
+    
+    cout << "Substrings are:\n\n";
+    
+    for (auto& s : results)  {     // debug
+        
+        cout << s << endl;    
+    }
+    
+    cout << "----------" << endl;
+}
+    
+  return 0;
+
   ifstream  input;
   
   if (argc != 2) {
@@ -220,10 +244,11 @@ try {
   for(size_t i = 1; i < matches.size(); ++i) {
       
           ssub_match submatch = matches[i];
+          string str = submatch;
           
           //TODO: Test length of string within submatch
-          str = ? 
-          cout << str << endl;
+          // TODO: str = ? 
+          //--cout << str << endl;
           
          
       /*
