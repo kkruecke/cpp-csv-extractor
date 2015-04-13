@@ -48,24 +48,26 @@ vector<string> strings;
        {
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
           
-            if (*++iter == '"') { // ... and check fo enclosing quotes.
+           if (*++iter == '"') { // ... and check for enclosing quotes.
    
-               while(*iter++ != '"'); // If string is enclosed in quotes, go to ending double quote...
+               while(*iter++ != '"'); // If string is enclosed in quotes, go to terminating double quote...
    
-               if (*iter++ != ',') { // ...and check for comma or end of string, or ...
+               if (*iter++ != ',') { // ...and check for comma...
    
-               } else if (!*iter) { // end-of-string.
+               } else if (!*iter) { // ...or end-of-string.
 
                     throw domain_error("string is not a proper csv string");
                }
    
-            } else {
+           } else {
 
-               // otherwise go to comma or end of string 
+               // If no enclosing double quotes, go to comma or end of string 
                while(*iter++ || *iter != ',');
-            } 
-   
-           strings.push_back( line.substr(start_offset, ???iter - start) );  
+           } 
+           
+           int length = iter - line.begin() - start_offset;
+           
+           strings.push_back( line.substr(start_offset, length) );  
        }
            break;
       
