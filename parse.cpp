@@ -26,15 +26,11 @@ vector<string> strings;
 
           while( *iter++ !=',');
 
-          cout << line.substr(0, iter - line.begin() - 1) << endl;
-
           strings.push_back(line.substr(0, iter - line.begin() - 1));
    
           break;  
       
        case 1: // date is a fixed length and can therefore be calculated 
-          
-          cout << line.substr(iter - line.begin(), date_length) << endl; // debug only
           
           strings.push_back(line.substr(iter - line.begin(), date_length));
    
@@ -42,12 +38,12 @@ vector<string> strings;
           break;
 
        default:
-              // All other cases are identical
+           // All other cases are identical
            // Question: Does good properly handle empty strings?
        
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
            
-           if (iter == end) { // Are we at the end of the string?
+           if (iter == end) { // Check if there are no comments
                strings.push_back(string{""}); // insert an empty string
                break;
            }

@@ -27,6 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
+Test code against a line with empty state or empty first and last name.
 
 Go through regex tutorial. Clang code is not finding hits.
 
