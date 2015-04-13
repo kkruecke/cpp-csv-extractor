@@ -64,8 +64,10 @@ for (auto& line : v) {
    
     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
     
+    // Failing on one "4,...." line
     vector<string> results = parse(transformed_line);
     
+    /*
     cout << "Substrings are:\n";
     int size = results.size();
     
@@ -76,6 +78,7 @@ for (auto& line : v) {
     }
     
     cout << "----------" << endl;
+     */ 
 }
     
   return 0;
