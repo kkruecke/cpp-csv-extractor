@@ -47,16 +47,12 @@ vector<string> strings;
        
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
            
-           if (iter == end) { // Are we at the end of the string?
+           if (iter == end || *iter == ',') { // Are we at the end of the string?
                
                strings.push_back(string{""}); // insert an empty string
                break;
                
-           } else if (*iter == ) { 
-               
-               // TODO: The code does not handle empty strings correctly.
-               
-           } else if (*++iter == '"') { // ... and check for enclosing quotes.
+           }  else if (*++iter == '"') { // ... and check for enclosing quotes.
    
                while(*iter++ != '"'); // If string is enclosed in quotes, go to terminating double quote...
    
@@ -87,10 +83,10 @@ vector<string> strings;
            auto temp_str = std::move( line.substr(start_offset, length) ); 
            
            // Strip enclosing quotes.
-            if (temp_str.front() == '"') {
+           if (temp_str.front() == '"') {
         
-                  temp_str = temp_str.substr(1, temp_str.end() - temp_str.begin() - 2);
-            } 
+                temp_str = temp_str.substr(1, temp_str.end() - temp_str.begin() - 2);
+           } 
 
            cout << temp_str << endl;
  
