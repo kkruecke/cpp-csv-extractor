@@ -21,9 +21,9 @@ class CsvParser {
 public:
     
     CsvParser(std::string file_name);
-    
+// std::vector<std::string> parseNextLine();
+
     std::vector<std::string> parseNextLine();
-    std::vector<std::string> parseNextLineTest();
     bool hasmoreLines();
 };
 

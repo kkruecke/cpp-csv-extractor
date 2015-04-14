@@ -31,7 +31,7 @@ bool CsvParser::hasmoreLines()
     return bResult; 
     
 }
-
+/*
 vector<string> CsvParser::parseNextLine()
 {
  vector<string> strings;
@@ -123,15 +123,13 @@ vector<string> CsvParser::parseNextLine()
 
     ++comma_cnt; 
  } // end while   
- 
    
  return strings;
-   
 } // end function
-vector<string> CsvParser::parseNextLineTest()
-{
-regex two_dbl_quotes{"(\"\")"};
+*/
 
+vector<string> CsvParser::parseNextLine()
+{
 smatch match;
 string prior_line;
    
@@ -143,7 +141,7 @@ vector<string> strings;
 
         getline(input, line);
 
-        auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+        auto transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
    
         line = prior_line + transformed_line;
 
@@ -151,18 +149,12 @@ vector<string> strings;
                   
         if (hits) { 
 
-            cout << "In CsvReader::parseNextLine():" << endl; // debug code
-            bool first = true;
-             
-            for (auto iter = match.begin(); iter != match.end();) {
+           for (auto iter = match.begin(); iter != match.end();) {
                 
-                ++iter;
-                                    
-                //std::cout << *iter << " " << endl; DEBUG 
-                strings.push_back(*iter);
-            }
-   
-           
+               ++iter;
+               strings.push_back(*iter);
+           }
+
            break;    
   
         } else {
@@ -174,10 +166,9 @@ vector<string> strings;
    } catch (exception& e) {
 
    }
-        
-   return strings; // Not correct--obviously
+   return strings; 
 }
-
+/*
 bool CsvParser::getNextSigner(string& line)
 {
    string prior_line;
@@ -189,10 +180,9 @@ bool CsvParser::getNextSigner(string& line)
          return false;
      }
  
-     /*
-      * TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
-      * we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
-     */ 
+     //
+     // TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
+     // we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
    
      getline(input, line);
 
@@ -221,5 +211,4 @@ bool CsvParser::getNextSigner(string& line)
    
    return true;
 }
-
-
+*/
