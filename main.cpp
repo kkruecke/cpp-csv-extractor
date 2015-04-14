@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 "3,01-11-2011,carmen,Fogliano,\"West Chester\",Pennsylvania,\"United States\",\"I had LASIK on 10-23-10. Since then ( and prior to! ) had dry eyes. Burning in my one eye. Starbursts and halos too... It's important to stop this cause of present problems and future unknown problems! My doctor said I was a good candidate.  Well I was not and he doesn't wanna hear about my ' problems'.\"",
  */
 "4,01-11-2011,Brent,Russo,Alhambra,California,\"United States\",",
-"5,01-11-2011,belinda,brown,knoxville,Tennessee,\"United States\",\"My eyes were ruined from lasik\""};
+"5,01-11-2011,,brown,knoxville,Tennessee,\"United States\",\"My eyes were ruined from lasik\""};
 
 vector<string> result;
 

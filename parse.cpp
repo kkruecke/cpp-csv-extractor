@@ -48,13 +48,15 @@ vector<string> strings;
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
            
            if (iter == end) { // Are we at the end of the string?
+               
                strings.push_back(string{""}); // insert an empty string
                break;
-           }
-          
-           // Question: Are we handling empty strings correctly?
-           
-           if (*++iter == '"') { // ... and check for enclosing quotes.
+               
+           } else if (*iter == ) { 
+               
+               // TODO: The code does not handle empty strings correctly.
+               
+           } else if (*++iter == '"') { // ... and check for enclosing quotes.
    
                while(*iter++ != '"'); // If string is enclosed in quotes, go to terminating double quote...
    
