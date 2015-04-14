@@ -1,12 +1,9 @@
 #include "csvparser.h"
 #include <regex>
 #include <stdexcept>
-
 #include <iostream> // debug only
 
 using namespace std;
-
-static const int date_length = 10;
 
 CsvParser::CsvParser(string file_name) : line_no(0)
 {
@@ -34,55 +31,19 @@ bool CsvParser::hasmoreLines()
     
 }
 
-bool CsvParser::getNextSigner(string& line)
-{
-   string prior_line;
-
-   while (1) { // TODO: Add additional test for: moreLines() == true
-
-     if (!hasmoreLines()) {
-
-         return false;
-     }
-
-     getline(input, line);
-
-     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
-   
-     line = prior_line + transformed_line;
-
-     bool hits = regex_match(line, regex{"^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,"});
-         
-     if (hits) { 
-              
-        cout << " --> In CsvParser::getNextSigner() <-- " << endl; // debug code
-
-        break;    
-  
-     } else {
-          
-         prior_line = line;
-     }
-
-   } // end while
-   
-   return true;
-}
-
 vector<string> CsvParser::parseNextLine()
 {
  vector<string> strings;
-
- string::const_iterator iter = line.begin();
- string::const_iterator end = line.end();
- 
- int comma_cnt = 0;
  
  if (!getNextSigner(this->line)) {
 
         return strings;
  }    
-
+ 
+ string::const_iterator iter = line.begin();
+ string::const_iterator end = line.end();
+ 
+ int comma_cnt = 0;
 
  while (iter != end) {
  
@@ -102,7 +63,7 @@ vector<string> CsvParser::parseNextLine()
         
       // cout << line.substr(iter - line.begin(), date_length) << endl; // debug only
         
-        strings.push_back(line.substr(iter - line.begin(), date_length));
+        strings.push_back(line.substr(iter - line.begin(), CsvParser::date_length));
  
         iter += 10; // Does it point to comma now or the next string?
         break;
@@ -166,3 +127,117 @@ vector<string> CsvParser::parseNextLine()
  return strings;
    
 } // end function
+/*
+vector<string> CsvParser::parseNextLineTest()
+{
+// ++line_no;
+
+// string line;
+
+   regex two_dbl_quotes{"(\"\")"};
+
+   smatch match;
+   string prior_line;
+
+   try {
+
+      while (1) {
+
+        getline(input, line);
+
+        auto transformed_line = regex_replace(line, two_dbl_quotes, string{"'"});
+   
+        line = prior_line + transformed_line;
+
+        bool hits = regex_search(line, match, CsvParser::csv_regex);
+   
+        cout << "In CsvReader::parseNextLine():" << endl; // debug code
+            
+        if (hits) { // TODO: Why is the regex not working suddently????????
+            
+           for (auto &x : match ) {     // DEBUG START
+          
+              cout <<  x.str()  << endl;   
+           }   
+           
+           break;    
+  
+        } else {
+             
+            prior_line = line;
+        }
+
+      } // end while
+   } catch (exception& e) {
+
+   }
+   
+   vector<string> strings;
+   
+   int debug = match.size();
+   
+   for (int i = 1; i < match.size(); ++i) {
+       
+       if (match[i].str().empty()) {
+           
+           cout << "EMPTY" << endl;
+                      
+           strings.push_back(std::move(string{""}));      
+             
+       } else {
+           
+            cout << match[i].str() << endl;
+            strings.push_back(match[i].str());      
+       }  
+   }
+   
+   return strings;
+   // return std::move(match); // Is this implicit?
+}
+*/
+
+bool CsvParser::getNextSigner(string& line)
+{
+   string prior_line;
+
+   while (1) { 
+
+     if (!hasmoreLines()) {
+
+         return false;
+     }
+ 
+     /*
+      * TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
+      * we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
+     */ 
+     getline(input, line);
+
+     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
+   
+     line = prior_line + transformed_line;
+     
+     cout << "The line is: \n" << line << endl;
+                                         
+     //--bool hits = false;
+     
+     std::regex re("^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,");
+     bool hits = std::regex_search(line, re);
+         
+     if (hits) { 
+              
+        cout << " --> In CsvParser::getNextSigner() <-- " << endl; // debug code
+
+        break;    
+  
+     } else {
+          
+         prior_line = line;
+     }
+
+   } // end while
+   
+   return true;
+}
+
+

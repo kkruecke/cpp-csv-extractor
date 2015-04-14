@@ -62,8 +62,7 @@ smatch CsvReader::getNextRegexMatches()
 
    while (1) {
 
-     //--getline(input, line); // <-- BUG??
-     input.getline(line); // <-- BUG??
+     getline(input, line); 
 
      string transformed_line = regex_replace(line, two_dbl_quotes, string{"'"}); 
    
@@ -90,7 +89,6 @@ smatch CsvReader::getNextRegexMatches()
    } // end while
    
    return match;
-   // return std::move(match); // Is this implicit?
 }
 
 smatch CsvReader::getNextRegexMatches(const regex& param_regex)

@@ -4,12 +4,16 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <regex>
 
 class CsvParser {
     
+    static const int date_length = 10;
+
     std::ifstream input;
     std::string   line;
     int           line_no;
+    std::string   line_cache;
 
     bool getNextSigner(std::string &);
         
