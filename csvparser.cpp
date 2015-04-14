@@ -130,7 +130,6 @@ vector<string> CsvParser::parseNextLine()
 } // end function
 vector<string> CsvParser::parseNextLineTest()
 {
-
 regex two_dbl_quotes{"(\"\")"};
 
 smatch match;
@@ -155,17 +154,13 @@ vector<string> strings;
             cout << "In CsvReader::parseNextLine():" << endl; // debug code
             bool first = true;
             
-            for (auto iter = match.begin(); iter != match.end(); ++iter) {
+            for (auto iter = match.begin(); iter != match.end();) {
                 
-                if (first) { 
-                    
-                    first = false;
-                    
-                } else {
-                    
-                    std::cout << *iter << " " << endl;
-                    strings.push_back(*iter);
-                }
+                ++iter;
+                                    
+                std::cout << *iter << " " << endl;
+                strings.push_back(*iter);
+                
             }
    
             std::cout << std::endl;
