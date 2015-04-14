@@ -9,7 +9,7 @@
 class CsvParser {
     
     static const int date_length = 10;
-    static const std::regex csv_regex;
+    const std::regex csv_regex;
 
     std::ifstream input;
     std::string   line;
@@ -20,7 +20,8 @@ class CsvParser {
         
 public:
     
-    CsvParser(std::string file_name);
+   CsvParser(const std::string& file_name, const std::regex& rx);
+//  CsvParser(std::string file_name);
 // std::vector<std::string> parseNextLine();
 
     std::vector<std::string> parseNextLine();

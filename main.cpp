@@ -35,8 +35,10 @@ int main(int argc, char** argv)
       cerr << "Please re-run with the input file name as the first parameter.\n";
       return 0;
   } 
-                                      
-  CsvParser csv_parser(argv[1]); 
+
+  regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};                                     
+
+  CsvParser csv_parser(argv[1], csv_regex); 
     
   // TODO: A transaction support later.
 
@@ -55,7 +57,7 @@ int main(int argc, char** argv)
 
   while (csv_parser.hasmoreLines()) {  
 
-  vector<string> strings = csv_parser.parseNextLineTest();     
+  vector<string> strings = csv_parser.parseNextLine();     
   
   cout << "=============== in main.cpp ==================\n";
   

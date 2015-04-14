@@ -4,9 +4,9 @@
 #include <iostream> // debug only
 
 using namespace std;
-const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+//const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
 
-CsvParser::CsvParser(string file_name) : line_no(0)
+CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv_regex(rx)
 {
    input.open(file_name);
 
@@ -140,6 +140,11 @@ vector<string> strings;
       while (1) {
 
         getline(input, line);
+        
+        if (input.fail()) {
+            
+            return strings;
+        }
 
         auto transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
    
