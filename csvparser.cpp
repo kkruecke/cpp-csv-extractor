@@ -1,4 +1,4 @@
-#include "parse.h"
+#include "csvparser.h"
 #include <regex>
 #include <stdexcept>
 
@@ -8,15 +8,82 @@ using namespace std;
 
 static const int date_length = 10;
 
-vector<string> parse(string line)
+CsvParser::CsvParser(string file_name) : line_no(0)
 {
-vector<string> strings;
+   input.open(file_name);
+
+   if (input.is_open()) {
+       
+      // TODO: Check for errors.
+   }
+}
+
+bool CsvParser::hasmoreLines() 
+{
+    char c;
+    
+    input >> c;
+    bool bResult = input.good();
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult; 
+    
+}
+
+bool CsvParser::getNextSigner(string& line)
+{
+   string prior_line;
+
+   while (1) { // TODO: Add additional test for: moreLines() == true
+
+     if (!hasmoreLines()) {
+
+         return false;
+     }
+
+     getline(input, line);
+
+     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
+   
+     line = prior_line + transformed_line;
+
+     bool hits = regex_match(line, regex{"^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,"});
+         
+     if (hits) { 
+              
+        cout << " --> In CsvParser::getNextSigner() <-- " << endl; // debug code
+
+        break;    
+  
+     } else {
+          
+         prior_line = line;
+     }
+
+   } // end while
+   
+   return true;
+}
+
+vector<string> CsvParser::parseNextLine()
+{
+ vector<string> strings;
 
  string::const_iterator iter = line.begin();
  string::const_iterator end = line.end();
  
  int comma_cnt = 0;
- try {  // for debug
+ 
+ if (!getNextSigner(this->line)) {
+
+        return strings;
+ }    
+
+ try {  
 
    while (iter != end) {
    
@@ -63,7 +130,7 @@ vector<string> strings;
                     throw domain_error("string is not a proper csv string");
                }
    
-           } else {
+          } else {
 
                // If no enclosing double quotes, go to comma or end of string 
                
@@ -73,8 +140,7 @@ vector<string> strings;
                         break; // Bug
                    }
                 }
-           } 
-           
+          } 
           
           int length = iter - line.begin() - start_offset; // debug only, combine below later
            
@@ -96,13 +162,13 @@ vector<string> strings;
 
       ++comma_cnt; 
     } // end while   
+
  }  catch(exception& e) {
      
         // catch-all for C++11 exceptions 
         cerr << "Exception caught in parse(line): " << e.what() << '\n';
-                  
  }
    
-   return strings;
+ return strings;
    
 } // end function

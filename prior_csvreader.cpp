@@ -1,8 +1,26 @@
 #include "csvreader.h"
 #include <iostream>
-#include <utility>
 
 using namespace std;
+
+/*
+ * Format of csv file: 
+ *
+ * Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+ *
+ * regex for above format:
+ *
+ *  ^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),($|"[^"]+"|[^"]+)$
+ *
+ * Note: we don't capture the first and last name.
+ * as a C string:
+ *
+ *  "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),($|\"[^\"]+\"|[^\"]+)$"
+ *
+ * Actual regex as C/C++-style string: 
+ *
+ * regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+ */
 
 CsvReader::CsvReader(string file_name, const regex& rgexp) : csv_regex(rgexp), line_no(0)
 {
@@ -44,7 +62,8 @@ smatch CsvReader::getNextRegexMatches()
 
    while (1) {
 
-     getline(input, line);
+     //--getline(input, line); // <-- BUG??
+     input.getline(line); // <-- BUG??
 
      string transformed_line = regex_replace(line, two_dbl_quotes, string{"'"}); 
    
