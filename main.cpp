@@ -7,8 +7,8 @@
 #include "csvparser.h"
 
 // MySQL Connector for C++
-#include "mysql_driver.h" 
-#include "mysql_connection.h" 
+#include <mysql_driver.h>  // Do I need to add prefix of: extern "C" {...}
+#include <mysql_connection.h> 
 
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -17,7 +17,7 @@
 #include <cppconn/prepared_statement.h>
 
 using namespace std;
-using namespace sql;
+using namespace sql; // There is a nested namespace of sql::mysql???
 
 /*
  * 
