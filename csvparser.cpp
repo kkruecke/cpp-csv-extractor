@@ -153,17 +153,15 @@ vector<string> strings;
 
             cout << "In CsvReader::parseNextLine():" << endl; // debug code
             bool first = true;
-            
+             
             for (auto iter = match.begin(); iter != match.end();) {
                 
                 ++iter;
                                     
-                std::cout << *iter << " " << endl;
+                //std::cout << *iter << " " << endl; DEBUG 
                 strings.push_back(*iter);
-                
             }
    
-            std::cout << std::endl;
            
            break;    
   

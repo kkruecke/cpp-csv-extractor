@@ -56,9 +56,15 @@ int main(int argc, char** argv)
   while (csv_parser.hasmoreLines()) {  
 
   vector<string> strings = csv_parser.parseNextLineTest();     
-
+  
+  cout << "=============== in main.cpp ==================\n";
+  
   for(int i = 0; i < strings.size(); ++i) {
+   
+     cout << strings[i]  << endl;
+     
      continue; // debug
+     
      try {
       
         switch(i) {
