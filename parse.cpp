@@ -26,7 +26,7 @@ vector<string> strings;
 
           while( *iter++ !=',');
 
-          cout << line.substr(0, iter - line.begin() - 1) << endl;
+         // cout << line.substr(0, iter - line.begin() - 1) << endl; debug code
 
           strings.push_back(line.substr(0, iter - line.begin() - 1));
    
@@ -34,7 +34,7 @@ vector<string> strings;
       
        case 1: // date is a fixed length and can therefore be calculated 
           
-          cout << line.substr(iter - line.begin(), date_length) << endl; // debug only
+        // cout << line.substr(iter - line.begin(), date_length) << endl; // debug only
           
           strings.push_back(line.substr(iter - line.begin(), date_length));
    
@@ -46,19 +46,19 @@ vector<string> strings;
            // Question: Does good properly handle empty strings?
        
            auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
-           
-           if (iter == end || *iter == ',') { // Are we at the end of the string?
+                      
+           if (iter == end || *iter == ',') { // Are we at the end of the string, or do we have an substring empty?
                
                strings.push_back(string{""}); // insert an empty string
                break;
                
-           }  else if (*++iter == '"') { // ... and check for enclosing quotes.
+           }  else if (*++iter == '"') { // Check for enclosing quotes.
    
-               while(*iter++ != '"'); // If string is enclosed in quotes, go to terminating double quote...
+               while(*iter++ != '"'); // If string is enclosed in quotes, find terminating double quote...
    
-               if (*iter++ != ',') { // ...and check for comma...
+               if (*iter++ != ',') { // ...and then check for the comma ...
    
-               } else if (!*iter) { // ...or end-of-string.
+               } else if (!*iter) { // ...or if end-of-string.
 
                     throw domain_error("string is not a proper csv string");
                }
@@ -66,9 +66,6 @@ vector<string> strings;
            } else {
 
                // If no enclosing double quotes, go to comma or end of string 
-               if (comma_cnt == 6) {
-                   auto debug = 10;
-               }
                
                for(;iter != end; ++iter) {
                                
@@ -78,27 +75,28 @@ vector<string> strings;
                 }
            } 
            
-           int length = iter - line.begin() - start_offset; // debug only, combine below later
+          
+          int length = iter - line.begin() - start_offset; // debug only, combine below later
            
-           auto temp_str = std::move( line.substr(start_offset, length) ); 
+          auto temp_str = std::move( line.substr(start_offset, length) ); 
            
-           // Strip enclosing quotes.
-           if (temp_str.front() == '"') {
+          // Strip enclosing quotes.
+          if (temp_str.front() == '"') {
         
-                temp_str = temp_str.substr(1, temp_str.end() - temp_str.begin() - 2);
-           } 
+               temp_str = temp_str.substr(1, temp_str.end() - temp_str.begin() - 2);
+          } 
 
-           cout << temp_str << endl;
+        // cout << temp_str << endl; debug code
  
-           strings.push_back( temp_str );  
+          strings.push_back( temp_str );  
        
-           break;
+          break;
       
       } // end switch
 
       ++comma_cnt; 
     } // end while   
- }  catch(exception& e) {// end try  
+ }  catch(exception& e) {
      
         // catch-all for C++11 exceptions 
         cerr << "Exception caught in parse(line): " << e.what() << '\n';
