@@ -58,9 +58,7 @@ int main(int argc, char** argv)
   while (csv_parser.hasmoreLines()) {  
 
   vector<string> strings = csv_parser.parseNextLine();     
-  
-  cout << "=============== in main.cpp ==================\n";
-  
+     
   for(int i = 0; i < strings.size(); ++i) {
    
      cout << strings[i] << endl;
@@ -163,16 +161,15 @@ int main(int argc, char** argv)
      
      } catch (SQLException & e) { 
                 
-              cerr << "Error code = " << e.getErrorCode() << endl;
+            cerr << "Error code = " << e.getErrorCode() << endl;
               
-              cerr << "MySQL State message = " << e.getSQLState() << endl;
+            cerr << "MySQL State message = " << e.getSQLState() << endl;
               
      } catch (exception & e) {
                      
-                    // catch-all for C++11 exceptions 
-                    cerr << "C++11 exception caught: " << e.what() << '\n';
-                    cerr << "Terminating" << "\n";
-                    throw e;
+            // catch-all for C++11 exceptions 
+            cerr << "C++11 exception caught: " << e.what() << '\n';
+            cerr << "Terminating" << "\n";
      } 
     } // end for         
   }  // end while    

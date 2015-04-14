@@ -10,9 +10,9 @@ CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv
 {
    input.open(file_name);
 
-   if (input.is_open()) {
+   if (!input.is_open()) {
        
-      // TODO: Check for errors.
+      throw logic_error("Could not open file" + file_name + "\n");
    }
 }
 
@@ -31,7 +31,53 @@ bool CsvParser::hasmoreLines()
     return bResult; 
     
 }
-/*
+
+vector<string> CsvParser::parseNextLine()
+{
+smatch match;
+string prior_line;
+   
+vector<string> strings;
+
+   try {
+
+      while (1) {
+
+        getline(input, line);
+        
+        if (input.fail()) {
+            
+            return strings;
+        }
+
+        auto transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
+   
+        line = prior_line + transformed_line;
+
+        bool hits = regex_search(line, match, CsvParser::csv_regex);
+                  
+        if (hits) { 
+
+           for (auto iter = match.begin(); iter != match.end();) {
+                
+               ++iter;
+               strings.push_back(*iter);
+           }
+
+           break;    
+  
+        } else {
+             
+            prior_line = line;
+        }
+
+      } // end while
+   } catch (exception& e) {
+
+   }
+   return strings; 
+}
+/* parse directly without using a regex.
 vector<string> CsvParser::parseNextLine()
 {
  vector<string> strings;
@@ -128,51 +174,6 @@ vector<string> CsvParser::parseNextLine()
 } // end function
 */
 
-vector<string> CsvParser::parseNextLine()
-{
-smatch match;
-string prior_line;
-   
-vector<string> strings;
-
-   try {
-
-      while (1) {
-
-        getline(input, line);
-        
-        if (input.fail()) {
-            
-            return strings;
-        }
-
-        auto transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
-   
-        line = prior_line + transformed_line;
-
-        bool hits = regex_search(line, match, CsvParser::csv_regex);
-                  
-        if (hits) { 
-
-           for (auto iter = match.begin(); iter != match.end();) {
-                
-               ++iter;
-               strings.push_back(*iter);
-           }
-
-           break;    
-  
-        } else {
-             
-            prior_line = line;
-        }
-
-      } // end while
-   } catch (exception& e) {
-
-   }
-   return strings; 
-}
 /*
 bool CsvParser::getNextSigner(string& line)
 {
