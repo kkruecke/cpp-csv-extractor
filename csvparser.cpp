@@ -2,6 +2,7 @@
 #include <regex>
 #include <stdexcept>
 #include <iostream> // debug only
+#include <memory>
 
 using namespace std;
 //const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
@@ -61,7 +62,7 @@ vector<string> strings;
            for (auto iter = match.begin(); iter != match.end();) {
                 
                ++iter;
-               strings.push_back(*iter);
+               strings.push_back(std::move(*iter));
            }
 
            break;    
