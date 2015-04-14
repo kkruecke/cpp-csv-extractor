@@ -211,6 +211,8 @@ bool CsvParser::getNextSigner(string& line)
       * TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
       * we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
      */ 
+   while(1) {
+
      getline(input, line);
 
      string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
@@ -218,7 +220,6 @@ bool CsvParser::getNextSigner(string& line)
      line = prior_line + transformed_line;
      
      cout << "The line is: \n" << line << endl;
-                                         
      //--bool hits = false;
      
      std::regex re("^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,");
@@ -235,7 +236,7 @@ bool CsvParser::getNextSigner(string& line)
          prior_line = line;
      }
 
-   } // end while
+ } // end while
    
    return true;
 }
