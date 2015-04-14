@@ -27,7 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-Test code against a line with empty state or empty first and last name.
+CsvParse::nextNextLineTest() test against full, recoverted-to-ascii file. Dump returned strings after that.
 
 Go through regex tutorial. Clang code is not finding hits.
 

@@ -58,7 +58,7 @@ int main(int argc, char** argv)
   vector<string> strings = csv_parser.parseNextLineTest();     
 
   for(int i = 0; i < strings.size(); ++i) {
-
+     continue; // debug
      try {
       
         switch(i) {
@@ -141,13 +141,13 @@ int main(int argc, char** argv)
      
          } // end switch
            
-            
+       /*     
        auto rc1 = signer_info_stmt->execute(); 
        auto rc2 = signer_comments_stmt->execute(); 
          
        cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
          cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
-          
+       */   
      } catch (std::length_error &e) {
          
             cerr << "length_error exception caught: " << e.what() << '\n';

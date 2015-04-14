@@ -4,6 +4,7 @@
 #include <iostream> // debug only
 
 using namespace std;
+const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
 
 CsvParser::CsvParser(string file_name) : line_no(0)
 {
@@ -127,17 +128,15 @@ vector<string> CsvParser::parseNextLine()
  return strings;
    
 } // end function
-/*
 vector<string> CsvParser::parseNextLineTest()
 {
-// ++line_no;
 
-// string line;
+regex two_dbl_quotes{"(\"\")"};
 
-   regex two_dbl_quotes{"(\"\")"};
-
-   smatch match;
-   string prior_line;
+smatch match;
+string prior_line;
+   
+vector<string> strings;
 
    try {
 
@@ -150,15 +149,26 @@ vector<string> CsvParser::parseNextLineTest()
         line = prior_line + transformed_line;
 
         bool hits = regex_search(line, match, CsvParser::csv_regex);
+                  
+        if (hits) { 
+
+            cout << "In CsvReader::parseNextLine():" << endl; // debug code
+            bool first = true;
+            
+            for (auto iter = match.begin(); iter != match.end(); ++iter) {
+                
+                if (first) { 
+                    
+                    first = false;
+                    
+                } else {
+                    
+                    std::cout << *iter << " " << endl;
+                    strings.push_back(*iter);
+                }
+            }
    
-        cout << "In CsvReader::parseNextLine():" << endl; // debug code
-            
-        if (hits) { // TODO: Why is the regex not working suddently????????
-            
-           for (auto &x : match ) {     // DEBUG START
-          
-              cout <<  x.str()  << endl;   
-           }   
+            std::cout << std::endl;
            
            break;    
   
@@ -171,30 +181,9 @@ vector<string> CsvParser::parseNextLineTest()
    } catch (exception& e) {
 
    }
-   
-   vector<string> strings;
-   
-   int debug = match.size();
-   
-   for (int i = 1; i < match.size(); ++i) {
-       
-       if (match[i].str().empty()) {
-           
-           cout << "EMPTY" << endl;
-                      
-           strings.push_back(std::move(string{""}));      
-             
-       } else {
-           
-            cout << match[i].str() << endl;
-            strings.push_back(match[i].str());      
-       }  
-   }
-   
-   return strings;
-   // return std::move(match); // Is this implicit?
+        
+   return strings; // Not correct--obviously
 }
-*/
 
 bool CsvParser::getNextSigner(string& line)
 {
@@ -211,8 +200,7 @@ bool CsvParser::getNextSigner(string& line)
       * TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
       * we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
      */ 
-   while(1) {
-
+   
      getline(input, line);
 
      string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
@@ -220,9 +208,9 @@ bool CsvParser::getNextSigner(string& line)
      line = prior_line + transformed_line;
      
      cout << "The line is: \n" << line << endl;
-     //--bool hits = false;
      
      std::regex re("^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,");
+     
      bool hits = std::regex_search(line, re);
          
      if (hits) { 
