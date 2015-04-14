@@ -157,8 +157,6 @@ for (auto& line : v) {
 }
 */
     
-    string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
-
   ifstream  input;
   
   if (argc != 2) {
@@ -296,17 +294,14 @@ vector<string> v {"1,01-11-2011,Kelly,Cunningham,Irving,Texas,\"United States\",
 
 while (moreLines(input)) {  
 
-//smatch matches { reader.test(str) };
-    
- smatch matches;
 
  string line, prior_line;
 
- getline(input, line);
+ getline(input, line);  // TODO: read until we have complete line.
 
- // TODO: read until we have complete line.
-
- string transformed_line = regex_replace(line, two_dbl_quotes, string{"'"}); 
+ line = regex_replace(line, regex{"\"\""}, string{"'"}); 
+ 
+ vector<string> strings = parse(line);
    
  cout << "Line:\n" << line << endl;
      
@@ -315,33 +310,6 @@ while (moreLines(input)) {
   
 try {
 
-  cout << " Regex match count is " << matches.size() << endl;
-      
-  for(size_t i = 1; i < matches.size(); ++i) {
-      
-          ssub_match submatch = matches[i];
-          string str = submatch;
-          
-          //TODO: Test length of string within submatch
-          // TODO: str = ? 
-          //--cout << str << endl;
-          
-         
-      /*
-       * Remove any enclosing double quotes
-       */
-      cout << "Before:\n" << submatch << endl;
-      
-      
-      if (str.front() == '"' && str.back() == '"') {
-        
-        str = str.substr(1, str.end() - str.begin() - 2);
-             
-      } 
-      
-      cout << "After:\n" << str << endl;     
-      
-      continue; // DEBUG skip switch
      /* 
       switch(i) {
           
@@ -432,7 +400,7 @@ try {
     cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
     cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
     */ 
-  } // end for
+  
 } catch (std::length_error &e) {
     
        cerr << "length_error exception caught: " << e.what() << '\n';
@@ -446,7 +414,8 @@ try {
                cerr << "Terminating" << "\n";
                throw e;
 }
-/* catch (SQLException & e) { Make this the first exception
+/* 
+ catch (SQLException & e) { Make this the first exception
            
          cerr << "Error code = " << e.getErrorCode() << endl;
          
@@ -454,7 +423,6 @@ try {
          
      }*/
      
-    }  // end while    
-    
+     
     return(0);
 }
