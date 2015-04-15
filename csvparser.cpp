@@ -64,6 +64,7 @@ vector<string> strings; // TODO: allocate room for six strings and use emplace(i
                 
                ++iter; // skip first element
                
+               // Remove enclosing quotes if present.
                const string& const_ref = *iter;
                          
                if (const_ref.front() == '"') {
