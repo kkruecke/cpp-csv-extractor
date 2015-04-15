@@ -5,6 +5,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `petition`
 --
 CREATE DATABASE IF NOT EXISTS  petition;
+grant all on petition.* to kurt@localhost identified by 'kk0457';
 
 use petition;
 

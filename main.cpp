@@ -147,24 +147,25 @@ int main(int argc, char** argv)
                    
        auto rc1 = signer_info_stmt->execute(); 
        auto rc2 = signer_comments_stmt->execute(); 
-         
-       cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
-       cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
           
      } catch (SQLException & e) { 
                 
             cerr << "Error code = " << e.getErrorCode() << endl;
               
             cerr << "MySQL State message = " << e.getSQLState() << endl;
+            throw e;
               
      } catch (exception & e) {
                      
             // catch-all for C++11 exceptions 
             cerr << "C++11 exception caught: " << e.what() << '\n';
             cerr << "Terminating" << "\n";
+            throw e;
      } 
     
-  }  // end while    
+  }  // end while   
+
+  
        
   return(0);
 }
