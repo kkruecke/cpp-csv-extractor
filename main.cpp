@@ -57,9 +57,9 @@ int main(int argc, char** argv)
 
   while (csv_parser.hasmoreLines()) {  
 
-  vector<string> strings = csv_parser.parseNextLine();     
+     vector<string> strings = csv_parser.parseNextLine();     
      
-  for(int i = 0; i < strings.size(); ++i) {
+     for(int i = 0; i < strings.size(); ++i) {
    
      cout << strings[i] << endl;
      
