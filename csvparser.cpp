@@ -39,7 +39,7 @@ vector<string> CsvParser::parseNextLine()
 smatch match;
 string prior_line;
    
-vector<string> strings{6}; // allocate room for six strings
+vector<string> strings; // allocate room for six strings
 
    try {
 
@@ -63,7 +63,7 @@ vector<string> strings{6}; // allocate room for six strings
            for (auto iter = match.begin(); iter != match.end();) {
                 
                ++iter;
-               strings.emplace_back(std::move(*iter));
+               strings.push_back(std::move(*iter)); 
            }
 
            break;    

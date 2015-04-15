@@ -58,9 +58,9 @@ int main(int argc, char** argv)
    vector<string> strings = csv_parser.parseNextLine();     
      
    for(int i = 0; i < strings.size(); ++i) {
-     /* 
-     cout << strings[i] << endl;
      
+     cout << strings[i] << endl;
+     /* 
      continue; // TODO: Remove this and run db insertion code.
      */
      try {
