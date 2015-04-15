@@ -152,12 +152,6 @@ int main(int argc, char** argv)
        cout << "Result of signer_info_stmt->execute() = " << rc1 << endl;
        cout << "Result of signer_comments_stmt->execute() = " << rc2 << endl;
           
-     } catch (std::length_error &e) {
-         
-            cerr << "length_error exception caught: " << e.what() << '\n';
-            cerr << "Terminating" << "\n";
-            throw e;
-     
      } catch (SQLException & e) { 
                 
             cerr << "Error code = " << e.getErrorCode() << endl;
