@@ -27,7 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-Code is working. Need to add code later to check for existing sequence numbers.
+How do I get the result of a count(*) query?
 
 Use working.csv or no-names-xxxx.csv file. Both are the same. They have been:
 

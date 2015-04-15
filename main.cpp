@@ -52,7 +52,31 @@ int main(int argc, char** argv)
  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
-
+ 
+ unique_ptr<ResultSet> res { stmt->executeQuery("select count(*) as total FROM signer_info") };
+ 
+ int count = res->getInt("total"); // <<-- Incorrect runtime error
+ 
+ vector<pair<int, int>> lookup_table(count + 1);
+ 
+ /* We assume the id begins at 1 an increments by one*/
+ res.reset( stmt->executeQuery("SELECT id, signee_no from signer_info ORDER BY id ASC") );
+ 
+ vector<pair<int, int>>::iterator iter = lookup_table.begin();
+ 
+ while (res->next()) {
+        
+    int id = res->getInt("id");
+    int signee_no = res->getInt("signee_no");
+    
+    // skip position 0
+    lookup_table.emplace(++iter, id, signee_no);
+ }
+ 
+ int debug = 0;
+ 
+ return 0;
+ 
  while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
