@@ -27,7 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-CsvParse::nextNextLineTest() test against full, recoverted-to-ascii file. Dump returned strings after that.
+I am not successfully writing the data to the database. I get a MySQL error.
 
 Go through regex tutorial. Clang code is not finding hits.
 
