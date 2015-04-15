@@ -56,15 +56,16 @@ int main(int argc, char** argv)
  while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
-     
-   for(int i = 0; i < strings.size(); ++i) {
-     
-     cout << strings[i] << endl;
+        
      /* 
      continue; // TODO: Remove this and run db insertion code.
      */
      try {
-      
+         
+      for(int i = 0; i < strings.size(); ++i) {
+          
+        cout << strings[i] << endl;     
+        
         switch(i) {
 
            case 0:
@@ -145,6 +146,7 @@ int main(int argc, char** argv)
             break;  
      
          } // end switch
+       } // end for         
                    
        auto rc1 = signer_info_stmt->execute(); 
        auto rc2 = signer_comments_stmt->execute(); 
@@ -164,7 +166,7 @@ int main(int argc, char** argv)
             cerr << "C++11 exception caught: " << e.what() << '\n';
             cerr << "Terminating" << "\n";
      } 
-    } // end for         
+    
   }  // end while    
        
   return(0);
