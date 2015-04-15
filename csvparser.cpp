@@ -39,7 +39,7 @@ vector<string> CsvParser::parseNextLine()
 smatch match;
 string prior_line;
    
-vector<string> strings; // allocate room for six strings
+vector<string> strings; // TODO: allocate room for six strings and use emplace(iter, ctor args)
 
    try {
 
@@ -59,11 +59,21 @@ vector<string> strings; // allocate room for six strings
         bool hits = regex_search(line, match, CsvParser::csv_regex);
                   
         if (hits) { 
-
-           for (auto iter = match.begin(); iter != match.end();) {
+            
+            for (auto iter = match.begin(); iter != match.end();) {
                 
-               ++iter;
-               strings.push_back(std::move(*iter)); 
+               ++iter; // skip first element
+               
+               const string& const_ref = *iter;
+                         
+               if (const_ref.front() == '"') {
+                   
+                   strings.push_back(const_ref.substr(1, const_ref.length() -2));
+                   
+               } else {
+                         
+                   strings.push_back(std::move(*iter)); 
+               }
            }
 
            break;    

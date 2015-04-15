@@ -57,10 +57,7 @@ int main(int argc, char** argv)
 
    vector<string> strings = csv_parser.parseNextLine();     
         
-     /* 
-     continue; // TODO: Remove this and run db insertion code.
-     */
-     try {
+    try {
          
       for(int i = 0; i < strings.size(); ++i) {
           
@@ -81,7 +78,7 @@ int main(int argc, char** argv)
            { // DATE: YYY-MM-DD
                string date { strings[1].substr(6, 4) + "-" + strings[1].substr(0, 2) + "-" + strings[1].substr(3, 2) };
                
-               signer_info_stmt->setDateTime(2, date);
+               signer_info_stmt->setDateTime(2, std::move(date));
            }
            break; 
      
@@ -109,7 +106,7 @@ int main(int argc, char** argv)
                    
                } else {
      
-                  signer_info_stmt->setString(4, strings[3]);
+                  signer_info_stmt->setString(4, std::move(strings[3]));
                }
            }
            break; 
@@ -123,7 +120,7 @@ int main(int argc, char** argv)
                    
                } else {
      
-                  signer_info_stmt->setString(5, strings[4]);
+                  signer_info_stmt->setString(5, std::move(strings[4]));
                }
            }
            break; 
@@ -137,7 +134,7 @@ int main(int argc, char** argv)
                    
                } else {
            
-                  signer_comments_stmt->setString(2, strings[5]);
+                  signer_comments_stmt->setString(2, std::move(strings[5]));
                }
            
            break; 

@@ -27,9 +27,7 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-I am not successfully writing the data to the database. I get a MySQL error.
-
-Go through regex tutorial. Clang code is not finding hits.
+A few of the database executes (of the prepared statements) are failing.
 
 Use working.csv or no-names-xxxx.csv file. Both are the same. They have been:
 
