@@ -36,9 +36,9 @@ int main(int argc, char** argv)
       return 0;
   } 
 
-  regex csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};                                     
+  
 
-  CsvParser csv_parser(argv[1], csv_regex); 
+  CsvParser csv_parser(argv[1]);
     
   // TODO: A transaction support later.
 
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
    
      cout << strings[i] << endl;
      
-     continue; // debug
+     continue; // TODO: Remove this and run db insertion code.
      
      try {
       
@@ -90,6 +90,7 @@ int main(int argc, char** argv)
              {   // First Name 
                  
                  if (strings[2].empty()) {
+                     
                       // Per http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter cab be be 0.   
                       signer_info_stmt->setNull(3, 0); 
      

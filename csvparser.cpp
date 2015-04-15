@@ -5,9 +5,10 @@
 #include <memory>
 
 using namespace std;
-//const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
 
-CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv_regex(rx)
+//CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv_regex(rx)
+CsvParser::CsvParser(const string& file_name) : line_no(0)
 {
    input.open(file_name);
 
@@ -38,7 +39,7 @@ vector<string> CsvParser::parseNextLine()
 smatch match;
 string prior_line;
    
-vector<string> strings;
+vector<string> strings{6}; // allocate room for six strings
 
    try {
 
@@ -62,7 +63,7 @@ vector<string> strings;
            for (auto iter = match.begin(); iter != match.end();) {
                 
                ++iter;
-               strings.push_back(std::move(*iter));
+               strings.emplace_back(std::move(*iter));
            }
 
            break;    
