@@ -20,12 +20,10 @@ using namespace std;
 using namespace sql; 
 
 /*
- * 
  * Format of CSV file:
  * 
- * Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+ *   Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
  *
- * Examples
  */
 int main(int argc, char** argv) 
 {
@@ -49,6 +47,8 @@ int main(int argc, char** argv)
  
  stmt->execute("USE petition");
  
+ conn->setAutoCommit(false);  // We will use transactions.
+ 
  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 
    vector<string> strings = csv_parser.parseNextLine();     
 
-   if (stoi(strings[0]) <= max_signee) {
+   if (stoi(strings[0]) <= max_signee) { // check if it is already in DB.
 
    	continue;
    }
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
                
                if (strings[2].empty()) {
                    
-                    // Per http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter cab be be 0.   
+                    // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
                     signer_info_stmt->setNull(3, 0); 
      
                } else {
@@ -161,21 +161,25 @@ int main(int argc, char** argv)
        auto rc2 = signer_comments_stmt->execute(); 
           
     } catch (SQLException & e) { 
-                
-            cerr << "Error code = " << e.getErrorCode() << endl;
+        
+        conn->rollback();              
+        cerr << "Error code = " << e.getErrorCode() << endl;
               
-            cerr << "MySQL State message = " << e.getSQLState() << endl;
-            throw e;
+        cerr << "MySQL State message = " << e.getSQLState() << endl;
+        throw e;
               
     } catch (exception & e) {
                      
             // catch-all for C++11 exceptions 
-            cerr << "C++11 exception caught: " << e.what() << '\n';
-            cerr << "Terminating" << "\n";
-            throw e;
+        conn->rollback();                 
+        cerr << "C++11 exception caught: " << e.what() << '\n';
+        cerr << "Terminating" << "\n";
+        throw e;
     } 
     
   }  // end while   
+ 
+  conn->commit();
         
   return(0);
 }
