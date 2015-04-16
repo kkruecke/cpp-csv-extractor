@@ -59,8 +59,8 @@ int main(int argc, char** argv)
  res->first();
  
  int count = res->getUInt("biggest"); 
- 
-vector<pair<int, int>> lookup_table(count + 1);
+ /*
+ vector<pair<int, int>> lookup_table(count + 1);
   
  unique_ptr<ResultSet> res2 ( stmt->executeQuery("SELECT id, signee_no from signer_info ORDER BY id ASC") );
  
@@ -82,11 +82,26 @@ vector<pair<int, int>> lookup_table(count + 1);
  }
 
 int debug = 0;
+*/
+ofstream output("???.txt");
+
+char separator_char = ???;
   
  while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
+
+   for(int i = 0; i < strings.size();) {
+          
+        output << strings[i++];
         
+        if (i < strings.size()) { 
+
+           output << separator_char;
+        } 
+   }
+   continue;
+
     try {
          
       for(int i = 0; i < strings.size(); ++i) {
