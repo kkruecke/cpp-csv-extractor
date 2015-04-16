@@ -53,30 +53,36 @@ int main(int argc, char** argv)
 
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
  
- unique_ptr<ResultSet> res { stmt->executeQuery("select count(*) as total FROM signer_info") };
+ // Allocate a vector one larger than the maximum id in signer_info. Since id is a primary key, it max value is the total number of rows in signer_info.
+ unique_ptr<ResultSet> res { stmt->executeQuery("select max(id) as biggest FROM signer_info") };
  
- int count = res->getInt("total"); // <<-- Incorrect runtime error
+ res->first();
  
- vector<pair<int, int>> lookup_table(count + 1);
+ int count = res->getUInt("biggest"); 
  
- /* We assume the id begins at 1 an increments by one*/
- res.reset( stmt->executeQuery("SELECT id, signee_no from signer_info ORDER BY id ASC") );
+vector<pair<int, int>> lookup_table(count + 1);
+  
+ unique_ptr<ResultSet> res2 ( stmt->executeQuery("SELECT id, signee_no from signer_info ORDER BY id ASC") );
  
  vector<pair<int, int>>::iterator iter = lookup_table.begin();
  
- while (res->next()) {
+ while (res2->next()) {
         
-    int id = res->getInt("id");
-    int signee_no = res->getInt("signee_no");
+    int id = res2->getUInt("id");
+    int signee_no = res2->getUInt("signee_no");
     
     // skip position 0
     lookup_table.emplace(++iter, id, signee_no);
  }
  
- int debug = 0;
- 
- return 0;
- 
+ for (auto &x : lookup_table) {
+     
+     cout << "{ " << x.first << ", " << x.second << " } " << endl;
+     
+ }
+
+int debug = 0;
+  
  while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
