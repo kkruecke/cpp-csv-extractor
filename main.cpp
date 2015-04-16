@@ -54,55 +54,22 @@ int main(int argc, char** argv)
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
  
  // Allocate a vector one larger than the maximum id in signer_info. Since id is a primary key, it max value is the total number of rows in signer_info.
- unique_ptr<ResultSet> res { stmt->executeQuery("select max(id) as biggest FROM signer_info") };
+ unique_ptr<ResultSet> res { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
  res->first();
  
- int count = res->getUInt("biggest"); 
- /*
- vector<pair<int, int>> lookup_table(count + 1);
-  
- unique_ptr<ResultSet> res2 ( stmt->executeQuery("SELECT id, signee_no from signer_info ORDER BY id ASC") );
+ auto max_signee = res->getUInt("max_signee"); 
  
- vector<pair<int, int>>::iterator iter = lookup_table.begin();
- 
- while (res2->next()) {
-        
-    int id = res2->getUInt("id");
-    int signee_no = res2->getUInt("signee_no");
-    
-    // skip position 0
-    lookup_table.emplace(++iter, id, signee_no);
- }
- 
- for (auto &x : lookup_table) {
-     
-     cout << "{ " << x.first << ", " << x.second << " } " << endl;
-     
- }
-
-int debug = 0;
-*/
-ofstream output("???.txt");
-
-char separator_char = ???;
-  
  while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
 
-   for(int i = 0; i < strings.size();) {
-          
-        output << strings[i++];
-        
-        if (i < strings.size()) { 
+   if (stoi(strings[0]) <= max_signee) {
 
-           output << separator_char;
-        } 
+   	continue;
    }
-   continue;
 
-    try {
+   try {
          
       for(int i = 0; i < strings.size(); ++i) {
           
@@ -193,20 +160,20 @@ char separator_char = ???;
        auto rc1 = signer_info_stmt->execute(); 
        auto rc2 = signer_comments_stmt->execute(); 
           
-     } catch (SQLException & e) { 
+    } catch (SQLException & e) { 
                 
             cerr << "Error code = " << e.getErrorCode() << endl;
               
             cerr << "MySQL State message = " << e.getSQLState() << endl;
             throw e;
               
-     } catch (exception & e) {
+    } catch (exception & e) {
                      
             // catch-all for C++11 exceptions 
             cerr << "C++11 exception caught: " << e.what() << '\n';
             cerr << "Terminating" << "\n";
             throw e;
-     } 
+    } 
     
   }  // end while   
         
