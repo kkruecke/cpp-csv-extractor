@@ -52,8 +52,7 @@ int main(int argc, char** argv)
  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
- 
- // Allocate a vector one larger than the maximum id in signer_info. Since id is a primary key, it max value is the total number of rows in signer_info.
+
  unique_ptr<ResultSet> res { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
  res->first();
@@ -64,7 +63,9 @@ int main(int argc, char** argv)
 
    vector<string> strings = csv_parser.parseNextLine();     
 
-   if (stoi(strings[0]) <= max_signee) { // check if it is already in DB.
+   int signee_no = stoi(strings[0]);
+
+   if (signee_no <= max_signee) { // check if it is already in DB.
 
    	continue;
    }
@@ -75,15 +76,15 @@ int main(int argc, char** argv)
           
         cout << strings[i] << endl;     
         
+        bool isEmpty { strings[i].empty() };
+
         switch(i) {
 
            case 0:
-           {
-             int signee_no = stoi(strings[0]);
              
              signer_info_stmt->setInt(1, signee_no);
              signer_comments_stmt->setInt(1, signee_no);
-           }
+
            break;
                
            case 1:    
@@ -97,7 +98,7 @@ int main(int argc, char** argv)
            case 2:    
            {   // First Name 
                
-               if (strings[2].empty()) {
+               if (isEmpty) {
                    
                     // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
                     signer_info_stmt->setNull(3, 0); 
@@ -112,7 +113,7 @@ int main(int argc, char** argv)
            case 3:    
            {  // Last Name 
                
-               if (strings[3].empty()) {
+               if (isEmpty) {
      
                   signer_info_stmt->setNull(4, 0);
                    
@@ -126,7 +127,7 @@ int main(int argc, char** argv)
            case 4:    
            {   // City 
                
-               if (strings[4].empty()) {
+               if (isEmpty) {
      
                   signer_info_stmt->setNull(5, 0);
                    
@@ -140,7 +141,7 @@ int main(int argc, char** argv)
            case 5:    
               
                // Comments 
-               if (strings[5].empty()) {
+               if (isEmpty) {
      
                   signer_comments_stmt->setNull(2, 0);
                    
