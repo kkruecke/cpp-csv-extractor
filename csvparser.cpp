@@ -8,7 +8,6 @@ using namespace std;
 // regex as a raw string: R"(<contents of regex>)"
 const regex CsvParser::csv_regex{ R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)"};
 
-//CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv_regex(rx)
 CsvParser::CsvParser(const string& file_name) : line_no(0)
 {
    input.open(file_name);
@@ -32,7 +31,6 @@ bool CsvParser::hasmoreLines()
     }
     
     return bResult; 
-    
 }
 
 vector<string> CsvParser::parseNextLine()

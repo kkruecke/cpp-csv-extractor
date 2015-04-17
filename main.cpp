@@ -63,7 +63,7 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
    
    int signee_no = atoi(strings[0].c_str());
            
-   if (signee_no <= max_signee) { // ignore if it is already in DB.
+   if (signee_no <= max_signee) { // ignore data if it is already in DB.
 
    	continue;
    }
@@ -75,18 +75,18 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
         bool isEmpty { strings[i].empty() };
         
         /*
-         * If not signee_no or date-signed, then, if empty, invoke setNull()
+         * If column not signee_no or date-signed, then, if empty, call setNull(I + 1, 0)
          */
         if (i >= 2 && isEmpty) { 
 
             // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
             if (i == 5) {
 
-                 signer_comments_stmt->setString(2,0); 
+                signer_comments_stmt->setNull(2, 0); 
  
             } else {
 
-                 signer_info_stmt->setNull(i + 1, 0); 
+                signer_info_stmt->setNull(i + 1, 0); 
             }
 
             continue;
@@ -103,9 +103,8 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
                
            case 1:    
            { // DATE: YYY-MM-DD
-               string date { strings[1].substr(6, 4) + "-" + strings[1].substr(0, 2) + "-" + strings[1].substr(3, 2) };
-               
-               signer_info_stmt->setDateTime(2, std::move(date));
+                              
+               signer_info_stmt->setDateTime(2, strings[1].substr(6, 4) + "-" + strings[1].substr(0, 2) + "-" + strings[1].substr(3, 2));
            }
            break; 
      
@@ -113,7 +112,6 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
               // First Name 
                
                 signer_info_stmt->setString(3, strings[2]);
-           
            break; 
      
            case 3:    
@@ -127,8 +125,7 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
                // City 
                 
                 signer_info_stmt->setString(5, std::move(strings[4]));
-            
-           break; 
+            break; 
             
            case 5:    
                // Comments 
@@ -165,7 +162,7 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
     
   }  // end while   
  
-  conn->commit();
+  conn->commit(); // commit after last line in input has been processed.
         
   return(0);
 }
