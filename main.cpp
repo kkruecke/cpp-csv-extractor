@@ -27,7 +27,7 @@ using namespace sql;
  */
 int main(int argc, char** argv) 
 {
-  
+    
  if (argc != 2) {
 
      cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
  conn->setAutoCommit(false);  // We will use transactions.
  
  unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
-
+auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)";
  unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
  unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
@@ -61,8 +61,6 @@ int main(int argc, char** argv)
 
    vector<string> strings = csv_parser.parseNextLine();     
 
-   int signee_no = stoi(strings[0]);
-
    if (signee_no <= max_signee) { // ignore if it is already in DB.
 
    	continue;
@@ -72,9 +70,8 @@ int main(int argc, char** argv)
          
       for(int i = 0; i < strings.size(); ++i) {
           
-        cout << strings[i] << endl;     
-        
         bool isEmpty { strings[i].empty() };
+        continue; // debug
 
         /*
          * If not signee_no or date signed, then, if empty, invoke setNull()

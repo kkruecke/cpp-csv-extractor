@@ -5,7 +5,8 @@
 #include <memory>
 
 using namespace std;
-const regex CsvParser::csv_regex{ "^(\\d+),(\\d\\d-\\d\\d-\\d\\d\\d\\d),(?:\"[^\"]*\"|[^,\"]*),(?:\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*),(\"[^\"]*\"|[^,\"]*)$"};
+// regex as a raw string: R"(<contents of regex>)"
+const regex CsvParser::csv_regex{ R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)"};
 
 //CsvParser::CsvParser(const string& file_name, const regex& rx) : line_no(0), csv_regex(rx)
 CsvParser::CsvParser(const string& file_name) : line_no(0)
