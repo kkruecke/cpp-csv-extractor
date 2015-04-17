@@ -112,25 +112,17 @@ vector<string> CsvParser::parseNextLine()
 
         while( *iter++ !=',');
 
-       // cout << line.substr(0, iter - line.begin() - 1) << endl; debug code
-
         strings.push_back(line.substr(0, iter - line.begin() - 1));
- 
         break;  
     
      case 1: // date is a fixed length and can therefore be calculated 
         
-      // cout << line.substr(iter - line.begin(), date_length) << endl; // debug only
-        
         strings.push_back(line.substr(iter - line.begin(), CsvParser::date_length));
- 
         iter += 10; // Does it point to comma now or the next string?
         break;
 
      default:
             // All other cases are identical
-         // Question: Does good properly handle empty strings?
-     
          auto start_offset = ++iter - line.begin(); // Initially iter is pointing at a comma. Advance it... 
                     
          if (iter == end || *iter == ',') { // Are we at the end of the string, or do we have an substring empty?
@@ -184,49 +176,4 @@ vector<string> CsvParser::parseNextLine()
    
  return strings;
 } // end function
-*/
-
-/*
-bool CsvParser::getNextSigner(string& line)
-{
-   string prior_line;
-
-   while (1) { 
-
-     if (!hasmoreLines()) {
-
-         return false;
-     }
- 
-     //
-     // TODO: The logic is wrong. We need to read and concatenate until we have the complete line. We are only regex searching the first two fields, so
-     // we really don't know if we have a complete line, only that the first two fields were present--not what we need to know.
-   
-     getline(input, line);
-
-     string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"}); 
-   
-     line = prior_line + transformed_line;
-     
-     cout << "The line is: \n" << line << endl;
-     
-     std::regex re("^\\d+,\\d\\d-\\d\\d-\\d\\d\\d\\d,");
-     
-     bool hits = std::regex_search(line, re);
-         
-     if (hits) { 
-              
-        cout << " --> In CsvParser::getNextSigner() <-- " << endl; // debug code
-
-        break;    
-  
-     } else {
-          
-         prior_line = line;
-     }
-
- } // end while
-   
-   return true;
-}
 */
