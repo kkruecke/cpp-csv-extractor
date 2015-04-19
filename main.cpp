@@ -28,42 +28,43 @@ using namespace sql;
 int main(int argc, char** argv) 
 {
     
- if (argc != 2) {
+if (argc != 2) {
 
-     cerr << "Please re-run with the input file name as the first parameter.\n";
-     return 0;
- } 
+    cerr << "Please re-run with the input file name as the first parameter.\n";
+    return 0;
+} 
 
- CsvParser csv_parser(argv[1]);
+CsvParser csv_parser(argv[1]);
    
- // Credentials: (url, user, password)
+// Credentials: (url, user, password)
    
- unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
  
- // Set database to use.
- unique_ptr< Statement > stmt(conn->createStatement());
+// Set database to use.
+unique_ptr< Statement > stmt(conn->createStatement());
  
- stmt->execute("USE petition");
+stmt->execute("USE petition");
  
- conn->setAutoCommit(false);  // We will use transactions.
+conn->setAutoCommit(false);  // We will use transactions.
  
- unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
-auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)";
- unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
+unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT INTO signer_info(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
- unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
+unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
+
+// Get max(sigee_no( to determine if new petition signers are already in the DB.
+unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
- resultSet->first();
+resultSet->first();
  
- auto max_signee = resultSet->getUInt("max_signee"); 
+auto max_signee = resultSet->getUInt("max_signee"); 
  
- while (csv_parser.hasmoreLines()) {  
+while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine();     
    
    int signee_no = atoi(strings[0].c_str());
            
-   if (signee_no <= max_signee) { // ignore data if it is already in DB.
+   if (signee_no <= max_signee) { 
 
    	continue;
    }
@@ -75,7 +76,7 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
         bool isEmpty { strings[i].empty() };
         
         /*
-         * If column not signee_no or date-signed, then, if empty, call setNull(I + 1, 0)
+         * If column not signee_no or date-signed, then, if empty, call setNull(i + 1, 0)
          */
         if (i >= 2 && isEmpty) { 
 
@@ -95,44 +96,35 @@ auto x =                          R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"
         switch(i) {
 
            case 0:
-             
-             signer_info_stmt->setInt(1, signee_no);
-             signer_comments_stmt->setInt(1, signee_no);
-
-           break;
+            // Signer #er              
+            signer_info_stmt->setInt(1, signee_no);
+            signer_comments_stmt->setInt(1, signee_no);
+            break;
                
            case 1:    
-           { // DATE: YYY-MM-DD
-                              
-               signer_info_stmt->setDateTime(2, strings[1].substr(6, 4) + "-" + strings[1].substr(0, 2) + "-" + strings[1].substr(3, 2));
-           }
-           break; 
+            // DATE: YYY-MM-DD
+            signer_info_stmt->setDateTime(2, strings[1].substr(6, 4) + "-" + strings[1].substr(0, 2) + "-" + strings[1].substr(3, 2));
+            break; 
      
            case 2:    
-              // First Name 
-               
-                signer_info_stmt->setString(3, strings[2]);
-           break; 
+            // First Name 
+            signer_info_stmt->setString(3, strings[2]);
+            break; 
      
            case 3:    
-             // Last Name 
-               
-                signer_info_stmt->setString(4, std::move(strings[3]));
-
-           break; 
+            // Last Name 
+            signer_info_stmt->setString(4, std::move(strings[3]));
+            break; 
      
            case 4:    
                // City 
-                
-                signer_info_stmt->setString(5, std::move(strings[4]));
+            signer_info_stmt->setString(5, std::move(strings[4]));
             break; 
             
            case 5:    
-               // Comments 
-                      
-               signer_comments_stmt->setString(2, std::move(strings[5]));
-           
-           break; 
+            // Comments 
+            signer_comments_stmt->setString(2, std::move(strings[5]));
+            break; 
            
            default:
             break;  

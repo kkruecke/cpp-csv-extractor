@@ -18,21 +18,6 @@ CsvParser::CsvParser(const string& file_name) : line_no(0)
    }
 }
 
-bool CsvParser::hasmoreLines() 
-{
-    char c;
-    
-    input >> c;
-    bool bResult = input.good();
-    
-    if (bResult) {
-        
-        input.putback(c);
-    }
-    
-    return bResult; 
-}
-
 vector<string> CsvParser::parseNextLine()
 {
 smatch match;
@@ -40,54 +25,50 @@ string prior_line;
    
 vector<string> strings; // TODO: allocate room for six strings and use emplace(iter, ctor args)
 
-   try {
+ while (1) {
 
-      while (1) {
-
-        getline(input, line);
-        
-        if (input.fail()) {
-            
-            return strings;
-        }
-
-        auto transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
+   getline(input, line);
    
-        line = prior_line + transformed_line;
-
-        bool hits = regex_search(line, match, CsvParser::csv_regex);
-                  
-        if (hits) { 
-            
-            for (auto iter = match.begin(); iter != match.end();) {
-                
-               ++iter; // skip first element
-               
-               // Remove enclosing quotes if present.
-               const string& const_ref = *iter;
-                         
-               if (const_ref.front() == '"') {
-                   
-                   strings.push_back(const_ref.substr(1, const_ref.length() -2));
-                   
-               } else {
-                         
-                   strings.push_back(std::move(*iter)); 
-               }
-           }
-
-           break;    
-  
-        } else {
-             
-            prior_line = line;
-        }
-
-      } // end while
-   } catch (exception& e) {
-
+   if (input.fail()) {
+       
+       return strings;
    }
-   return strings; 
+
+   string transformed_line = regex_replace(line, regex {"(\"\")"}, string{"'"});
+ 
+   line = prior_line + transformed_line;
+
+   bool hits = regex_search(line, match, CsvParser::csv_regex);
+             
+   if (hits) { 
+       
+       for (auto iter = match.begin(); iter != match.end();) {
+           
+          ++iter; // skip first hit, the entire regex
+          
+          // Remove enclosing quotes if present from submatch.
+          const string& const_ref = *iter;
+                    
+          if (const_ref.front() == '"') {
+              
+              strings.push_back(const_ref.substr(1, const_ref.length() -2));
+              
+          } else {
+                    
+              strings.push_back(std::move(*iter)); 
+          }
+      }
+
+      break;    
+ 
+   } else {
+        
+       prior_line = std::move(line);
+   }
+
+ } // end while
+ 
+ return strings; 
 }
 /* parse directly without using a regex.
 vector<string> CsvParser::parseNextLine()

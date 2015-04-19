@@ -27,4 +27,19 @@ public:
     bool hasmoreLines();
 };
 
+inline bool CsvParser::hasmoreLines() 
+{
+    char c;
+    
+    input >> c;
+    bool bResult = input.good();
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult; 
+}
+
 #endif
