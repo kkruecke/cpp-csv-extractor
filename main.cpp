@@ -57,6 +57,8 @@ unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as m
 resultSet->first();
  
 auto max_signee = resultSet->getUInt("max_signee"); 
+
+int lineno = 1;
  
 while (csv_parser.hasmoreLines()) {  
 
@@ -68,32 +70,36 @@ while (csv_parser.hasmoreLines()) {
 
    	continue;
    }
+   int col = 0;
 
    try {
-         
-      for(int i = 0; i < strings.size(); ++i) {
+      // TODO: Check if "col + 1" is correct. Compare it to older versions.
+      // TODO: Check that getNextLine() always returns 6 elements.
+      
           
-        bool isEmpty { strings[i].empty() };
+      for(; col < strings.size(); ++col) {
+          
+        bool isEmpty { strings[col].empty() };
         
         /*
-         * If column not signee_no or date-signed, then, if empty, call setNull(i + 1, 0)
+         * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
          */
-        if (i >= 2 && isEmpty) { 
+        if (col >= 2 && isEmpty) { 
 
             // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
-            if (i == 5) {
+            if (col == 5) {
 
                 signer_comments_stmt->setNull(2, 0); 
  
             } else {
 
-                signer_info_stmt->setNull(i + 1, 0); 
+                signer_info_stmt->setNull(col + 1, 0); 
             }
 
             continue;
         }
 
-        switch(i) {
+        switch(col) {
 
            case 0:
             // Signer #er              
@@ -138,20 +144,19 @@ while (csv_parser.hasmoreLines()) {
     } catch (SQLException & e) { 
         
         conn->rollback();              
-        cerr << "Error code = " << e.getErrorCode() << endl;
-              
-        cerr << "MySQL State message = " << e.getSQLState() << endl;
+        cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
+        cerr << "Line number = " << lineno << ". Insert column = " << col+1 << endl;
         throw e;
               
     } catch (exception & e) {
                      
             // catch-all for C++11 exceptions 
         conn->rollback();                 
-        cerr << "C++11 exception caught: " << e.what() << '\n';
-        cerr << "Terminating" << "\n";
+        cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col+1 << "\n";
         throw e;
-    } 
-    
+    }
+   
+    ++lineno;
   }  // end while   
  
   conn->commit(); // commit after last line in input has been processed.
