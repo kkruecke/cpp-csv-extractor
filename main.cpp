@@ -51,7 +51,7 @@ unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT 
 
 unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
-// Get max(sigee_no( to determine if new petition signers are already in the DB.
+// Get max(sigee_no) to determine if new petition signers are already in the DB.
 unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
 resultSet->first();
@@ -73,9 +73,6 @@ while (csv_parser.hasmoreLines()) {
    int col = 0;
 
    try {
-      // TODO: Check if "col + 1" is correct. Compare it to older versions.
-      // TODO: Check that getNextLine() always returns 6 elements.
-      
           
       for(; col < strings.size(); ++col) {
           
