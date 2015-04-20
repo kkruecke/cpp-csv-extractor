@@ -27,19 +27,11 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-How do I get the result of a count(*) query?
-
-Use working.csv or no-names-xxxx.csv file. Both are the same. They have been:
+Use modified-petition.csv and make sure this is done:
 
 1. Doing dos2unix on file
 2. Removing first and last name by importing into excel then exporting them back into a csv file.
 3. Running iconv -f UTF-8 -t ASCII and looking for characters that could not be converted.
-
-Get rid of csvreader code. Put its code in main and re-test. This is too time consuming.
-
-getNextRegexMatch() works correctly, but the returned smatch value is corrupted for some reason. I could try using boost regex, to see if it has the problem.
-
-It could be due to funny characters. Try"
 
 The petition.csv is a Unicode UTF-8 file. 
 ----------------------------------------
