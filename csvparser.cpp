@@ -64,7 +64,7 @@ auto insert_pos = strings.begin();
  
    } else {
         
-       prior_line = std::move(line);
+       prior_line = move(line);
    }
 
  } // end while
