@@ -26,6 +26,9 @@ smatch match;
 string prior_line;
    
 vector<string> strings; 
+strings.reserve(6);
+
+auto insert_pos = strings.begin();
 
  while (1) {
 
@@ -42,20 +45,18 @@ vector<string> strings;
              
    if (hits) { 
        
-       for (auto iter = ++(match.begin()); iter != match.end(); ++iter) {
+       for (auto iter = ++(match.begin()); iter != match.end(); ++iter, ++insert_pos) {
 
           // Remove enclosing quotes if present from submatch.
           const string& const_ref = *iter;
           
-          // Note emplace_back below may not be faster than push_back for ctor that only have one argument
-                        
           if (const_ref.front() == '"') {
               
-              strings.emplace( strings.begin(), move(const_ref.substr(1, const_ref.length() - 2)) );
+              strings.emplace(insert_pos, move(const_ref.substr(1, const_ref.length() - 2)) );
               
           } else {
                              
-               strings.emplace(strings.begin(), move(*iter)); 
+               strings.emplace(insert_pos, move(*iter)); 
           }
       }
 
