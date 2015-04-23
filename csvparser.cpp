@@ -26,7 +26,7 @@ smatch match;
 string prior_line;
    
 vector<string> strings; 
-strings.reserve(6);
+strings.reserve(6);  // reserve does not result in default ctor initializations
 
 auto insert_pos = strings.begin();
 
