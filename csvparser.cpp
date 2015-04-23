@@ -17,7 +17,9 @@ CsvParser::CsvParser(const string& file_name) : line_no(0)
       throw logic_error("Could not open file" + file_name + "\n");
    }
 }
-
+/*
+ * TODO: See how to preallocate the vector and then "insert" with emplace or emplace_back.
+ */
 vector<string> CsvParser::parseNextLine()
 {
 smatch match;
