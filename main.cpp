@@ -62,7 +62,7 @@ int lineno = 1;
  
 while (csv_parser.hasmoreLines()) {  
 
-   vector<string> strings = csv_parser.parseNextLine();
+   vector<string> strings = csv_parser.parseNextLine(); 
          
    int signee_no = atoi(strings[0].c_str());
         
@@ -70,7 +70,6 @@ while (csv_parser.hasmoreLines()) {
 
    	continue;
    }
-  
 
    int col = 0;
 

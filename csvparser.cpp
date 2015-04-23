@@ -16,7 +16,9 @@ CsvParser::CsvParser(const string& file_name) : line_no(0)
       throw logic_error("Could not open file" + file_name + "\n");
    }
 }
-
+/*
+ * Always returns a vector of six 6. Some entries may be empty.
+ */
 vector<string> CsvParser::parseNextLine()
 {
 smatch match;
