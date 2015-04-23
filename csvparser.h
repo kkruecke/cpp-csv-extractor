@@ -8,7 +8,6 @@
 
 class CsvParser {
     
-    static const int date_length = 10;
     static const std::regex csv_regex;
 
     std::ifstream input;
