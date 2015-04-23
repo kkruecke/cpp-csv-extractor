@@ -19,11 +19,10 @@ class CsvParser {
     bool getNextSigner(std::string &);
         
 public:
-    
-//  CsvParser(const std::string& file_name, const std::regex& rx);
-    CsvParser(const std::string& file_name);
 
+    CsvParser(const std::string& file_name);
     std::vector<std::string> parseNextLine();
+
     bool hasmoreLines();
 };
 

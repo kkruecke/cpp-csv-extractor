@@ -50,7 +50,7 @@ vector<string> strings; // TODO: allocate room for six strings and use emplace(i
               strings.push_back(const_ref.substr(1, const_ref.length() - 2));
               
           } else {
-                    
+                             
               strings.push_back(std::move(*iter)); 
           }
       }

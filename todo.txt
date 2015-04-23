@@ -27,6 +27,8 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
+define:
+vector<string>strings(6);
 Use modified-petition.csv and make sure this is done:
 
 1. Doing dos2unix on file
