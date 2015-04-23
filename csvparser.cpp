@@ -25,7 +25,7 @@ vector<string> CsvParser::parseNextLine()
 smatch match;
 string prior_line;
    
-vector<string> strings; // TODO: allocate room for six strings and use emplace(iter, ctor args)
+vector<string> strings; 
 
  while (1) {
 
@@ -46,14 +46,16 @@ vector<string> strings; // TODO: allocate room for six strings and use emplace(i
 
           // Remove enclosing quotes if present from submatch.
           const string& const_ref = *iter;
+          
+          // Note emplace_back below may not be faster than push_back for ctor that only have one argument
                         
           if (const_ref.front() == '"') {
               
-              strings.push_back(const_ref.substr(1, const_ref.length() - 2));
+              strings.emplace( strings.begin(), move(const_ref.substr(1, const_ref.length() - 2)) );
               
           } else {
                              
-              strings.push_back(std::move(*iter)); 
+               strings.emplace(strings.begin(), move(*iter)); 
           }
       }
 
@@ -68,6 +70,7 @@ vector<string> strings; // TODO: allocate room for six strings and use emplace(i
 
  return strings; 
 }
+
 /* parse directly without using a regex.
 vector<string> CsvParser::parseNextLine()
 {
