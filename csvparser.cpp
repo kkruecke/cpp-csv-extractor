@@ -5,9 +5,7 @@
 #include <memory>
 using namespace std;
 
-const regex CsvParser::csv_regex{ R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)"};
-
-CsvParser::CsvParser(const string& file_name) : line_no(0)
+CsvParser::CsvParser(const string& file_name, const regex& rgex) : line_no(0), csv_regex(rgex)
 {
    input.open(file_name);
 
@@ -38,7 +36,7 @@ strings.reserve(6);  // reserve(n) does not result in default ctor initializatio
    // replace two consecutive double quotes with a single quote
    line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"});
 
-   bool hits = regex_search(line, match, CsvParser::csv_regex);
+   bool hits = regex_search(line, match, csv_regex);
              
    if (hits) { 
        
@@ -53,7 +51,7 @@ strings.reserve(6);  // reserve(n) does not result in default ctor initializatio
               
           } else {
                              
-               strings.emplace_back(move(*iter)); 
+              strings.emplace_back(move(*iter)); 
           }
       }
 

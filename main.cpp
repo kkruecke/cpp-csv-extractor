@@ -34,7 +34,7 @@ if (argc != 2) {
     return 0;
 } 
 
-CsvParser csv_parser(argv[1]);
+CsvParser csv_parser(argv[1], regex{ R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)"});
    
 // Credentials: (url, user, password)
    
@@ -59,7 +59,7 @@ resultSet->first();
 auto max_signee = resultSet->getUInt("max_signee"); 
 
 int lineno = 1;
- 
+
 while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine(); 

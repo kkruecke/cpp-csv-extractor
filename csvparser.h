@@ -8,7 +8,7 @@
 
 class CsvParser {
     
-    static const std::regex csv_regex;
+    const std::regex csv_regex;
 
     std::ifstream input;
     std::string   line;
@@ -19,7 +19,7 @@ class CsvParser {
         
 public:
 
-    CsvParser(const std::string& file_name);
+    CsvParser(const std::string& file_name, std::regex rexp);
     std::vector<std::string> parseNextLine();
 
     bool hasmoreLines();
