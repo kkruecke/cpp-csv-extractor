@@ -8,10 +8,10 @@
 using namespace std;
 
 // MySQL Connector for C++ headers
-#include <mysql_driver.h>     // Its methos are in a static library 
+#include <mysql_driver.h>     // Its methods are in a static library libmysqlcppconn-static 
 #include <mysql_connection.h> 
 
-#include <cppconn/driver.h>   // Its methods are in a dynamic library
+#include <cppconn/driver.h>   // Its methods are in a dynamic library libmysqlcppconn  
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
@@ -51,7 +51,7 @@ unique_ptr<PreparedStatement> signer_info_stmt { conn->prepareStatement("INSERT 
 
 unique_ptr<PreparedStatement> signer_comments_stmt { conn->prepareStatement("INSERT INTO signer_comments(signee_no, comments) VALUES(?, ?)") };
 
-// Get max(sigee_no) to determine if new petition signers are already in the DB.
+// Get max(sigee_no) to determine if petition signers are already in the DB.
 unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
 resultSet->first();
@@ -66,7 +66,7 @@ while (csv_parser.hasmoreLines()) {
          
    int signee_no = atoi(strings[0].c_str());
         
-   if (signee_no <= max_signee) { 
+   if (signee_no <= max_signee) { // Skip if already present in DB. 
 
    	continue;
    }

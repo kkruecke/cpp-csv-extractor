@@ -23,8 +23,8 @@ string prior_line;
    
 vector<string> strings;
 /*
- * reserve(n) does not result in default ctor initializations like vector<string> strings(6) would. 
- * Plus strings.begin() is the front of the vector.
+ * strings.reserve(n) does not result in default ctor initializations like vector<string> strings(6). 
+ * and strings.begin() points to string[0].
  */
 strings.reserve(6);  
 
@@ -40,14 +40,12 @@ strings.reserve(6);
    // Replace any two consecutive double quotes with a single quote
    line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"});
 
-   bool hits = regex_search(line, match, csv_regex);
-             
-   if (hits) { 
+   if (regex_search(line, match, csv_regex)) { 
 
-       // Skip first hit, the entire regex. We only want submatches. 
+       // Skip first hit, the entire regex. We only want the submatches. 
        for (auto iter = ++(match.begin()); iter != match.end(); ++iter) {
 
-          // Remove enclosing quotes if present from submatch.
+          // Remove enclosing quotes if present from submatches.
           const string& const_ref = *iter;
           
           if (const_ref.front() == '"') {
@@ -65,7 +63,6 @@ strings.reserve(6);
         
        prior_line = move(line);
    }
-
  } 
 
  return strings; 
