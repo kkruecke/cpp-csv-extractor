@@ -25,9 +25,7 @@ smatch match;
 string prior_line;
    
 vector<string> strings; 
-strings.reserve(6);  // reserve does not result in default ctor initializations
-
-auto insert_pos = strings.begin();
+strings.reserve(6);  // reserve(n) does not result in default ctor initializations
 
  while (1) {
 
@@ -44,7 +42,7 @@ auto insert_pos = strings.begin();
              
    if (hits) { 
        
-       for (auto iter = ++(match.begin()); iter != match.end(); ++iter, ++insert_pos) {
+       for (auto iter = ++(match.begin()); iter != match.end(); ++iter) {
 
           // Remove enclosing quotes if present from submatch.
           const string& const_ref = *iter;
