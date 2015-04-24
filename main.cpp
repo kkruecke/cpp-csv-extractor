@@ -1,17 +1,17 @@
 #include <cstdlib>
-#include <iostream>   // debug only
 #include <memory>     // unique_ptr
 #include <exception>
 #include <vector> 
 #include <fstream>
 #include "csvparser.h"
+#include "hidden/db_credentials.h" // database credentials
 using namespace std;
 
-// MySQL Connector for C++
-#include <mysql_driver.h>     // in static library 
+// MySQL Connector for C++ headers
+#include <mysql_driver.h>     // Its methos are in a static library 
 #include <mysql_connection.h> 
 
-#include <cppconn/driver.h>   // in dynamic library
+#include <cppconn/driver.h>   // Its methods are in a dynamic library
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
@@ -19,12 +19,6 @@ using namespace std;
 
 using namespace sql; 
 
-/*
- * Format of CSV file:
- * 
- *   Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
- *
- */
 int main(int argc, char** argv) 
 {
     
@@ -34,11 +28,17 @@ if (argc != 2) {
     return 0;
 } 
 
-CsvParser csv_parser(argv[1], regex{ R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)"});
+/*
+ * Format of CSV file:
+ * 
+ *   Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+ *
+ */
+CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)");
    
 // Credentials: (url, user, password)
    
-unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", "petition", "kk0457") };
+unique_ptr<Connection> conn { get_driver_instance()->connect("tcp://127.0.0.1:3306", DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
 // Set database to use.
 unique_ptr< Statement > stmt(conn->createStatement());

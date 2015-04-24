@@ -13,13 +13,12 @@ class CsvParser {
     std::ifstream input;
     std::string   line;
     int           line_no;
-    std::string   line_cache;
 
     bool getNextSigner(std::string &);
         
 public:
 
-    CsvParser(const std::string& file_name, const std::regex& rexp);
+    CsvParser(const std::string& file_name, const std::string& str);
     std::vector<std::string> parseNextLine();
 
     bool hasmoreLines();
