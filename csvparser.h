@@ -19,7 +19,7 @@ class CsvParser {
         
 public:
 
-    CsvParser(const std::string& file_name, std::regex rexp);
+    CsvParser(const std::string& file_name, const std::regex& rexp);
     std::vector<std::string> parseNextLine();
 
     bool hasmoreLines();
