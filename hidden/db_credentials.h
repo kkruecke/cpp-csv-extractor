@@ -10,25 +10,14 @@ class DB_Credentials {
     static std::unordered_map<std::string, std::string> credentials;
     
 public:
-    static const std::string& Url();
-    static const std::string& User();
-    static const std::string& Password();
+    static const std::string& get(const string& str);
+    
      
 };
 
-inline const std::string& DB_Credentials::Url() 
+inline const std::string& DB_Credentials::get(const string& str) 
 {
-     return credentials["url"];
-}
-
-inline const std::string& DB_Credentials::User() 
-{
-    return credentials["user"];
-}
-
-inline const std::string&  DB_Credentials::Password() 
-{
-    return credentials["password"];
+     return credentials[str];
 }
 #endif	
 
