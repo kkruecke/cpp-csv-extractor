@@ -1,0 +1,2 @@
+ASCII is an single bytes, seven-bit encoding. There are other single byte, eight-bit encodings that extend ASCII. One of
+the most popular is Latin-1, which also have the Internet Assigned Number of ISO/IEC 8859-1:1998.

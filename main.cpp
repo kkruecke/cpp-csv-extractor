@@ -31,14 +31,14 @@ if (argc != 2) {
 /*
  * Format of CSV file:
  * 
- *   Number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+ *   Signer number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
  *
  */
 CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)");
    
 // Credentials: (url, user, password)
    
-unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::get('url').c_str(), DB_Credentials::get('usr').c_str(), DB_Credentials::get('password').c_str()) };
+unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
 // Set database to use.
 unique_ptr< Statement > stmt(conn->createStatement());
