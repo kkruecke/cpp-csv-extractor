@@ -23,8 +23,8 @@ string prior_line;
    
 vector<string> strings;
 /*
- * strings.reserve(n) does not result in default ctor initializations like vector<string> strings(6). 
- * and strings.begin() points to string[0].
+ * Note: strings.reserve(n) does not result in default ctor initializations unlike vector<string> strings(6). 
+ * Also strings.begin() points to string[0].
  */
 strings.reserve(6);  
 
