@@ -1,0 +1,41 @@
+How to convert from UTF-8 to Latin-1 in C++11
+=============================================
+From Slashdot:
+
+
+First convert UTF-8 to 32-bit Unicode.
+------------
+
+Code to do so:
+
+#include <iostream>
+#include <string>
+#include <locale>
+#include <codecvt>
+int main()
+{
+    std::string utf8 =  u8"z\u00df\u6c34\U0001d10b"; // or u8"zß水𝄋"
+                        // or "\x7a\xc3\x9f\xe6\xb0\xb4\xf0\x9d\x84\x8b";
+    std::cout << "original UTF-8 string size: " << utf8.size() << '\n';
+ 
+    // the UTF-8 - UTF-32 standard conversion facet
+    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+ 
+    // UTF-8 to UTF-32
+    std::u32string utf32 = cvt.from_bytes(utf8);
+    std::cout << "UTF-32 string size: " << utf32.size() << '\n';
+    std::cout << "converted() == " << cvt.converted() << '\n';
+-----------------
+
+
+Then keep the values that are in the range 0 through 255.
+
+Those are the Latin-1 code points, and for other values, decide if you want to treat that as an error or perhaps replace with code point 127 (my fav, the ASCII "del") or question mark or something.
+
+The C++ standard library defines a std::codecvt specialization that can be used,
+
+template<>
+codecvt<char32_t, char, mbstate_t>
+
+C++11 §22.4.1.4/3: “the specialization codecvt <char32_t, char, mbstate_t> converts between the UTF-32 and UTF-8 encoding schemes”
+
