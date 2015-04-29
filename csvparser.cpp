@@ -31,8 +31,7 @@ vector<string> strings;
  */
 strings.reserve(6);  
 
-//--csv_back_inserter<vector<string>> emplace_inserter(strings);
-csv_back_inserter emplace_inserter(strings);
+emplace_back_inserter emplace_inserter(strings);
 
  while (1) {
 

@@ -18,24 +18,23 @@ class CsvParser {
    
     // Nested class to work with std::copy() to do emplace_back 
         
-    class csv_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
-
-      protected:
-        std::vector<std::string>& container; 
-     public:
-        typedef std::vector<std::string> container_type;
+    class emplace_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
+      private: 
+         std::vector<std::string>& container; 
+      public:
+         typedef std::vector<std::string> container_type;
       
-        explicit csv_back_inserter (std::vector<std::string>& x) : container(x) {}
+         explicit emplace_back_inserter (std::vector<std::string>& x) : container(x) {}
       
-        csv_back_inserter& operator= (typename std::vector<std::string>::const_reference value);
+         emplace_back_inserter& operator= (typename std::vector<std::string>::const_reference value);
       
-        csv_back_inserter& operator* () { return *this; }
+         emplace_back_inserter& operator* () { return *this; }
       
-        csv_back_inserter& operator++ () { return *this; }
+         emplace_back_inserter& operator++ () { return *this; }
       
-        csv_back_inserter operator++ (int) { return *this; }
+         emplace_back_inserter operator++ (int) { return *this; }
       };
-        
+     
 public:
 
     CsvParser(const std::string& file_name, const std::string& str);
@@ -59,7 +58,7 @@ inline bool CsvParser::hasmoreLines()
     return bResult; 
 }
 
-inline CsvParser::csv_back_inserter&  CsvParser::csv_back_inserter::operator= (typename std::vector<std::string>::const_reference value)
+inline CsvParser::emplace_back_inserter&  CsvParser::emplace_back_inserter::operator= (typename std::vector<std::string>::const_reference value)
 {
   // Remove enclosing quotes if present from submatches.
   if (value.front() == '"') {
@@ -78,7 +77,7 @@ inline CsvParser::csv_back_inserter&  CsvParser::csv_back_inserter::operator= (t
 /* Generalized template of the nested class above
 
 template <class Container> // vector<string>
-class csv_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
+class emplace_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
 protected:
 
   Container* container; // vector<string>
@@ -86,18 +85,18 @@ protected:
 public:
   typedef Container container_type;
 
-  explicit csv_back_inserter (Container& x) : container(&x) {}
+  explicit emplace_back_inserter (Container& x) : container(&x) {}
 
-  csv_back_inserter<Container>& operator= (typename Container::const_reference value);
+  emplace_back_inserter<Container>& operator= (typename Container::const_reference value);
 
-  csv_back_inserter<Container>& operator* () { return *this; }
+  emplace_back_inserter<Container>& operator* () { return *this; }
 
-  csv_back_inserter<Container>& operator++ () { return *this; }
+  emplace_back_inserter<Container>& operator++ () { return *this; }
 
-  csv_back_inserter<Container> operator++ (int) { return *this; }
+  emplace_back_inserter<Container> operator++ (int) { return *this; }
 };
 
-template <class Container> inline csv_back_inserter<Container>& csv_back_inserter<Container>::operator= (typename Container::const_reference value) // OK
+template <class Container> inline emplace_back_inserter<Container>& emplace_back_inserter<Container>::operator= (typename Container::const_reference value) // OK
 {
  // Remove enclosing quotes if present from submatches.
  if (value.front() == '"') {
