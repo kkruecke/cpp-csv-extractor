@@ -63,6 +63,14 @@ int lineno = 1;
 while (csv_parser.hasmoreLines()) {  
 
    vector<string> strings = csv_parser.parseNextLine(); 
+   
+   cout << "--------\n";
+   
+   for(const auto& x : strings) {
+       
+       cout << x << endl;
+   }
+   continue;
 
    int signee_no = atoi(strings[0].c_str());
         

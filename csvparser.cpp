@@ -2,6 +2,7 @@
 #include <regex>
 #include <stdexcept>
 #include <memory>
+
 using namespace std;
 
 CsvParser::CsvParser(const string& file_name, const string& rgex) : line_no(0), csv_regex(rgex)
@@ -28,6 +29,8 @@ vector<string> strings;
  */
 strings.reserve(6);  
 
+csv_back_inserter<vector<string>> inserter(strings);
+
  while (1) {
 
    getline(input, line); // line is this->line
@@ -41,18 +44,14 @@ strings.reserve(6);
    line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"});
 
    if (regex_search(line, match, csv_regex)) { 
-
+       
        // Skip first hit, the entire regex. We only want the submatches. 
+       copy(++(match.begin()), match.end(), inserter); // testing
+      
+       /* Prior code
        for (auto iter = ++(match.begin()); iter != match.end(); ++iter) { 
 
-       /*
-          Goal: Code like this
-
-                     copy(++(match.begin(), match.end, custom_iterator);
-
-          that does the steps here below 
-        */
-
+      
           // Remove enclosing quotes if present from submatches.
           const string& const_ref = *iter;
           
@@ -64,7 +63,8 @@ strings.reserve(6);
                              
               strings.emplace_back(move(const_ref)); 
           }
-      }
+        }
+      */ 
       break;    
  
    } else {
