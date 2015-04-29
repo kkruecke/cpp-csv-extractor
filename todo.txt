@@ -27,36 +27,29 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-define:
-vector<string>strings(6);
+1. Unicode
+----------
+
+Listen to cppcon Unicode lecture at https://www.youtube.com/watch?v=n0GK-9f4dl8,
+in order to decide what to do about handling the petition file. I want the comments to be only in ASCII.
+
+http://www.w3schools.com/charsets/default.asp
+
 Use modified-petition.csv and make sure this is done:
 
 1. Doing dos2unix on file
 2. Removing first and last name by importing into excel then exporting them back into a csv file.
 3. Running iconv -f UTF-8 -t ASCII and looking for characters that could not be converted.
 
-The petition.csv is a Unicode UTF-8 file. 
-----------------------------------------
+2. PHP under Tomcat 
+-------------------
 
-Doing 
+3. See TODO in .cpp's
+---------------------
 
-$ file petition.csv
+option 1: quercus
+~~~~~~~~~~~~~~~~~
 
-yields:
-
-petition.csv: UTF-8 Unicode text, with very long lines. 
-
-links to read to understand Unicode better
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* http://www.joelonsoftware.com/articles/Unicode.html
-* http://www.unicode.org/
-* http://stackoverflow.com/questions/15473051/reading-writing-printing-utf-8-in-c11
-
-ideas
-~~~~~
-
-The foreign language occuring in the petition (in the comments at least) can't be understood, so we won't keep it. Therefore just eliminate it.
 
 Other todoes
 ------------
