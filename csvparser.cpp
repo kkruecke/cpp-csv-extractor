@@ -29,7 +29,7 @@ vector<string> strings;
  */
 strings.reserve(6);  
 
-csv_back_inserter<vector<string>> inserter(strings);
+csv_back_inserter<vector<string>> emplace_inserter(strings);
 
  while (1) {
 
@@ -46,25 +46,8 @@ csv_back_inserter<vector<string>> inserter(strings);
    if (regex_search(line, match, csv_regex)) { 
        
        // Skip first hit, the entire regex. We only want the submatches. 
-       copy(++(match.begin()), match.end(), inserter); // testing
-      
-       /* Prior code
-       for (auto iter = ++(match.begin()); iter != match.end(); ++iter) { 
-
-      
-          // Remove enclosing quotes if present from submatches.
-          const string& const_ref = *iter;
-          
-          if (const_ref.front() == '"') {
-              
-              strings.emplace_back(move(const_ref.substr(1, const_ref.length() - 2)) );
-              
-          } else {
-                             
-              strings.emplace_back(move(const_ref)); 
-          }
-        }
-      */ 
+       copy(++(match.begin()), match.end(), emplace_inserter); 
+       
       break;    
  
    } else {
