@@ -14,6 +14,7 @@ CsvParser::CsvParser(const string& file_name, const string& rgex) : line_no(0), 
       throw logic_error("Could not open file" + file_name + "\n");
    }
 }
+      
 /*
  * Always returns a vector of six elements. Entries not in the petition will be empty.
  */
@@ -29,7 +30,8 @@ vector<string> strings;
  */
 strings.reserve(6);  
 
-csv_back_inserter<vector<string>> emplace_inserter(strings);
+//--csv_back_inserter<vector<string>> emplace_inserter(strings);
+csv_back_inserter emplace_inserter(strings);
 
  while (1) {
 

@@ -15,6 +15,26 @@ class CsvParser {
     int           line_no;
 
     bool getNextSigner(std::string &);
+   
+    // Nested class to work with std::copy() to do emplace_back 
+        
+    class csv_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
+      protected:
+      
+        std::vector<std::string>* container; 
+     public:
+        typedef std::vector<std::string> container_type;
+      
+        explicit csv_back_inserter (std::vector<std::string>& x) : container(&x) {}
+      
+        csv_back_inserter& operator= (typename std::vector<std::string>::const_reference value);
+      
+        csv_back_inserter& operator* () { return *this; }
+      
+        csv_back_inserter& operator++ () { return *this; }
+      
+        csv_back_inserter operator++ (int) { return *this; }
+      };
         
 public:
 
@@ -39,9 +59,23 @@ inline bool CsvParser::hasmoreLines()
     return bResult; 
 }
 
-/*
- * Used to insert smatch results into vector<string>
- */
+inline CsvParser::csv_back_inserter&  CsvParser::csv_back_inserter::operator= (typename std::vector<std::string>::const_reference value)
+{
+  // Remove enclosing quotes if present from submatches.
+  if (value.front() == '"') {
+              
+    (*container).emplace_back(move(value.substr(1, value.length() - 2)) );
+              
+  } else {
+                             
+    (*container).emplace_back(move(value)); 
+  }
+
+  return *this;
+}
+
+
+/* Generalized template of the nested class above
 
 template <class Container> // vector<string>
 class csv_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
@@ -77,4 +111,5 @@ template <class Container> inline csv_back_inserter<Container>& csv_back_inserte
 
  return *this; 
 }
+*/
 #endif
