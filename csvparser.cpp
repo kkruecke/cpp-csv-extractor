@@ -45,6 +45,14 @@ strings.reserve(6);
        // Skip first hit, the entire regex. We only want the submatches. 
        for (auto iter = ++(match.begin()); iter != match.end(); ++iter) { 
 
+       /*
+          Goal: Code like this
+
+                     copy(++(match.begin(), match.end, custom_iterator);
+
+          that does the steps here below 
+        */
+
           // Remove enclosing quotes if present from submatches.
           const string& const_ref = *iter;
           
@@ -54,7 +62,7 @@ strings.reserve(6);
               
           } else {
                              
-              strings.emplace_back(move(*iter)); 
+              strings.emplace_back(move(const_ref)); 
           }
       }
       break;    
