@@ -43,7 +43,7 @@ strings.reserve(6);
    if (regex_search(line, match, csv_regex)) { 
 
        // Skip first hit, the entire regex. We only want the submatches. 
-       for (auto iter = ++(match.begin()); iter != match.end(); ++iter) { // TODO: replace for() with std::copy() with a lambda
+       for (auto iter = ++(match.begin()); iter != match.end(); ++iter) { 
 
           // Remove enclosing quotes if present from submatches.
           const string& const_ref = *iter;
@@ -67,3 +67,5 @@ strings.reserve(6);
 
  return strings; 
 }
+
+

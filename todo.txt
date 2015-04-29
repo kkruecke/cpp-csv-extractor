@@ -44,12 +44,6 @@ Use modified-petition.csv and make sure this is done:
 2. PHP under Tomcat 
 -------------------
 
-3. See TODO in .cpp's
----------------------
-
-option 1: quercus
-~~~~~~~~~~~~~~~~~
-
 
 Other todoes
 ------------
