@@ -2,6 +2,7 @@
 #include <regex>
 #include <stdexcept>
 #include <memory>
+#include <algorithm>
 
 using namespace std;
 
