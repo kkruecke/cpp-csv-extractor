@@ -27,27 +27,24 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-copy-ptition.txt has Russion removed. It has the single quote that is not Latin-1 compliant converted to the Latin-1 ' character. It has some similar 
-minor corrections. If Lucene/Solr can handle Unicode maybe I should keep copy-petition.tx as UTF8; otherwise, convert it to ISO-8859-1 and delete
-non English comments or have them translated to English.
+copy-petition.txt is a partically "converted" version of the partition. It has the single quote marks that were not Latin-1- compatible converted to the Latin-1 '
+character. It has had some similar minor corrections. 
 
-1. Unicode
-----------
+Question: There are some Spandish characters that are not longer legible when converted from UTF8 to ISO-8859-1. The question is:
+1. Should we simply retain the slightly-modified UTF8 verison of copy-petition.txt, and save it in the database at UTF8, since Lucene-Solor supposedly can handle
+   UTF8, or 
+2. Should the non-English remarks be converted to ISO-8859-1?
 
-Listen to cppcon Unicode lecture at https://www.youtube.com/watch?v=n0GK-9f4dl8,
-in order to decide what to do about handling the petition file. I want the comments to be only in ASCII.
+For more an overview of Unicode and command line techniques for converting it see. unicode.txt
 
-http://www.w3schools.com/charsets/default.asp
-
-Use modified-petition.csv and make sure this is done:
+Basic file modification steps.
+==============================
+Use copy-petition.csv and make sure this is done:
 
 1. Doing dos2unix on file
-2. Removing first and last name by importing into excel then exporting them back into a csv file.
-3. Running iconv -f UTF-8 -t ASCII and looking for characters that could not be converted.
-
+2. Do iconv -f utf8 --to-encoding ISO-9959-1 to do basic single character changes, but not foreign language changes, to the files.
 2. PHP under Tomcat 
 -------------------
-
 
 Other todoes
 ------------

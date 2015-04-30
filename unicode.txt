@@ -1,3 +1,9 @@
+Videos and Articles on Unicode
+==============================
+
+A excellent introduction to Unicode and its limitations as a string class in C++11 listen to: https://www.youtube.com/watch?v=n0GK-9f4dl8,
+Also read: http://www.w3schools.com/charsets/default.asp
+
 Overview
 ========
 
