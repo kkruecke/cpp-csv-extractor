@@ -27,6 +27,10 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
+copy-ptition.txt has Russion removed. It has the single quote that is not Latin-1 compliant converted to the Latin-1 ' character. It has some similar 
+minor corrections. If Lucene/Solr can handle Unicode maybe I should keep copy-petition.tx as UTF8; otherwise, convert it to ISO-8859-1 and delete
+non English comments or have them translated to English.
+
 1. Unicode
 ----------
 
