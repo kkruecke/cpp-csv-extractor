@@ -16,7 +16,7 @@ class CsvParser {
 
     bool getNextSigner(std::string &);
    
-    // Nested class to work with std::copy() to do emplace_back 
+    // This nested class allows use to do copy(++(match.begin()), match.end(), emplace_inserter) to do emplace_back into vector<string> 
         
     class emplace_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
       private: 
@@ -74,26 +74,27 @@ inline CsvParser::emplace_back_inserter&  CsvParser::emplace_back_inserter::oper
 }
 
 
-/* Generalized template of the nested class above
+/* Below is a generalized template of the nested class above. It works with an arbitary container supporting emplace_back.
 
-template <class Container> // vector<string>
+template <class Container> 
 class emplace_back_inserter : public std::iterator<std::output_iterator_tag,void,void,void,void> {
-protected:
 
-  Container* container; // vector<string>
+ protected:
 
-public:
-  typedef Container container_type;
+    Container* container; // vector<string>
 
-  explicit emplace_back_inserter (Container& x) : container(&x) {}
+ public:
+   using Container container_type;
 
-  emplace_back_inserter<Container>& operator= (typename Container::const_reference value);
+   explicit emplace_back_inserter (Container& x) : container(&x) {}
 
-  emplace_back_inserter<Container>& operator* () { return *this; }
+   emplace_back_inserter<Container>& operator= (typename Container::const_reference value);
 
-  emplace_back_inserter<Container>& operator++ () { return *this; }
+   emplace_back_inserter<Container>& operator* () { return *this; }
 
-  emplace_back_inserter<Container> operator++ (int) { return *this; }
+   emplace_back_inserter<Container>& operator++ () { return *this; }
+
+   emplace_back_inserter<Container> operator++ (int) { return *this; }
 };
 
 template <class Container> inline emplace_back_inserter<Container>& emplace_back_inserter<Container>::operator= (typename Container::const_reference value) // OK
