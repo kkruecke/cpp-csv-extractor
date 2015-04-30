@@ -1,7 +1,7 @@
 libmysqlcppconn-dev libmysqlcooconn7 build steps
 ================================================
 
-Trying C++ connector for MySQL. Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source, in order to compile and link against g++ 4.9:
+Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source, in order to compile and link against g++ 4.9:
 
    kurt@kurt-QAL51:/usr/local/src$ sudo apt-get source --compile mysql-connector-c++
 
@@ -13,10 +13,11 @@ Install the just-built .deb versions
 
  kurt@kurt-QAL51:/usr/local/src$ ls libmysqlcppconn* | xargs sudo dpkg -i
 
-
 libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with:
 
-   -lmysql and -lmysqlcppconn
+  -lmysqlcppconn -lmysqlcppconn-static 
+
+The order above is necessary. The static library must come second.
 
 The example code is in the source package
 
