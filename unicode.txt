@@ -1,2 +1,64 @@
-ASCII is an single bytes, seven-bit encoding. There are other single byte, eight-bit encodings that extend ASCII. One of
-the most popular is Latin-1, which also have the Internet Assigned Number of ISO/IEC 8859-1:1998.
+Overview
+========
+
+ASCII is an single bytes, seven-bit encoding. It thus allows for the encoding of 128 (decimal values 0 through 127)characters, including the English alphabet. There are
+other single byte, eight-bit encodings that extend ASCII, and that therefore support the encoding of 256 characters. One of the most popular is ISO-8859-1 or Latin-1,
+which also have the Internet Assigned Number of ISO/IEC 8859-1:1998.
+
+Unicode works by indicating (in various ways depending of the version of Unicode used) a hex value that maps to another hex value called a code point. The code point
+represents the "concept" of a given character, as opposed to how it's is rendered as a glyph or font. 
+
+UTF8 is the most common because it saves the most space. It is a variable lenth encoding, meaning some Unicode code points require more bytes--I believe from one to
+three bytes--than others.
+
+How to convert from UTF-8 to Latin-1 in C++11
+=============================================
+
+Option 1
+--------
+
+$ sudo apt-get install recode
+$ recode UTF-8..latin1 *.php
+
+Or 
+$ iconv -t ISO88592 -f UTF8 myfile.txt > output.txt
+
+Option 2
+--------
+
+From a post on Slashdot:
+
+First convert UTF-8 to 32-bit Unicode.
+
+// This is sampe code, from elsewhere, to do that.
+Code to do so:
+
+#include <iostream>
+#include <string>
+#include <locale>
+#include <codecvt>
+int main()
+{
+    std::string utf8 =  u8"z\u00df\u6c34\U0001d10b"; // or u8"zß水𝄋"
+                        // or "\x7a\xc3\x9f\xe6\xb0\xb4\xf0\x9d\x84\x8b";
+    std::cout << "original UTF-8 string size: " << utf8.size() << '\n';
+ 
+    // the UTF-8 - UTF-32 standard conversion facet
+    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+ 
+    // UTF-8 to UTF-32
+    std::u32string utf32 = cvt.from_bytes(utf8);
+    std::cout << "UTF-32 string size: " << utf32.size() << '\n';
+    std::cout << "converted() == " << cvt.converted() << '\n';
+}
+
+Then keep the values that are in the range 0 through 255.
+
+Those are the Latin-1 code points, and for other values, decide if you want to treat that as an error or perhaps replace with code point 127 (my fav, the ASCII "del") or question mark or something.
+
+The C++ standard library defines a std::codecvt specialization that can be used,
+
+template<>
+codecvt<char32_t, char, mbstate_t>
+
+C++11 §22.4.1.4/3: “the specialization codecvt <char32_t, char, mbstate_t> converts between the UTF-32 and UTF-8 encoding schemes”
