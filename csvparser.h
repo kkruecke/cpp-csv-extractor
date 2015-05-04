@@ -27,7 +27,7 @@ class CsvParser {
          explicit emplace_back_inserter (std::vector<std::string>& x) : container(x) {}
       
          emplace_back_inserter& operator= (typename std::vector<std::string>::const_reference value);
-      
+               
          emplace_back_inserter& operator* () { return *this; }
       
          emplace_back_inserter& operator++ () { return *this; }
@@ -58,7 +58,7 @@ inline bool CsvParser::hasmoreLines()
     return bResult; 
 }
 
-inline CsvParser::emplace_back_inserter&  CsvParser::emplace_back_inserter::operator= (typename std::vector<std::string>::const_reference value)
+inline CsvParser::emplace_back_inserter&  CsvParser::emplace_back_inserter::operator=(typename std::vector<std::string>::const_reference value)
 {
   // Remove enclosing quotes if present from submatches.
   if (value.front() == '"') {

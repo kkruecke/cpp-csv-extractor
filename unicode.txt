@@ -43,19 +43,24 @@ Code to do so:
 #include <string>
 #include <locale>
 #include <codecvt>
+using namespace std;
+
 int main()
 {
-    std::string utf8 =  u8"z\u00df\u6c34\U0001d10b"; // or u8"zß水𝄋"
+    string utf8_str =  u8"z\u00df\u6c34\U0001d10b"; // or u8"zß水𝄋"
                         // or "\x7a\xc3\x9f\xe6\xb0\xb4\xf0\x9d\x84\x8b";
-    std::cout << "original UTF-8 string size: " << utf8.size() << '\n';
+
+    cout << "original UTF-8 string size: " << utf8_str.size() << '\n';
  
     // the UTF-8 - UTF-32 standard conversion facet
-    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+    wstring_convert<codecvt_utf8<char32_t>, char32_t> cvt; // wstring_convert not part of g++ 4.9
  
     // UTF-8 to UTF-32
-    std::u32string utf32 = cvt.from_bytes(utf8);
-    std::cout << "UTF-32 string size: " << utf32.size() << '\n';
-    std::cout << "converted() == " << cvt.converted() << '\n';
+    u32string utf32_str = cvt.from_bytes(utf8_str);
+
+    cout << "UTF-32 string size: " << utf32_str.size() << '\n';
+
+    cout << "converted() == " << cvt.converted() << '\n';
 }
 
 Then keep the values that are in the range 0 through 255.
