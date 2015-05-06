@@ -5,6 +5,8 @@ Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source, in orde
 
    kurt@kurt-QAL51:/usr/local/src$ sudo apt-get source --compile mysql-connector-c++
 
+Note: To compile with clang++ instead of g++ set the c++ compiler alternative to be clang++. I don't think I need to use -std=c++11 or -stdlib=libc+=
+
 Purge any previously installed versions
 
    kurt@kurt-QAL51:/usr/local/src$ sudo aptitude purge libmysqlcppconn7 libmysqlcppconn-dev 
@@ -28,15 +30,10 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-copy-petition.txt is a partically "converted" version of the partition. It has the single quote marks that were not Latin-1- compatible converted to the Latin-1 '
-character. It has had some similar minor corrections. 
+iso-8859-1 is a converted version of the petition. Try displaying it as an html page with ISO-8859-1 encoding and see if the Spanish and other lines look ok
+as a web page. If so, this format can be saved in a MySQL database.
 
-Question: There are some Spandish characters that are not longer legible when converted from UTF8 to ISO-8859-1. The question is:
-1. Should we simply retain the slightly-modified UTF8 verison of copy-petition.txt, and save it in the database at UTF8, since Lucene-Solor supposedly can handle
-   UTF8, or 
-2. Should the non-English remarks be converted to ISO-8859-1?
-
-For more an overview of Unicode and command line techniques for converting it see. unicode.txt
+For an overview of Unicode and command line techniques for converting it see: unicode.txt
 
 Basic file modification steps.
 ==============================
