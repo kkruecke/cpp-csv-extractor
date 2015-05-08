@@ -6,3 +6,4 @@ output.txt
 Failed_lines.txt
 *.csv
 *.*~
+a.out
