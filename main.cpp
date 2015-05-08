@@ -167,7 +167,7 @@ while (csv_parser.hasmoreLines()) {
        
        lastIDResultSet->first();
        
-       unsigned int last_signee_insertID = lastIDResultSet->getUInt();
+       unsigned int last_signee_insertID = lastIDResultSet->getUInt("what goes here"); // or call different method
 
        comments_stmt->setUInt(1, last_sginee_insertID);
 
