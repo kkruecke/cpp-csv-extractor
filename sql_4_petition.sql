@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS comments (
   comments text,
   PRIMARY KEY (id),
 # The foreign key could also be the signee(id), it seems.
-  FOREIGN KEY fk_signee_no(signee_no)
-  REFERENCES signee(signee_no) 
+  FOREIGN KEY fk_signee_id(signee_id)
+  REFERENCES signee(signee_id) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
-ALTER TABLE `comments` ADD UNIQUE ( `signee_no`);
+ALTER TABLE `comments` ADD UNIQUE ( `signee_id`);

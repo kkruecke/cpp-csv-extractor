@@ -33,6 +33,7 @@ int main(int argc, char** argv)
  * 
  *   Signer number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
  *
+ *   Regex returns: signer #er, date, city, state, country, comments.
  */
 CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)");
    
@@ -82,7 +83,14 @@ while (csv_parser.hasmoreLines()) {
    }
 
    int col = 0;
-
+   /* vector<string>
+    * [0] is signee number
+    * [1] is date 
+    * [2] is city 
+    * [3] is state  
+    * [4] is country
+    * [5] is comments
+    */
    try {
           
       for(; col < strings.size(); ++col) {
@@ -121,32 +129,29 @@ while (csv_parser.hasmoreLines()) {
             break; 
      
            case 2:    
-            // First Name 
-            signee_stmt->setString(col + 1, strings[col]);
+            // City 
+            // TODO: touper() first words in each part of city name
+            signee_stmt->setString(col + 1, std::move(strings[col]));
             break; 
      
            case 3:    
-            // Last Name 
+            // State 
+            // TODO: touper() first words in each part of state name
             signee_stmt->setString(col + 1, std::move(strings[col]));
             break; 
      
            case 4:    
-               // City 
-            // TODO: touuper() first words in city name
+               // Country
+            // TODO: touper() first words in each part of Country name
             signee_stmt->setString(col + 1, std::move(strings[col]));
             break; 
             
            case 5:    
-            // State 
+            // Comments
+            // TODO: Do any fixes to appearance of text.
             comments_stmt->setString(2, std::move(strings[col]));
             break; 
             
-           case 6:    
-            // Country 
-            ?????????->setString(2, std::move(strings[5]));
-            break; 
-           
-
            default:
             break;  
      
@@ -154,9 +159,10 @@ while (csv_parser.hasmoreLines()) {
        } // end for         
                    
        auto rc1 = signee_stmt->execute(); 
-       // TODO: Retrieve id of last row just inserted above into signee table
+       // TODO: Retrieve id of last row just inserted above into signee table:
+       // "SELECT LAST_INSERT_ID()" or getMaxRows()? Check out cpp-connector API documentation.
        // and do comments->setInt(...) with it.
-      auto rc2 = comments_stmt->execute(); 
+       auto rc2 = comments_stmt->execute(); 
           
     } catch (SQLException & e) { 
         
