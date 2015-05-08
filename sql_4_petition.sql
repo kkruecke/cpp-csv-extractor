@@ -20,18 +20,16 @@ CREATE TABLE IF NOT EXISTS signee (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
-ALTER TABLE `signer_info` ADD UNIQUE ( `signee_no`);
+ALTER TABLE `signee` ADD UNIQUE ( `signee_no`);
 
-CREATE TABLE IF NOT EXISTS signer_comments (
+CREATE TABLE IF NOT EXISTS comments (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   signee_id int(11) unsigned NOT NULL,
   comments text,
   PRIMARY KEY (id),
-# The foreign key could also be the signer_info(id), it seems.
+# The foreign key could also be the signee(id), it seems.
   FOREIGN KEY fk_signee_no(signee_no)
-  REFERENCES signer_info(signee_no) 
+  REFERENCES signee(signee_no) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
-ALTER TABLE `signer_comments` ADD UNIQUE ( `signee_no`);
-
-
+ALTER TABLE `comments` ADD UNIQUE ( `signee_no`);
