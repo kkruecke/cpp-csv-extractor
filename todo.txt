@@ -5,8 +5,6 @@ Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source, in orde
 
    kurt@kurt-QAL51:/usr/local/src$ sudo apt-get source --compile mysql-connector-c++
 
-Note: To compile with clang++ instead of g++ set the c++ compiler alternative to be clang++. I don't think I need to use -std=c++11 or -stdlib=libc+=
-
 Purge any previously installed versions
 
    kurt@kurt-QAL51:/usr/local/src$ sudo aptitude purge libmysqlcppconn7 libmysqlcppconn-dev 
@@ -19,7 +17,7 @@ libmysqlcppconn-dev contains a static library that has the code for ::get_driver
 
   -lmysqlcppconn -lmysqlcppconn-static 
 
-The order above is necessary. The static library must come second.
+in that order. The static library must come second.
 
 The example code is in the source package
 
@@ -30,19 +28,27 @@ The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
 TODOes
 ======
 
-iso-8859-1 is a converted version of the petition. Try displaying it as an html page with ISO-8859-1 encoding and see if the Spanish and other lines look ok
-as a web page. If so, this format can be saved in a MySQL database.
+iso-8859-1.csv is a converted version of the petition made with
+
+$ iconv -f utf8 -t iso-8859-1 
+
+Check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page. Use the php code in ~/csv to do this.
+If so, this format can be saved in a MySQL database after so code changes are made to main.cpp:
+
+1. Make sure the correct columns are being created and extract from the correct vector<string> indecies.
+2. Make sure to uppercase the first letter in first name, last name, and the first words in the city, state and country names.
 
 For an overview of Unicode and command line techniques for converting it see: unicode.txt
 
 Basic file modification steps.
 ==============================
+
 Use copy-petition.csv and make sure this is done:
 
 1. Doing dos2unix on file
 2. Do iconv -f utf8 --to-encoding ISO-9959-1 to do basic single character changes, but not foreign language changes, to the files.
-2. PHP under Tomcat 
--------------------
+3. Check it using PHP code. 
+4. Correct the main.cpp code per above.
 
 Other todoes
 ------------
