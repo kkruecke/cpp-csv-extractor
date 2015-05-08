@@ -16,7 +16,7 @@
 
 #include "csvparser.h"
 #include "hidden/db_credentials.h" // database credentials
-
+using namespace std;
 using namespace sql; 
 
 int main(int argc, char** argv) 
@@ -50,14 +50,16 @@ conn->setAutoCommit(false);  // We will use transactions.
  
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
-unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, signee_no, comments) VALUES(?, ?, ?)") };
+unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, comments) VALUES(?, ?)") };
+
+unique_ptr<Statement> last_insert_id_stmt { conn->createStatement() };  
 
 // Get max(sigee_no) to determine if petition signers are already in the DB.
-unique_ptr<ResultSet> resultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
+unique_ptr<ResultSet> max_signeeResultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
  
-resultSet->first();
+max_signeeResultSet->first();
  
-auto max_signee = resultSet->getUInt("max_signee"); 
+auto max_signee = max_signeeResultSet->getUInt("max_signee"); 
 
 int lineno = 1;
 
@@ -83,7 +85,7 @@ while (csv_parser.hasmoreLines()) {
    }
 
    int col = 0;
-   /* vector<string>
+   /* vector<string> elements by key:
     * [0] is signee number
     * [1] is date 
     * [2] is city 
@@ -159,9 +161,13 @@ while (csv_parser.hasmoreLines()) {
        } // end for         
                    
        auto rc1 = signee_stmt->execute(); 
-       // TODO: Retrieve id of last row just inserted above into signee table:
-       // "SELECT LAST_INSERT_ID()" or getMaxRows()? Check out cpp-connector API documentation.
-       // and do comments->setInt(...) with it.
+
+       // TODO: Test the next four lines.
+       unique_ptr<ResultSet> lastIDResultSet { insert_last_id_stmt->executeQuery("SELECT LAST_INSERT_ID()") } ;
+       auto last_signee_insertID = lastIDResultSet->getUInt();
+
+       comments_stmt->setUInt(1, last_sginee_insertID);
+
        auto rc2 = comments_stmt->execute(); 
           
     } catch (SQLException & e) { 
