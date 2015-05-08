@@ -163,8 +163,11 @@ while (csv_parser.hasmoreLines()) {
        auto rc1 = signee_stmt->execute(); 
 
        // TODO: Test the next four lines.
-       unique_ptr<ResultSet> lastIDResultSet { insert_last_id_stmt->executeQuery("SELECT LAST_INSERT_ID()") } ;
-       auto last_signee_insertID = lastIDResultSet->getUInt();
+       unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID()") } ;
+       
+       lastIDResultSet->first();
+       
+       unsigned int last_signee_insertID = lastIDResultSet->getUInt();
 
        comments_stmt->setUInt(1, last_sginee_insertID);
 
