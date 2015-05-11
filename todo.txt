@@ -2,7 +2,7 @@ TODOes
 ======
 
 BUG: Code is failing fails in parseNextLine() regex_replace. The former two consecutive double quotes (within a quoted subsection) are now only one
-double quote. Is this due iconv removing the two consecutive double quotes? 
+double quote. This is due to the new format of the .csv from www.thepetitionsite.com. 
 Note: After fixing the bug, remove the debug code.
 
 
