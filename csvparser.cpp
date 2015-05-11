@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <memory>
 #include <algorithm>
+#include <iostream>  // debug only
 
 using namespace std;
 
@@ -43,7 +44,9 @@ emplace_back_inserter emplace_inserter(strings);
    }
 
    // Replace any two consecutive double quotes with a single quote
-   line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"});
+   line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
+   
+   cout << line << endl; // debug only
 
    bool rc = regex_search(line, match, csv_regex);
  
