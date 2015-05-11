@@ -13,6 +13,7 @@ Change the following characters:
 
 1. No standard double quotes, like these--“a perfect candidate”--have to be changed to "a perfect candidate".
 2. Some apostrophe's maybe need to be changed to the standard single quote.
+3. Some other changes I've forgotten.
 
 Convert to 8859-1 format:
 
