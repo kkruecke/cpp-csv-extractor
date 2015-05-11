@@ -26,8 +26,8 @@ string prior_line;
    
 vector<string> strings;
 /*
- * Note: strings.reserve(n) does not result in default ctor initializations unlike vector<string> strings(6). 
- * Also strings.begin() points to string[0].
+ * Note: Doing strings.reserve(n) does not result in default ctor initializations unlike vector<string> strings(6). 
+ * Also strings.begin() returns iterator to strings[0].
  */
 strings.reserve(6);  
 
@@ -54,7 +54,7 @@ emplace_back_inserter emplace_inserter(strings);
  
    } else {
         
-       prior_line = move(line);
+       prior_line = std::move(line);
    }
  } 
 
