@@ -79,6 +79,9 @@ while (csv_parser.hasmoreLines()) {
   */
 
    int signee_no = atoi(strings[0].c_str());
+
+   // TODO: Debug remove later
+   cout << "signo = " << signee_no << " " << "\n";
         
    if (signee_no <= max_signee) { // Skip if already present in DB. 
 
