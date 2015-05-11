@@ -16,7 +16,7 @@
 
 #include "csvparser.h"
 #include "hidden/db_credentials.h" // database credentials
-#include <iostream> // debug
+#include <iostream>               // debug
 using namespace std;
 using namespace sql; 
 
@@ -40,13 +40,15 @@ CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),
    
 unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
-// Set database to use.get_driver_instance()->
+// Set database to use petition database.
 unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
- 
-conn->setAutoCommit(false);  // We will use transactions.
- 
+
+/* TODO: Remove later
+ * Debug 
+ * conn->setAutoCommit(false);  // We will use transactions.
+ */
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
 unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, comments) VALUES(?, ?)") };
@@ -171,10 +173,12 @@ while (csv_parser.hasmoreLines()) {
        comments_stmt->setUInt(1, last_signee_insertID);
 
        auto rc2 = comments_stmt->execute(); 
+
+       cout << "line number " << lineno << " processed " << endl;
           
     } catch (SQLException & e) { 
         
-        conn->rollback();              
+       // conn->rollback(); Commented out for debugging   TODO: Remove Later          
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
         cerr << "Line number = " << lineno << ". Insert column = " << col+1 << endl;
         throw e;
