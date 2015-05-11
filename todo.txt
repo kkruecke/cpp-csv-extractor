@@ -1,7 +1,7 @@
 TODOes
 ======
 
-BUG: Code seems to loop forever.
+BUG: Code seems to loop forever. Remove the transaction and use auto commit to debug this.
 
 How to Prepare Petition File
 ============================
