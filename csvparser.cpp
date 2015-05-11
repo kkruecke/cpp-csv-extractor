@@ -45,7 +45,9 @@ emplace_back_inserter emplace_inserter(strings);
    // Replace any two consecutive double quotes with a single quote
    line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"});
 
-   if (regex_search(line, match, csv_regex)) { 
+   bool rc = regex_search(line, match, csv_regex);
+ 
+   if (rc) { 
        
        // Skip first hit, the entire regex. We only want the submatches. 
        copy(++(match.begin()), match.end(), emplace_inserter); 
