@@ -1,8 +1,8 @@
 TODOes
 ======
 
-BUG: Code seems to loop forever. I have commented out the transactions, so the code now ues auto commit. Remove this later.
-At signee_no 328, the code seems to stall for some reason, like it is in an infinite loop. Weird. And the code seems slow.
+BUG: Code is failing, when rerun ater initial failure, on signee #er 328. It fails in parseNextLine(). 
+After fixing the bug, remove the debug code.
 
 How to Prepare Petition File
 ============================
