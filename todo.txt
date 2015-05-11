@@ -1,7 +1,24 @@
-libmysqlcppconn-dev libmysqlcooconn7 build steps
-================================================
+TODOes
+======
 
-Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source, in order to compile and link against g++ 4.9:
+BUG: Code seems to loop forever.
+
+How to Prepare Petition File
+============================
+
+iso-8859-1.csv is a converted version of the petition made with
+
+$ iconv -f utf8 -t iso-8859-1 
+
+To check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page, use the php code in ~/csv to do this.
+
+
+For an overview of Unicode and command line techniques for converting it see: unicode.txt
+
+Steps to buildl ibmysqlcppconn-dev libmysqlcooconn7
+===================================================
+
+Built the packages libmysqlcppconn7 and libmysqlcppconn-dev from source with g++ 4.9:
 
    kurt@kurt-QAL51:/usr/local/src$ sudo apt-get source --compile mysql-connector-c++
 
@@ -13,30 +30,13 @@ Install the just-built .deb versions
 
  kurt@kurt-QAL51:/usr/local/src$ ls libmysqlcppconn* | xargs sudo dpkg -i
 
-libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with:
+libmysqlcppconn-dev contains a static library that has the code for ::get_driver_instance(). So you will need to link with two libraries:
 
   -lmysqlcppconn -lmysqlcppconn-static 
 
-in that order. The static library must come second. To add it in Netbeans go Linker "Additional options" and add the two lines above.
-
-The example code is in the source package
-
-   $ sudo apt-get source libmysqlcppconn-dev
+in that order; the static library must come second. To add these link libraries in Netbeans go Linker "Additional options" and add the two lines above.
 
 The documentation is at http://dev.mysql.com/doc/connector-cpp/en/index.html
-
-TODOes
-======
-
-iso-8859-1.csv is a converted version of the petition made with
-
-$ iconv -f utf8 -t iso-8859-1 
-
-To check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page, use the php code in ~/csv to do this.
-
-BUG: Code seems to loop forever.
-
-For an overview of Unicode and command line techniques for converting it see: unicode.txt
 
 Basic file modification steps.
 ==============================
