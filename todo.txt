@@ -1,7 +1,7 @@
 TODOes
 ======
 
-BUG: Code is failing, when rerun ater initial failure, on signee #er 328. It fails in parseNextLine(). 
+BUG: Code is failing on signee #329. It fails in parseNextLine(). Debug the code. 
 After fixing the bug, remove the debug code.
 
 How to Prepare Petition File
