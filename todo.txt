@@ -9,6 +9,13 @@ Note: After fixing the bug, remove the debug code.
 How to Prepare Petition File
 ============================
 
+Change the following characters:
+
+1. No standard double quotes, like these--“a perfect candidate”--have to be changed to "a perfect candidate".
+2. Some apostrophe's maybe need to be changed to the standard single quote.
+
+Convert to 8859-1 format:
+
 iso-8859-1.csv is a converted version of the petition made with
 
 $ iconv -f utf8 -t iso-8859-1 
