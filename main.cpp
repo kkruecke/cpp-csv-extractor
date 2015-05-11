@@ -16,6 +16,7 @@
 
 #include "csvparser.h"
 #include "hidden/db_credentials.h" // database credentials
+#include <iostream> // debug
 using namespace std;
 using namespace sql; 
 
@@ -39,9 +40,17 @@ CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),
    
 // Credentials: (url, user, password)
    
+ cout << "url = " << DB_Credentials::Url().c_str() << " user = " << DB_Credentials::User().c_str() << " password = " << DB_Credentials::Password().c_str() << endl;
+ const char *url = DB_Credentials::Url().c_str();
+ const char *user =  DB_Credentials::User().c_str();
+ const char *password =  DB_Credentials::Password().c_str();
+Driver *driver =  get_driver_instance();
+driver->connect(url, user, password);
+return 0;
+
 unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
-// Set database to use.
+// Set database to use.get_driver_instance()->
 unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
@@ -169,7 +178,7 @@ while (csv_parser.hasmoreLines()) {
        
        unsigned int last_signee_insertID = lastIDResultSet->getUInt(0); // Get the result in column zero.
 
-       comments_stmt->setUInt(1, last_sginee_insertID);
+       comments_stmt->setUInt(1, last_signee_insertID);
 
        auto rc2 = comments_stmt->execute(); 
           

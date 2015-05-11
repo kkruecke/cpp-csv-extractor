@@ -6,7 +6,7 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS  petition;
 
-#grant all on petition.* to kurt@localhost identified by 'kk0457';
+grant all on petition.* to kurt@localhost identified by 'kk0457';
 
 use petition;
 
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS comments (
   PRIMARY KEY (id),
 # The foreign key could also be the signee(id), it seems.
   FOREIGN KEY fk_signee_id(signee_id)
-  REFERENCES signee(signee_id) 
+  REFERENCES signee(id) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
 ALTER TABLE `comments` ADD UNIQUE ( `signee_id`);
