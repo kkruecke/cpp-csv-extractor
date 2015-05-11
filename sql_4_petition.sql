@@ -6,7 +6,7 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS  petition;
 
-grant all on petition.* to kurt@localhost identified by 'kk0457';
+#grant all on petition.* to petition@localhost identified by 'kk0457';
 
 use petition;
 

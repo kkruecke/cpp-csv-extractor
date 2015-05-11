@@ -38,16 +38,6 @@ int main(int argc, char** argv)
  */
 CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)");
    
-// Credentials: (url, user, password)
-   
- cout << "url = " << DB_Credentials::Url().c_str() << " user = " << DB_Credentials::User().c_str() << " password = " << DB_Credentials::Password().c_str() << endl;
- const char *url = DB_Credentials::Url().c_str();
- const char *user =  DB_Credentials::User().c_str();
- const char *password =  DB_Credentials::Password().c_str();
-Driver *driver =  get_driver_instance();
-driver->connect(url, user, password);
-return 0;
-
 unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
 // Set database to use.get_driver_instance()->
@@ -64,7 +54,7 @@ unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INT
 unique_ptr<Statement> last_insert_id_stmt { conn->createStatement() };  
 
 // Get max(sigee_no) to determine if petition signers are already in the DB.
-unique_ptr<ResultSet> max_signeeResultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signer_info") };
+unique_ptr<ResultSet> max_signeeResultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signee") };
  
 max_signeeResultSet->first();
  
@@ -172,11 +162,11 @@ while (csv_parser.hasmoreLines()) {
        auto rc1 = signee_stmt->execute(); 
 
        // TODO: Test the next four lines.
-       unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID()") } ;
+       unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
        
        lastIDResultSet->first();
        
-       unsigned int last_signee_insertID = lastIDResultSet->getUInt(0); // Get the result in column zero.
+       unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); // Get the result in column zero.
 
        comments_stmt->setUInt(1, last_signee_insertID);
 

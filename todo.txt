@@ -17,7 +17,7 @@ libmysqlcppconn-dev contains a static library that has the code for ::get_driver
 
   -lmysqlcppconn -lmysqlcppconn-static 
 
-in that order. The static library must come second.
+in that order. The static library must come second. To add it in Netbeans go Linker "Additional options" and add the two lines above.
 
 The example code is in the source package
 
@@ -32,11 +32,9 @@ iso-8859-1.csv is a converted version of the petition made with
 
 $ iconv -f utf8 -t iso-8859-1 
 
-Check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page. Use the php code in ~/csv to do this.
-If so, this format can be saved in a MySQL database after so code changes are made to main.cpp:
+To check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page, use the php code in ~/csv to do this.
 
-1. Make sure the correct columns are being created and extract from the correct vector<string> indecies.
-2. Make sure to uppercase the first letter in first name, last name, and the first words in the city, state and country names.
+BUG: Code seems to loop forever.
 
 For an overview of Unicode and command line techniques for converting it see: unicode.txt
 
@@ -61,7 +59,9 @@ Finish C++11 version of database insert using mysql++3 to insert records and pop
 MySQL++ Class Library
 =====================
 
-$ sudo apt-get source --compile libmysql++-dev
+$ sudo apt-get source --compile mysql-connector-c++
+
+It will pick the correct source package.
 
 This builds three .debs that can be installed by doing:
 
