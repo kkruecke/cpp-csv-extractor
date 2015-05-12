@@ -36,7 +36,7 @@ int main(int argc, char** argv)
  *
  *   Regex returns: signer #er, date, city, state, country, comments.
  */
-CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)");
+CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)" );
    
 unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
