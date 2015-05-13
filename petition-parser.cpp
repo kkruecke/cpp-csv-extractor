@@ -64,6 +64,28 @@ emplace_back_inserter emplace_inserter(strings);
        
        // Move line into prior line?
        prior_line = std::move(line);
+
+       while (1) {
+
+           getline(input, cached_line);
+
+           /*
+           bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" };
+
+           if (rc) {
+
+              throw logic_error("file is not formatted correctly");
+           }
+           */
+
+           if (cached_line.back() == '"') {
+
+                   line += cached_line;
+           }
+
+
+       }
+       
    }
       
  } 
