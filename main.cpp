@@ -14,7 +14,8 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-#include "csvparser.h"
+//#include "csvparser.h"
+#include "petition-parser.h"
 #include "hidden/db_credentials.h" // database credentials
 #include <iostream>               // debug
 using namespace std;
@@ -36,7 +37,8 @@ int main(int argc, char** argv)
  *
  *   Regex returns: signer #er, date, city, state, country, comments.
  */
-CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)" );
+//--CsvParser csv_parser(argv[1], R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*)$)" );
+PetitionParser csv_parser(argv[1]);
    
 unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
  
