@@ -1,0 +1,104 @@
+test.cpp: In function ‘std::string parseLine(std::ifstream&, const regex&)’:
+test.cpp:40:23: error: no matching function for call to ‘getline(std::ifstream&, std::string&)’
+    getline(input, line); 
+                       ^
+test.cpp:40:23: note: candidates are:
+In file included from /usr/include/c++/4.9/cstdio:42:0,
+                 from /usr/include/c++/4.9/ext/string_conversions.h:43,
+                 from /usr/include/c++/4.9/bits/basic_string.h:2850,
+                 from /usr/include/c++/4.9/string:52,
+                 from /usr/include/c++/4.9/bits/locale_classes.h:40,
+                 from /usr/include/c++/4.9/bits/ios_base.h:41,
+                 from /usr/include/c++/4.9/ios:42,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/stdio.h:678:20: note: __ssize_t getline(char**, size_t*, FILE*)
+ extern _IO_ssize_t getline (char **__restrict __lineptr,
+                    ^
+/usr/include/stdio.h:678:20: note:   candidate expects 3 arguments, 2 provided
+In file included from /usr/include/c++/4.9/string:52:0,
+                 from /usr/include/c++/4.9/bits/locale_classes.h:40,
+                 from /usr/include/c++/4.9/bits/ios_base.h:41,
+                 from /usr/include/c++/4.9/ios:42,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/c++/4.9/bits/basic_string.h:2827:5: note: template<class _CharT, class _Traits, class _Alloc> std::basic_istream<_CharT, _Traits>& std::getline(std::basic_istream<_CharT, _Traits>&&, std::basic_string<_CharT, _Traits, _Alloc>&)
+     getline(basic_istream<_CharT, _Traits>&& __is,
+     ^
+/usr/include/c++/4.9/bits/basic_string.h:2827:5: note:   template argument deduction/substitution failed:
+test.cpp:40:23: note:   ‘std::ifstream {aka std::basic_ifstream<char>}’ is not derived from ‘std::basic_istream<_CharT, _Traits>’
+    getline(input, line); 
+                       ^
+In file included from /usr/include/c++/4.9/string:52:0,
+                 from /usr/include/c++/4.9/bits/locale_classes.h:40,
+                 from /usr/include/c++/4.9/bits/ios_base.h:41,
+                 from /usr/include/c++/4.9/ios:42,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/c++/4.9/bits/basic_string.h:2820:5: note: template<class _CharT, class _Traits, class _Alloc> std::basic_istream<_CharT, _Traits>& std::getline(std::basic_istream<_CharT, _Traits>&&, std::basic_string<_CharT, _Traits, _Alloc>&, _CharT)
+     getline(basic_istream<_CharT, _Traits>&& __is,
+     ^
+/usr/include/c++/4.9/bits/basic_string.h:2820:5: note:   template argument deduction/substitution failed:
+test.cpp:40:23: note:   ‘std::ifstream {aka std::basic_ifstream<char>}’ is not derived from ‘std::basic_istream<_CharT, _Traits>’
+    getline(input, line); 
+                       ^
+In file included from /usr/include/c++/4.9/string:52:0,
+                 from /usr/include/c++/4.9/bits/locale_classes.h:40,
+                 from /usr/include/c++/4.9/bits/ios_base.h:41,
+                 from /usr/include/c++/4.9/ios:42,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/c++/4.9/bits/basic_string.h:2812:5: note: template<class _CharT, class _Traits, class _Alloc> std::basic_istream<_CharT, _Traits>& std::getline(std::basic_istream<_CharT, _Traits>&, std::basic_string<_CharT, _Traits, _Alloc>&)
+     getline(basic_istream<_CharT, _Traits>& __is,
+     ^
+/usr/include/c++/4.9/bits/basic_string.h:2812:5: note:   template argument deduction/substitution failed:
+test.cpp:40:23: note:   ‘std::ifstream {aka std::basic_ifstream<char>}’ is not derived from ‘std::basic_istream<_CharT, _Traits>’
+    getline(input, line); 
+                       ^
+In file included from /usr/include/c++/4.9/string:53:0,
+                 from /usr/include/c++/4.9/bits/locale_classes.h:40,
+                 from /usr/include/c++/4.9/bits/ios_base.h:41,
+                 from /usr/include/c++/4.9/ios:42,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/c++/4.9/bits/basic_string.tcc:1068:5: note: template<class _CharT, class _Traits, class _Alloc> std::basic_istream<_CharT, _Traits>& std::getline(std::basic_istream<_CharT, _Traits>&, std::basic_string<_CharT, _Traits, _Alloc>&, _CharT)
+     getline(basic_istream<_CharT, _Traits>& __in,
+     ^
+/usr/include/c++/4.9/bits/basic_string.tcc:1068:5: note:   template argument deduction/substitution failed:
+test.cpp:40:23: note:   ‘std::ifstream {aka std::basic_ifstream<char>}’ is not derived from ‘std::basic_istream<_CharT, _Traits>’
+    getline(input, line); 
+                       ^
+test.cpp:42:13: error: invalid use of incomplete type ‘std::ifstream {aka class std::basic_ifstream<char>}’
+    if (input.fail()) {
+             ^
+In file included from /usr/include/c++/4.9/ios:38:0,
+                 from /usr/include/c++/4.9/ostream:38,
+                 from /usr/include/c++/4.9/iostream:39,
+                 from test.cpp:2:
+/usr/include/c++/4.9/iosfwd:111:11: error: declaration of ‘std::ifstream {aka class std::basic_ifstream<char>}’
+     class basic_ifstream;
+           ^
+test.cpp:49:87: error: ‘sort_match’ was not declared in this scope
+         ostr << "Regex failed and next line is a new signer with signer_id of " << (++sort_match.begin()).str() << endl;
+                                                                                       ^
+test.cpp:59:4: error: ‘regex_failed’ was not declared in this scope
+    regex_failed = regex_search(line, match, csv_regex);
+    ^
+test.cpp:64:45: error: ‘emplace_inserter’ was not declared in this scope
+        copy(++(match.begin()), match.end(), emplace_inserter); 
+                                             ^
+test.cpp: In function ‘int main(int, char**)’:
+test.cpp:87:12: error: aggregate ‘std::ifstream input’ has incomplete type and cannot be defined
+   ifstream input;
+            ^
+test.cpp:98:3: error: expected initializer before ‘while’
+   while (moreLines()) {
+   ^
+g++-4.9.real: error: build/Debug/GNU-Linux-x86/test.o: No such file or directory
+g++-4.9.real: fatal error: no input files
+compilation terminated.

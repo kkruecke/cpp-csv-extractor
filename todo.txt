@@ -1,17 +1,19 @@
 TODOes
 ======
 
-BUG: Code is failing fails in parseNextLine() regex_replace. The former two consecutive double quotes (within a quoted subsection) are now only one
-double quote. This is due to the new format of the .csv from www.thepetitionsite.com. 
-Note: After fixing the bug, remove the debug code.
+BUG: Code is failing in parseNextLine() regex_replace. The utf8-like quote marks that are different in appearance from the standard quote of ", are being converted
+to the normal double quote. This causes the regex to fail, as the last submatch is wrong.
 
+I probably need to special case this and only grab the first six fields and handle the comments separately. 
+
+RegexBuddy can also be used to debug troublesome lines found with test.cpp code.
 
 How to Prepare Petition File
 ============================
 
 Change the following characters:
 
-1. No standard double quotes, like these--“a perfect candidate”--have to be changed to "a perfect candidate".
+1. Non standard, utf8 double quotes, like these--“a perfect candidate”--have to be changed to "a perfect candidate".
 2. Some apostrophe's maybe need to be changed to the standard single quote.
 3. Some other changes I've forgotten.
 
@@ -22,7 +24,7 @@ iso-8859-1.csv is a converted version of the petition made with
 $ iconv -f utf8 -t iso-8859-1 
 
 To check that it displays correct in Spanish and other foreign languages as a ISO-8859-1 encoded web page, use the php code in ~/csv to do this.
-
+However, iconv produces the bug at the top of the page.
 
 For an overview of Unicode and command line techniques for converting it see: unicode.txt
 
