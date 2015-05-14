@@ -87,21 +87,19 @@ See:
    	continue;
    }
 
-   int col = 0;
-
    /* matches values:
-    * [0] is signee number
-    * [1] is date 
-    * [2] is city 
-    * [3] is state  
+    * [0] is entire match of all values below
+    * [1] is signee number
+    * [2] is date 
+    * [3] is city 
+    * [4] is state  
     * [4] is country
-    * [5] is comments
+    * [6] is comments
     */
-   try {
+  try  {
           
-      for(int col = 1; col < matches.size(); ++col) {
+     for(int col = 1; col < matches.size(); ++col) {
           
-        //--bool isEmpty { strings[col].empty() };
         bool isEmpty { matches[col].str().empty() };
         
         /*
@@ -116,7 +114,7 @@ See:
  
             } else {
 
-                signee_stmt->setNull(col + 1, 0); 
+                signee_stmt->setNull(col, 0); 
             }
 
             continue;
@@ -180,24 +178,13 @@ See:
            } 
             break; 
      
-           case 3:    
-            // City 
+           case 3:   // City 
+           case 4:   // State 
+           case 5:   // Country 
             // TODO: touper() first words in each part of city name
             signee_stmt->setString(col, std::move(matches[col].str()));
             break; 
      
-           case 4:    
-            // State 
-            // TODO: touper() first words in each part of state name
-            signee_stmt->setString(col, std::move(matches[col].str()));
-            break; 
-     
-           case 5:    
-               // Country
-            // TODO: touper() first words in each part of Country name
-            signee_stmt->setString(col, std::move(matches[col].str()));
-            break; 
-            
            case 6:    
             // Comments
             // TODO: Do any fixes to appearance of text.
@@ -208,22 +195,22 @@ See:
             break;  
      
          } // end switch
-       } // end for         
+    } // end for         
     
-      auto rc1 = signee_stmt->execute(); 
+    auto rc1 = signee_stmt->execute(); 
 
-       // TODO: Test the next four lines.
-       unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
-       
-       lastIDResultSet->first();
-       
-       unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); // Get the result in column zero.
+    // TODO: Test the next four lines.
+    unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
+    
+    lastIDResultSet->first();
+    
+    unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); // Get the result in column zero.
 
-       comments_stmt->setUInt(1, last_signee_insertID);
+    comments_stmt->setUInt(1, last_signee_insertID);
 
-       auto rc2 = comments_stmt->execute(); 
+    auto rc2 = comments_stmt->execute(); 
 
-       cout << "line number " << lineno << " processed " << endl;
+    cout << "line number " << lineno << " processed " << endl;
           
     } catch (SQLException & e) { 
         
