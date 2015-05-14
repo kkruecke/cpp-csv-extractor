@@ -1,7 +1,7 @@
 TODOes
 ======
 
-Fix compile errors by changing strings[?]. to iter usage.
+Fix compile errors and correctly alter switch logic.
 
 How to Prepare Petition File
 ============================

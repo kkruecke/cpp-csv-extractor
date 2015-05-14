@@ -70,10 +70,8 @@ while (csv_parser.hasmoreLines()) {
    //--vector<string> strings = csv_parser.parseNextLine(); 
    smatch matches = csv_parser.parseNextLine(); 
 
-   auto iter = ++matches.begin();
-
    //--int signee_no = atoi(strings[0].c_str());
-   int signee_no = atoi(iter->str().c_str());
+   int signee_no = atoi(matches[1].str().c_str());
 
    // TODO: Debug remove later
    cout << "sigee_no = " << signee_no << " " << "\n";
@@ -102,10 +100,10 @@ while (csv_parser.hasmoreLines()) {
    try {
           
       //--for(; col < strings.size(); ++col) {
-      for(; col < iter.size(); ++col) {
+      for(int col = 1; col < matches.size(); ++col) {
           
         //--bool isEmpty { strings[col].empty() };
-        bool isEmpty { iter[col].empty() };
+        bool isEmpty { matches[col].str().empty() };
         
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
@@ -167,50 +165,52 @@ while (csv_parser.hasmoreLines()) {
      
          } // end switch
        } // end for         
-*/          
-        switch(col) {
+*/     
+    
+       switch(col) {
 
-           case 0:
+           case 1:
             // Signer #er              
-            signee_stmt->setInt(col + 1, signee_no);
-            comments_stmt->setInt(col + 1, signee_no);
+            signee_stmt->setInt(col, signee_no);
+            comments_stmt->setInt(col, signee_no);
             break;
                
-           case 1:    
-            // DATE: YYY-MM-DD
-            signee_stmt->setDateTime(col + 1, iter[col].substr(6, 4) + "-" + iter[col].substr(0, 2) + "-" + iter[col].substr(3, 2));
-            break; 
-     
            case 2:    
-            // City 
-            // TODO: touper() first words in each part of city name
-            signee_stmt->setString(col + 1, std::move(iter[col]));
+            // DATE: YYY-MM-DD
+            signee_stmt->setDateTime(col, matches[col - 1].substr(6, 4) + "-" + matches[col - 1].substr(0, 2) + "-" + matches[col - 1].substr(3, 2));
             break; 
      
            case 3:    
-            // State 
-            // TODO: touper() first words in each part of state name
-            signee_stmt->setString(col + 1, std::move(iter[col]));
+            // City 
+            // TODO: touper() first words in each part of city name
+            signee_stmt->setString(col, std::move(matches[col]));
             break; 
      
            case 4:    
+            // State 
+            // TODO: touper() first words in each part of state name
+            signee_stmt->setString(col, std::move(matches[col]));
+            break; 
+     
+           case 5:    
                // Country
             // TODO: touper() first words in each part of Country name
-            signee_stmt->setString(col + 1, std::move(iter[col]));
+            signee_stmt->setString(col, std::move(matches[col]));
             break; 
             
-           case 5:    
+           case 6:    
             // Comments
             // TODO: Do any fixes to appearance of text.
-            comments_stmt->setString(2, std::move(iter[col]));
+            comments_stmt->setString(2, std::move(matches[col]));
             break; 
             
            default:
             break;  
      
          } // end switch
-       } // end for                  
-       auto rc1 = signee_stmt->execute(); 
+       } // end for         
+ 
+      auto rc1 = signee_stmt->execute(); 
 
        // TODO: Test the next four lines.
        unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
