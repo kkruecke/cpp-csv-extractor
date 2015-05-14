@@ -17,6 +17,7 @@
 
 #include "petition-parser.h"
 #include "hidden/db_credentials.h" // database credentials
+#include <iostream>
 using namespace std;
 using namespace sql; 
 
