@@ -34,8 +34,6 @@ int main(int argc, char** argv)
  * Format of CSV file:
  * 
  *   Signer number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
- *
- *   Regex returns: signer #er, date, city, state, country, comments.
  */
 PetitionParser csv_parser(argv[1]);
    
@@ -99,50 +97,8 @@ while (csv_parser.hasmoreLines()) {
 
             continue;
         }
-/* --
+        
         switch(col) {
-
-           case 0:
-            // Signer #er              
-            signee_stmt->setInt(col + 1, signee_no);
-            comments_stmt->setInt(col + 1, signee_no);
-            break;
-               
-           case 1:    
-            // DATE: YYY-MM-DD
-            signee_stmt->setDateTime(col + 1, strings[col].substr(6, 4) + "-" + strings[col].substr(0, 2) + "-" + strings[col].substr(3, 2));
-            break; 
-     
-           case 2:    
-            // City 
-            // TODO: touper() first words in each part of city name
-            signee_stmt->setString(col + 1, std::move(strings[col]));
-            break; 
-     
-           case 3:    
-            // State 
-            // TODO: touper() first words in each part of state name
-            signee_stmt->setString(col + 1, std::move(strings[col]));
-            break; 
-     
-           case 4:    
-               // Country
-            // TODO: touper() first words in each part of Country name
-            signee_stmt->setString(col + 1, std::move(strings[col]));
-            break; 
-            
-           case 5:    
-            // Comments
-            // TODO: Do any fixes to appearance of text.
-            comments_stmt->setString(2, std::move(strings[col]));
-            break; 
-            
-           default:
-            break;  
-     
-         } // end switch
-*/ 
-      switch(col) {
 
            case 1:
             // Signer #er              
