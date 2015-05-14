@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include <memory>
 #include <algorithm>
-#include <iostream>  // debug only
 
 using namespace std;
 
@@ -49,18 +48,6 @@ bool PetitionParser::hasmoreLines()
     }
     
     return rc;
-        
-    char c;
-    
-    input >> c;
-    bool bResult = input.good();
-    
-    if (bResult) {
-        
-        input.putback(c);
-    }
-    
-    return bResult; 
 }
 
 /*

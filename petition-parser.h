@@ -21,6 +21,17 @@ class PetitionParser {
 public:
 
     PetitionParser(const std::string& file_name);
+
+   /* returns smatch with these values:
+    * [0] is entire match of all values below
+    * [1] is signee number
+    * [2] is date 
+    * [3] is city 
+    * [4] is state  
+    * [4] is country
+    * [6] is comments
+    */
+
     std::smatch parseNextLine();
 
     bool hasmoreLines();

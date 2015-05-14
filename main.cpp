@@ -17,7 +17,6 @@
 
 #include "petition-parser.h"
 #include "hidden/db_credentials.h" // database credentials
-#include <iostream>               // debug
 using namespace std;
 using namespace sql; 
 
@@ -65,40 +64,20 @@ int lineno = 1;
 
 while (csv_parser.hasmoreLines()) {  
 
-/*
-See:
-  https://msdn.microsoft.com/en-us/library/bb982735.aspx
-*/
-   smatch matches = csv_parser.parseNextLine(); 
+  smatch matches = csv_parser.parseNextLine(); 
 
-   int signee_no = atoi(matches[1].str().c_str());
+  int signee_no = atoi(matches[1].str().c_str());
 
-   // TODO: Debug remove later
-   cout << "sigee_no = " << signee_no << " " << "\n";
-   
-   // debug, remoe later
-   if (signee_no == 328) { // Skip if already present in DB. TODO: Correct??? 
-
-   	int debug = 10;
-   }
-        
-   if (signee_no <= max_signee) { // Skip if already present in DB. TODO: Correct??? 
+  if (signee_no <= max_signee) { // Skip if already present in DB. 
 
    	continue;
-   }
+  }
 
-   /* matches values:
-    * [0] is entire match of all values below
-    * [1] is signee number
-    * [2] is date 
-    * [3] is city 
-    * [4] is state  
-    * [4] is country
-    * [6] is comments
-    */
+  int col = 1;
+
   try  {
           
-     for(int col = 1; col < matches.size(); ++col) {
+     for(; col < matches.size(); ++col) {
           
         bool isEmpty { matches[col].str().empty() };
         
@@ -216,14 +195,14 @@ See:
         
         conn->rollback(); 
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
-        cerr << "Line number = " << lineno << ". Insert column = " << col+1 << endl;
+        cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
         throw e;
               
     } catch (exception & e) {
                      
         // catch-all for C++11 exceptions 
         conn->rollback();                 
-        cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col+1 << "\n";
+        cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col << "\n";
         throw e;
     }
    
