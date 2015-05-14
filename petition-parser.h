@@ -13,6 +13,8 @@ class PetitionParser {
     std::ifstream input;
     std::string   line;
     int           line_no;
+    
+    std::string cached_line;
 
     bool getNextSigner(std::string &);
    

@@ -38,7 +38,13 @@ emplace_back_inserter emplace_inserter(strings);
 
  while (1) {
 
-   getline(input, line); // line is this->line
+   if (cached_line.empty()) {
+
+      getline(input, line); 
+   } else {
+
+      line = move(cached_line); 
+   }  
    
    if (input.fail()) {
        
@@ -50,7 +56,9 @@ emplace_back_inserter emplace_inserter(strings);
    
    bool rc = regex_search(line, match, PetitionParser::csv_regex);
    
-   if (!match.str(6).empty() && match.str(6).end() == '"' ) { // Is there a matching end double quote?
+   string submatch = match.str(6);
+   
+   if (!submatch.empty() && submatch.back() == '"' ) { // Is there a matching end double quote?
        
        copy(++(match.begin()), match.end(), emplace_inserter); 
        
@@ -65,27 +73,20 @@ emplace_back_inserter emplace_inserter(strings);
        // Move line into prior line?
        prior_line = std::move(line);
 
-       while (1) {
+       do {
 
            getline(input, cached_line);
 
-           /*
-           bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" };
-
+           bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
            if (rc) {
 
-              throw logic_error("file is not formatted correctly");
-           }
-           */
+                break;
+           } 
 
-           if (cached_line.back() == '"') {
+           line += move(cached_line);
 
-                   line += cached_line;
-           }
-
-
-       }
-       
+       } while (!rc);
+             
    }
       
  } 
