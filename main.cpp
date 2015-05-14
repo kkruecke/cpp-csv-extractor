@@ -44,7 +44,7 @@ unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
 
-conn->setAutoCommit(false);  // We will use transactions.
+//REMOVE conn->setAutoCommit(false);  // We will use transactions.
  
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
@@ -80,6 +80,17 @@ while (csv_parser.hasmoreLines()) {
           
         bool isEmpty { matches[col].str().empty() };
         
+        /*
+         * Remove any enclosing double quotes.
+         */
+                
+        if (matches[col].str().front() = '"' && matches[col].str().back() == '"') {
+        
+            //??? = matches[col].str().substr(1, str_ref.size() - 2);
+        }
+        
+        // TODO: Set the string to the substring
+        throw logic_error("See the TODO comment at" + __LINE__);
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
          */
@@ -150,7 +161,7 @@ while (csv_parser.hasmoreLines()) {
           
     } catch (SQLException & e) { 
         
-        conn->rollback(); 
+       //REMOVE conn->rollback(); 
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
         cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
         throw e;
@@ -166,7 +177,7 @@ while (csv_parser.hasmoreLines()) {
     ++lineno;
   }  // end while   
  
-  conn->commit(); // commit after last line in input has been processed.
+  //REMOVE conn->commit(); // commit after last line in input has been processed.
         
   return(0);
 }
