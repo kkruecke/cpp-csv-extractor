@@ -14,7 +14,7 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-//#include "csvparser.h"
+//--#include "csvparser.h"
 #include "petition-parser.h"
 #include "hidden/db_credentials.h" // database credentials
 #include <iostream>               // debug
@@ -47,10 +47,8 @@ unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
 
-/* TODO: Remove later
- * Debug 
- * conn->setAutoCommit(false);  // We will use transactions.
- */
+conn->setAutoCommit(false);  // We will use transactions.
+ 
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
 unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, comments) VALUES(?, ?)") };
@@ -190,14 +188,14 @@ while (csv_parser.hasmoreLines()) {
           
     } catch (SQLException & e) { 
         
-       // conn->rollback(); Commented out for debugging   TODO: Remove Later          
+        conn->rollback(); 
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
         cerr << "Line number = " << lineno << ". Insert column = " << col+1 << endl;
         throw e;
               
     } catch (exception & e) {
                      
-            // catch-all for C++11 exceptions 
+        // catch-all for C++11 exceptions 
         conn->rollback();                 
         cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col+1 << "\n";
         throw e;

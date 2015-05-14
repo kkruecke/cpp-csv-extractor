@@ -25,7 +25,7 @@ PetitionParser::PetitionParser(const string& file_name) : line_no(0)
 vector<string> PetitionParser::parseNextLine()
 {
 smatch match;
-string prior_line;
+//--string prior_line;
    
 vector<string> strings;
 /*
@@ -36,66 +36,55 @@ strings.reserve(6);
 
 emplace_back_inserter emplace_inserter(strings);
 
- while (1) {
+ if (cached_line.empty()) {
 
-   if (cached_line.empty()) {
+    getline(input, line); 
+    
+ } else {
 
-      getline(input, line); 
-   } else {
+    line = move(cached_line); 
+ }  
+ 
+ if (input.fail()) {
+     
+     return strings;
+ }
 
-      line = move(cached_line); 
-   }  
-   
-   if (input.fail()) {
-       
-       return strings;
-   }
+ // Replace any two consecutive double quotes with a single quote
+ line = regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
+ 
+ bool rc = regex_search(line, match, PetitionParser::csv_regex);
+ 
+ string submatch = match.str(6);
+ bool not_empty = !submatch.empty();
+ 
+ if (not_empty && submatch.back() == '"' ) { // Is there a matching end double quote?
+     
+     copy(++(match.begin()), match.end(), emplace_inserter); // then the comments are all contained on this line...
+    
+ } else if (not_empty) { //...otherwise; are the remaining lines of the comments.
+                 
+     // Move line into prior line?
+     //--prior_line = std::move(line);
 
-   // Replace any two consecutive double quotes with a single quote
-   line = prior_line + regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
-   
-   bool rc = regex_search(line, match, PetitionParser::csv_regex);
-   
-   string submatch = match.str(6);
-   
-   if (!submatch.empty() && submatch.back() == '"' ) { // Is there a matching end double quote?
-       
-       copy(++(match.begin()), match.end(), emplace_inserter); 
-       
-       break;    
-       
-   } else {
-       
-       /*
-        *  TODO: Since the comments continue on the next line, loop until we get the rest of the comments.
-        */ 
-       
-       // Move line into prior line?
-       prior_line = std::move(line);
+     do {
 
-       do {
+         getline(input, cached_line);
 
-           getline(input, cached_line);
+         bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
 
-           bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
+         if (rc) {
 
-           if (rc) {
+              break;
+         } 
 
-                break;
-           } 
+         line += move(cached_line);
 
-           line += move(cached_line);
+     } while (!rc);
 
-       } while (!rc);
-
-       copy(++(match.begin()), match.end(), emplace_inserter); 
-       
-       break;    
-
-             
-   }
-      
- } 
+     copy(++(match.begin()), match.end(), emplace_inserter); 
+     
+ }
 
  return strings; 
 }
