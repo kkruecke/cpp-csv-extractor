@@ -3,7 +3,6 @@
 #include <exception>
 #include <vector> 
 #include <fstream>
-#include <regex>
 
 // MySQL Connector for C++ headers
 #include <mysql_driver.h>     // Its methods are in a static library libmysqlcppconn-static 
@@ -67,13 +66,19 @@ int lineno = 1;
 
 while (csv_parser.hasmoreLines()) {  
 
-/*
-See:
-  https://msdn.microsoft.com/en-us/library/bb982735.aspx
-*/
-   smatch matches = csv_parser.parseNextLine(); 
+   vector<string> strings = csv_parser.parseNextLine(); 
 
-   int signee_no = atoi(matches[1].str().c_str());
+  /* Debug 
+   cout << "--------\n";
+   
+   for(const auto& x : strings) {
+       
+       cout << x << endl;
+   }
+   continue;
+  */
+
+   int signee_no = atoi(strings[0].c_str());
 
    // TODO: Debug remove later
    cout << "sigee_no = " << signee_no << " " << "\n";
@@ -88,10 +93,10 @@ See:
 
    	continue;
    }
+ 
 
    int col = 0;
-
-   /* matches values:
+   /* vector<string> elements by key:
     * [0] is signee number
     * [1] is date 
     * [2] is city 
@@ -101,11 +106,9 @@ See:
     */
    try {
           
-      //--for(; col < strings.size(); ++col) {
-      for(int col = 1; col < matches.size(); ++col) {
+      for(; col < strings.size(); ++col) {
           
-        //--bool isEmpty { strings[col].empty() };
-        bool isEmpty { matches[col].str().empty() };
+        bool isEmpty { strings[col].empty() };
         
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
@@ -124,7 +127,7 @@ See:
 
             continue;
         }
-/* --
+
         switch(col) {
 
            case 0:
@@ -167,52 +170,8 @@ See:
      
          } // end switch
        } // end for         
-*/     
-    
-       switch(col) {
-
-           case 1:
-            // Signer #er              
-            signee_stmt->setInt(col, signee_no);
-            comments_stmt->setInt(col, signee_no);
-            break;
-               
-           case 2:    
-            // DATE: YYY-MM-DD
-            signee_stmt->setDateTime(col, matches[col - 1].substr(6, 4) + "-" + matches[col - 1].substr(0, 2) + "-" + matches[col - 1].substr(3, 2));
-            break; 
-     
-           case 3:    
-            // City 
-            // TODO: touper() first words in each part of city name
-            signee_stmt->setString(col, std::move(matches[col]));
-            break; 
-     
-           case 4:    
-            // State 
-            // TODO: touper() first words in each part of state name
-            signee_stmt->setString(col, std::move(matches[col]));
-            break; 
-     
-           case 5:    
-               // Country
-            // TODO: touper() first words in each part of Country name
-            signee_stmt->setString(col, std::move(matches[col]));
-            break; 
-            
-           case 6:    
-            // Comments
-            // TODO: Do any fixes to appearance of text.
-            comments_stmt->setString(2, std::move(matches[col]));
-            break; 
-            
-           default:
-            break;  
-     
-         } // end switch
-       } // end for         
- 
-      auto rc1 = signee_stmt->execute(); 
+                   
+       auto rc1 = signee_stmt->execute(); 
 
        // TODO: Test the next four lines.
        unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
@@ -241,11 +200,11 @@ See:
         cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col+1 << "\n";
         throw e;
     }
-   
+  
     ++lineno;
   }  // end while   
  
   conn->commit(); // commit after last line in input has been processed.
         
   return(0);
-}
+} 
