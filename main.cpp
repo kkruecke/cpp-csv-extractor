@@ -3,6 +3,7 @@
 #include <exception>
 #include <vector> 
 #include <fstream>
+#include <regex>
 
 // MySQL Connector for C++ headers
 #include <mysql_driver.h>     // Its methods are in a static library libmysqlcppconn-static 
@@ -66,19 +67,13 @@ int lineno = 1;
 
 while (csv_parser.hasmoreLines()) {  
 
-   vector<string> strings = csv_parser.parseNextLine(); 
+   //--vector<string> strings = csv_parser.parseNextLine(); 
+   smatch matches = csv_parser.parseNextLine(); 
 
-  /* Debug 
-   cout << "--------\n";
-   
-   for(const auto& x : strings) {
-       
-       cout << x << endl;
-   }
-   continue;
-  */
+   auto iter = ++matches.begin();
 
-   int signee_no = atoi(strings[0].c_str());
+   //--int signee_no = atoi(strings[0].c_str());
+   int signee_no = atoi(iter->str().c_str());
 
    // TODO: Debug remove later
    cout << "sigee_no = " << signee_no << " " << "\n";
@@ -93,10 +88,10 @@ while (csv_parser.hasmoreLines()) {
 
    	continue;
    }
- 
 
    int col = 0;
-   /* vector<string> elements by key:
+
+   /* iter values:
     * [0] is signee number
     * [1] is date 
     * [2] is city 
@@ -106,9 +101,11 @@ while (csv_parser.hasmoreLines()) {
     */
    try {
           
-      for(; col < strings.size(); ++col) {
+      //--for(; col < strings.size(); ++col) {
+      for(; col < iter.size(); ++col) {
           
-        bool isEmpty { strings[col].empty() };
+        //--bool isEmpty { strings[col].empty() };
+        bool isEmpty { iter[col].empty() };
         
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
@@ -127,7 +124,7 @@ while (csv_parser.hasmoreLines()) {
 
             continue;
         }
-
+/* --
         switch(col) {
 
            case 0:
@@ -170,7 +167,49 @@ while (csv_parser.hasmoreLines()) {
      
          } // end switch
        } // end for         
-                   
+*/          
+        switch(col) {
+
+           case 0:
+            // Signer #er              
+            signee_stmt->setInt(col + 1, signee_no);
+            comments_stmt->setInt(col + 1, signee_no);
+            break;
+               
+           case 1:    
+            // DATE: YYY-MM-DD
+            signee_stmt->setDateTime(col + 1, iter[col].substr(6, 4) + "-" + iter[col].substr(0, 2) + "-" + iter[col].substr(3, 2));
+            break; 
+     
+           case 2:    
+            // City 
+            // TODO: touper() first words in each part of city name
+            signee_stmt->setString(col + 1, std::move(iter[col]));
+            break; 
+     
+           case 3:    
+            // State 
+            // TODO: touper() first words in each part of state name
+            signee_stmt->setString(col + 1, std::move(iter[col]));
+            break; 
+     
+           case 4:    
+               // Country
+            // TODO: touper() first words in each part of Country name
+            signee_stmt->setString(col + 1, std::move(iter[col]));
+            break; 
+            
+           case 5:    
+            // Comments
+            // TODO: Do any fixes to appearance of text.
+            comments_stmt->setString(2, std::move(iter[col]));
+            break; 
+            
+           default:
+            break;  
+     
+         } // end switch
+       } // end for                  
        auto rc1 = signee_stmt->execute(); 
 
        // TODO: Test the next four lines.

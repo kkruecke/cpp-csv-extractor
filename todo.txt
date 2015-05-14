@@ -1,12 +1,7 @@
 TODOes
 ======
 
-BUG: Code is failing in parseNextLine() regex_replace. The utf8-like quote marks that are different in appearance from the standard quote of ", are being converted
-to the normal double quote. This causes the regex to fail, as the last submatch is wrong.
-
-I probably need to special case this and only grab the first six fields and handle the comments separately. 
-
-RegexBuddy can also be used to debug troublesome lines found with test.cpp code.
+Fix compile errors by changing strings[?]. to iter usage.
 
 How to Prepare Petition File
 ============================

@@ -9,7 +9,7 @@ using namespace std;
 
 const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"])$)" }; 
 
-PetitionParser::PetitionParser(const string& file_name) : line_no(0)
+PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initially_empty(false)
 {
    input.open(file_name);
 
@@ -17,24 +17,63 @@ PetitionParser::PetitionParser(const string& file_name) : line_no(0)
        
       throw logic_error("Could not open file" + file_name + "\n");
    }
+   
+   // Test if file is empty
+   char c;
+    
+   input >> c;
+    
+   //--file_initially_empty = input.good();
+    
+   if (input.good()) {
+        
+       input.putback(c);
+       
+   } else {
+       file_initially_empty = true;
+   }
 }
       
+bool PetitionParser::hasmoreLines() 
+{
+    bool rc = true;
+    
+    if (file_initially_empty) { // This handle empty file
+        
+        rc = false;
+    }
+            
+    if (input.eof() && cached_line.empty()) { // This handles eof
+        
+        rc = false;
+    }
+    
+    return rc;
+        
+    char c;
+    
+    input >> c;
+    bool bResult = input.good();
+    
+    if (bResult) {
+        
+        input.putback(c);
+    }
+    
+    return bResult; 
+}
+
 /*
  * Always returns a vector of six elements. Entries not in the petition will be empty.
  */
-vector<string> PetitionParser::parseNextLine()
+smatch PetitionParser::parseNextLine()
 {
 smatch match;
-//--string prior_line;
    
-vector<string> strings;
 /*
  * Note: Doing strings.reserve(n) does not result in default ctor initializations unlike vector<string> strings(6). 
  * Also strings.begin() returns iterator to strings[0].
  */
-strings.reserve(6);  
-
-emplace_back_inserter emplace_inserter(strings);
 
  if (cached_line.empty()) {
 
@@ -47,7 +86,8 @@ emplace_back_inserter emplace_inserter(strings);
  
  if (input.fail()) {
      
-     return strings;
+     //--return strings;
+     return smatch();
  }
 
  // Replace any two consecutive double quotes with a single quote
@@ -56,17 +96,9 @@ emplace_back_inserter emplace_inserter(strings);
  bool rc = regex_search(line, match, PetitionParser::csv_regex);
  
  string submatch = match.str(6);
- bool not_empty = !submatch.empty();
- 
- if (not_empty && submatch.back() == '"' ) { // Is there a matching end double quote?
-     
-     copy(++(match.begin()), match.end(), emplace_inserter); // then the comments are all contained on this line...
-    
- } else if (not_empty) { //...otherwise; are the remaining lines of the comments.
+  
+ if ( !submatch.empty() ) { // Read ahead until we encounter 1) the next line or 2) eof
                  
-     // Move line into prior line?
-     //--prior_line = std::move(line);
-
      do {
 
          getline(input, cached_line);
@@ -81,12 +113,30 @@ emplace_back_inserter emplace_inserter(strings);
          line += move(cached_line);
 
      } while (!rc);
-
-     copy(++(match.begin()), match.end(), emplace_inserter); 
      
  }
+/*
+ if (not_empty && submatch.back() == '"' ) { // Is there a matching end double quote?
+     
+    
+ } else if (not_empty) { //...otherwise; are the remaining lines of the comments.
+                 
+     do {
 
- return strings; 
+         getline(input, cached_line);
+
+         bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
+
+         if (rc) {
+
+              break;
+         } 
+
+         line += move(cached_line);
+
+     } while (!rc);
+     
+ }
+ */
+ return match;
 }
-
-
