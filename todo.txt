@@ -1,7 +1,7 @@
 TODOes
 ======
 
-Test switch logic in main.cpp.
+Finish converting 5-xxx.csv to iso-8859-1. Test switch logic in main.cpp.
 
 How to Prepare Petition File
 ============================
