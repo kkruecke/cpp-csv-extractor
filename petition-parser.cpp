@@ -97,15 +97,13 @@ smatch match;
  
  string submatch = match.str(6);
   
- if ( !submatch.empty() ) { // Read ahead until we encounter 1) the next line or 2) eof
+ if ( !submatch.empty() ) { // Read ahead until we encounter ether 1.) the next line or 2.) eof
                  
      do {
 
          getline(input, cached_line);
 
-         bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
-
-         if (rc) {
+         if (regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" })) {
 
               break;
          } 
@@ -115,28 +113,6 @@ smatch match;
      } while (!rc);
      
  }
-/*
- if (not_empty && submatch.back() == '"' ) { // Is there a matching end double quote?
-     
-    
- } else if (not_empty) { //...otherwise; are the remaining lines of the comments.
-                 
-     do {
 
-         getline(input, cached_line);
-
-         bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
-
-         if (rc) {
-
-              break;
-         } 
-
-         line += move(cached_line);
-
-     } while (!rc);
-     
- }
- */
  return match;
 }

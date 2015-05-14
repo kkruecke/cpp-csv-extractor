@@ -1,7 +1,7 @@
 TODOes
 ======
 
-Fix compile errors and correctly alter switch logic per: https://msdn.microsoft.com/en-us/library/bb982735.aspx
+Test switch logic in main.cpp.
 
 How to Prepare Petition File
 ============================
