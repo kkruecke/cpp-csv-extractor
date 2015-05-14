@@ -78,6 +78,7 @@ emplace_back_inserter emplace_inserter(strings);
            getline(input, cached_line);
 
            bool rc = regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" });
+
            if (rc) {
 
                 break;
@@ -86,6 +87,11 @@ emplace_back_inserter emplace_inserter(strings);
            line += move(cached_line);
 
        } while (!rc);
+
+       copy(++(match.begin()), match.end(), emplace_inserter); 
+       
+       break;    
+
              
    }
       
