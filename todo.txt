@@ -1,7 +1,8 @@
 TODOes
 ======
 
-Finish converting 5-xxx.csv to iso-8859-1. Test switch logic in main.cpp.
+TODO: Remove leading and trailing quotes in petition-parser.cpp by changing what is captured in the regex
+TODO: Ucomment commit code in main.cpp.
 
 How to Prepare Petition File
 ============================
