@@ -65,9 +65,7 @@ smatch match;
     }
      
  } else {
-    /* Note: 
-         string& string::operator=(string && str) does: this->swap(str);          
-     */ 
+    // Note: string& string::operator=(string && str) does this->swap(str);   
     line = move(cached_line); 
     cached_line.clear();
  } 

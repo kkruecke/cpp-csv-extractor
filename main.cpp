@@ -44,7 +44,7 @@ unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
 
-//UNCOMMENT DEBUG-ONLY NOW conn->setAutoCommit(false);  // We will use transactions.
+conn->setAutoCommit(false);  // We will use transactions.
  
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
@@ -64,27 +64,13 @@ int lineno = 1;
 while (csv_parser.hasmoreLines()) {  
 
   smatch matches = csv_parser.parseNextLine(); 
-  /* Debug only
-  for (auto& x : matches) {
-      
-      cout << x << endl;
-  }
-  return 0;
-  */
-
+  
   int signee_no = atoi(matches[1].str().c_str());
 
   if (signee_no <= max_signee) { // Skip if already present in DB. 
 
    	continue;
   }
-
-  /* debug   */
-  for(auto& x: matches) {
-      
-        cout << x.str() << endl;    
-  }
-  cout << "---------" << endl;
   
   int col = 1;
 
@@ -180,7 +166,7 @@ while (csv_parser.hasmoreLines()) {
           
     } catch (SQLException & e) { 
         
-       //UNCOMMENT DEBUG-ONLY NOW conn->rollback(); 
+        conn->rollback(); 
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
         cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
         throw e;
@@ -188,7 +174,7 @@ while (csv_parser.hasmoreLines()) {
     } catch (exception & e) {
                      
         // catch-all for C++11 exceptions 
-        
+        conn->rollback(); 
         cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col << "\n";
         throw e;
     }
@@ -196,7 +182,9 @@ while (csv_parser.hasmoreLines()) {
     ++lineno;
   }  // end while   
  
-  //UNCOMMENT DEBUG-ONLY NOW conn->commit(); // commit after last line in input has been processed.
+  conn->commit(); // commit after last line in input has been processed.
+  
+  cout << lineno << " lines processed successfully\n";
         
   return(0);
 }
