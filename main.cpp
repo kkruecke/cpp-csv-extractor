@@ -169,6 +169,8 @@ while (csv_parser.hasmoreLines()) {
     lastIDResultSet->first();
     
     unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); // Get the result in column zero.
+    
+    cout << "LAST_INSERT_ID() = " << last_signee_insertID << endl;
 
     comments_stmt->setUInt(1, last_signee_insertID);
 

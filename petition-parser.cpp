@@ -8,7 +8,7 @@ using namespace std;
 
 const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"]*)$)" }; 
 
-PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initially_empty(false)
+PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initially_empty(false), cached_line(), line()
 {
    input.open(file_name);
 
@@ -54,7 +54,7 @@ bool PetitionParser::hasmoreLines()
 smatch PetitionParser::parseNextLine()
 {
 smatch match;
-   
+
  if (cached_line.empty()) {
 
     getline(input, line); 
@@ -65,8 +65,11 @@ smatch match;
     }
      
  } else {
-     
+    /* Note: 
+         string& string::operator=(string && str) does: this->swap(str);          
+     */ 
     line = move(cached_line); 
+    cached_line.clear();
  } 
 
  // Replace any two consecutive double quotes with a single quote
