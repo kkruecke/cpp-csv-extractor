@@ -64,11 +64,13 @@ int lineno = 1;
 while (csv_parser.hasmoreLines()) {  
 
   smatch matches = csv_parser.parseNextLine(); 
+  /* Debug only
   for (auto& x : matches) {
       
       cout << x << endl;
   }
   return 0;
+  */
 
   int signee_no = atoi(matches[1].str().c_str());
 

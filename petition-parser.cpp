@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"])$)" }; 
+const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"]*)$)" }; 
 
 PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initially_empty(false)
 {
@@ -57,32 +57,26 @@ smatch PetitionParser::parseNextLine()
 {
 smatch match;
    
-/*
- * Note: Doing strings.reserve(n) does not result in default ctor initializations unlike vector<string> strings(6). 
- * Also strings.begin() returns iterator to strings[0].
- */
-
  if (cached_line.empty()) {
 
     getline(input, line); 
-    
- } else {
-
-    line = move(cached_line); 
- }  
- 
- if (input.fail()) {
+        
+    if (input.fail()) {      
+       
+       return smatch();
+    }
      
-     //--return strings;
-     return smatch();
- }
+ } else {
+     
+    line = move(cached_line); 
+ } 
 
  // Replace any two consecutive double quotes with a single quote
  line = regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
  
  bool rc = regex_search(line, match, PetitionParser::csv_regex);
  
- string submatch = match.str(6);
+ string submatch = match[6].str(); // Recall match[0] is the entire regex match.
   
  if ( !submatch.empty() ) { // Read ahead until we encounter ether 1.) the next line or 2.) eof
                  
