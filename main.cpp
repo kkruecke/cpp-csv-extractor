@@ -109,13 +109,13 @@ while (csv_parser.hasmoreLines()) {
         if (col >= 2 && isEmpty) { 
 
             // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
-            if (col == 5) {
+            if (col == 5) { 
 
                 comments_stmt->setNull(2, 0); 
  
             } else {
 
-                signee_stmt->setNull(col, 0); 
+                signee_stmt->setNull(col, 0);  // BUG: I believe this setNull(col, 0) has wrong col value for line 4.
             }
 
             continue;
