@@ -22,13 +22,12 @@ PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initi
     
    input >> c;
     
-   //--file_initially_empty = input.good();
-    
    if (input.good()) {
         
        input.putback(c);
        
    } else {
+       
        file_initially_empty = true;
    }
 }
@@ -40,9 +39,8 @@ bool PetitionParser::hasmoreLines()
     if (file_initially_empty) { // This handle empty file
         
         rc = false;
-    }
-            
-    if (input.eof() && cached_line.empty()) { // This handles eof
+        
+    } else if (input.eof() && cached_line.empty()) { // This handles eof
         
         rc = false;
     }

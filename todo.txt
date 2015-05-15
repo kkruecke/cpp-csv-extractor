@@ -1,7 +1,7 @@
 TODOes
 ======
 
-TODO: Remove leading and trailing quotes in petition-parser.cpp by changing what is captured in the regex
+TODO: Blowing up MySQL duplicate entry '11' for signee_no
 Idea: See if C++11 regex's support Branch Reset Groups. For what these are see http://www.regular-expressions.info/branchreset.html.
 
 TODO: Ucomment commit code in main.cpp.

@@ -79,11 +79,19 @@ while (csv_parser.hasmoreLines()) {
    	continue;
   }
 
+  /* debug   */
+  for(auto& x: matches) {
+      
+        cout << x.str() << endl;    
+  }
+  cout << "---------" << endl;
+  
   int col = 1;
 
   try  {
-          
-     for(; col < matches.size(); ++col) {
+     auto sz = matches.size();     
+     
+     for(; col < sz; ++col) {
           
         bool isEmpty { matches[col].str().empty() };
         
@@ -106,16 +114,16 @@ while (csv_parser.hasmoreLines()) {
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
          */
-        if (col >= 2 && isEmpty) { 
+        if (col >= 3 && isEmpty) { 
 
             // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
-            if (col == 5) { 
+            if (col == 6) { 
 
                 comments_stmt->setNull(2, 0); 
  
             } else {
 
-                signee_stmt->setNull(col, 0);  // BUG: I believe this setNull(col, 0) has wrong col value for line 4.
+                signee_stmt->setNull(col, 0);  // ??
             }
 
             continue;
@@ -178,7 +186,7 @@ while (csv_parser.hasmoreLines()) {
     } catch (exception & e) {
                      
         // catch-all for C++11 exceptions 
-        conn->rollback();                 
+        
         cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col << "\n";
         throw e;
     }
