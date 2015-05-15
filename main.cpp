@@ -44,7 +44,7 @@ unique_ptr< Statement > stmt(conn->createStatement());
  
 stmt->execute("USE petition");
 
-//REMOVE conn->setAutoCommit(false);  // We will use transactions.
+//UNCOMMENT DEBUG-ONLY NOW conn->setAutoCommit(false);  // We will use transactions.
  
 unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
 
@@ -88,14 +88,19 @@ while (csv_parser.hasmoreLines()) {
         /*
          * Remove any enclosing double quotes.
          */
-                
-        if (matches[col].str().front() = '"' && matches[col].str().back() == '"') {
+        string str;
+        const string& str_ref = matches[col].str();
         
-            //??? = matches[col].str().substr(1, str_ref.size() - 2);
+        if (str_ref.front() == '"' && str_ref.back() == '"') {
+            
+           str = str_ref.substr(1, str_ref.size() - 2); // will invoke move ctor
+           
+        } else {
+            
+           str = move(matches[col].str()); 
+           
         }
-        
-        // TODO: Set the string to the substring
-        throw logic_error("See the TODO comment at" + __LINE__);
+                
         /*
          * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
          */
@@ -124,23 +129,21 @@ while (csv_parser.hasmoreLines()) {
                
            case 2:    
             // DATE: YYY-MM-DD
-           {   
-            const string& str = matches[col].str();
             signee_stmt->setDateTime(col, str.substr(6, 4) + "-" + str.substr(0, 2) + "-" + str.substr(3, 2));
-           } 
+
             break; 
      
            case 3:   // City 
            case 4:   // State 
            case 5:   // Country 
             // TODO: touper() first words in each part of city name
-            signee_stmt->setString(col, std::move(matches[col].str()));
+            signee_stmt->setString(col, std::move(str));
             break; 
      
            case 6:    
             // Comments
             // TODO: Do any fixes to appearance of text.
-            comments_stmt->setString(2, std::move(matches[col].str()));
+            comments_stmt->setString(2, std::move(str));
             break; 
             
            default:
@@ -150,8 +153,7 @@ while (csv_parser.hasmoreLines()) {
     } // end for         
     
     auto rc1 = signee_stmt->execute(); 
-
-    // TODO: Test the next four lines.
+    
     unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
     
     lastIDResultSet->first();
@@ -166,7 +168,7 @@ while (csv_parser.hasmoreLines()) {
           
     } catch (SQLException & e) { 
         
-       //REMOVE conn->rollback(); 
+       //UNCOMMENT DEBUG-ONLY NOW conn->rollback(); 
         cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
         cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
         throw e;
@@ -182,7 +184,7 @@ while (csv_parser.hasmoreLines()) {
     ++lineno;
   }  // end while   
  
-  //REMOVE conn->commit(); // commit after last line in input has been processed.
+  //UNCOMMENT DEBUG-ONLY NOW conn->commit(); // commit after last line in input has been processed.
         
   return(0);
 }
