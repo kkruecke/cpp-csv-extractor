@@ -23,13 +23,14 @@ CREATE TABLE IF NOT EXISTS signee (
 ALTER TABLE `signee` ADD UNIQUE ( `signee_no`);
 
 CREATE TABLE IF NOT EXISTS comments (
-  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+#  id int(11) unsigned NOT NULL AUTO_INCREMENT,
   signee_id int(11) unsigned NOT NULL,
   comments text,
-  PRIMARY KEY (id),
+# PRIMARY KEY (id),
 # The foreign key could also be the signee(id), it seems.
   FOREIGN KEY fk_signee_id(signee_id)
-  REFERENCES signee(id) 
+  REFERENCES signee(id), 
+  PRIMARY KEY (signee_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1  AUTO_INCREMENT=1 ;
 
-ALTER TABLE `comments` ADD UNIQUE ( `signee_id`);
+#ALTER TABLE `comments` ADD UNIQUE ( `signee_id`);

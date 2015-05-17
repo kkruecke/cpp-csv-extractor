@@ -1,8 +1,9 @@
 TODOes
 ======
 
-TODO: Blowing up MySQL duplicate entry '11' for signee_no
-Idea: See if C++11 regex's support Branch Reset Groups. For what these are see http://www.regular-expressions.info/branchreset.html.
+Perfect inner join. See 
+
+1. http://stackoverflow.com/questions/5979508/inner-join-only-if-a-field-is-not-empty
 
 TODO: Ucomment commit code in main.cpp.
 

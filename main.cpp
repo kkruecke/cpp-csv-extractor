@@ -160,8 +160,11 @@ while (csv_parser.hasmoreLines()) {
 
     auto rc2 = comments_stmt->execute(); 
 
-    cout << "line number " << lineno << " processed " << endl;
-          
+    if (!(lineno % 100)) {
+
+       cout << lineno << " lines processed\n";
+    } 
+
     } catch (SQLException & e) { 
         
         conn->rollback(); 
