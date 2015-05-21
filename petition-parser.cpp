@@ -48,11 +48,27 @@ smatch match;
               break;
          } 
 
-         line += move(cached_line);
+         line += move(cached_line); 
 
      } while (!rc);
      
  }
 
  return match;
+}
+      
+bool PetitionParser::hasmoreLines() 
+{
+    bool rc = true;
+    
+    if (is_empty()) { // This handle empty file
+        
+        rc = false;
+        
+    } else if (input.eof() && cached_line.empty()) { // This handles eof
+        
+        rc = false;
+    }
+    
+    return rc;
 }

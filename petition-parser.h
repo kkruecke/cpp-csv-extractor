@@ -1,12 +1,12 @@
 #ifndef PETITION_PARSER_1234
 #define PETITION_PARSER_1234
 
-#include "file-regex-parser.h"
+#include "file-parser.h"
 #include <string>
 #include <fstream>
 #include <regex>
 
-class PetitionParser : public FilePetitionParser {
+class PetitionParser : public FileParser {
     
     static const std::regex csv_regex;
 
@@ -32,7 +32,7 @@ public:
     bool hasmoreLines() override;
 };
 
-inline PetitionParser::PetitionParser(const std::string& file_name) : FileRegexParser(file_name) 
+inline PetitionParser::PetitionParser(const std::string& file_name) : FileParser(file_name) 
 {
 }
 #endif
