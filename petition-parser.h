@@ -25,7 +25,7 @@ public:
     * [4] is country
     * [6] is comments
     */
-    std::smatch parseNextLine() override;
+    std::smatch getNextMatches() override;
 
     bool hasmoreLines() override;
 };

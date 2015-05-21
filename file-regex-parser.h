@@ -19,7 +19,7 @@ public:
       
     FileRegexParser(const std::string& file_name, const std::regex& r = std::regex{});
     const std::regex& get_regex();
-    virtual std::smatch parseNextLine() = 0;
+    virtual std::smatch getNextMatches() = 0;
 
     virtual bool hasmoreLines() = 0;
 

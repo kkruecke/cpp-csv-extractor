@@ -9,7 +9,7 @@ using namespace std;
 /*
  * Always returns a vector of six elements. Entries not in the petition will be empty.
  */
-smatch PetitionParser::parseNextLine()
+smatch PetitionParser::getNextMatches()
 {
 smatch match;
 
