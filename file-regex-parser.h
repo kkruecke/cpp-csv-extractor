@@ -9,7 +9,8 @@ class FileRegexParser {
 
    std::ifstream input; 
    int line_no;
-     
+   bool file_empty;
+
 public:
 
     FileRegexParser(const std::string& file_name);
@@ -23,6 +24,9 @@ public:
 
 inline FileRegexParser::~FileRegexParser()
 {
-   input.close();
+   if (!file_empty) { 
+
+      input.close();
+   }
 }
 #endif

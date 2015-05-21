@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FileRegexParser::FileRegexParser(const string& file_name) : line_no(0)
+FileRegexParser::FileRegexParser(const string& file_name) : line_no(1), file_empty(false)
 {
    input.open(file_name);
 
@@ -26,6 +26,6 @@ FileRegexParser::FileRegexParser(const string& file_name) : line_no(0)
        
    } else {
        
-       file_initially_empty = true;
+       file_empty = true;
    }
 }
