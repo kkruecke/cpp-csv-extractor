@@ -8,46 +8,6 @@ using namespace std;
 
 const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"]*)$)" }; 
 
-PetitionParser::PetitionParser(const string& file_name) : line_no(0), file_initially_empty(false), cached_line(), line()
-{
-   input.open(file_name);
-
-   if (!input.is_open()) {
-       
-      throw logic_error("Could not open file" + file_name + "\n");
-   }
-   
-   // Test if file is empty
-   char c;
-    
-   input >> c;
-    
-   if (input.good()) {
-        
-       input.putback(c);
-       
-   } else {
-       
-       file_initially_empty = true;
-   }
-}
-      
-bool PetitionParser::hasmoreLines() 
-{
-    bool rc = true;
-    
-    if (file_initially_empty) { // This handle empty file
-        
-        rc = false;
-        
-    } else if (input.eof() && cached_line.empty()) { // This handles eof
-        
-        rc = false;
-    }
-    
-    return rc;
-}
-
 /*
  * Always returns a vector of six elements. Entries not in the petition will be empty.
  */

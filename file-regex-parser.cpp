@@ -1,0 +1,31 @@
+#include "file-regex-parser.h"
+#include <regex>
+#include <stdexcept>
+#include <memory>
+#include <algorithm>
+
+using namespace std;
+
+FileRegexParser::FileRegexParser(const string& file_name) : line_no(0)
+{
+   input.open(file_name);
+
+   if (!input.is_open()) {
+       
+      throw logic_error("Could not open file" + file_name + "\n");
+   }
+   
+   // Test if file is empty
+   char c;
+    
+   input >> c;
+    
+   if (input.good()) {
+        
+       input.putback(c);
+       
+   } else {
+       
+       file_initially_empty = true;
+   }
+}
