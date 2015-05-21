@@ -6,8 +6,6 @@
 
 using namespace std;
 
-const regex PetitionParser::csv_regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"]*)$)" }; 
-
 /*
  * Always returns a vector of six elements. Entries not in the petition will be empty.
  */
@@ -33,7 +31,7 @@ smatch match;
  // Replace any two consecutive double quotes with a single quote
  line = regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
  
- bool rc = regex_search(line, match, PetitionParser::csv_regex);
+ bool rc = regex_search(line, match, reg_ex);
  
  string submatch = match[6].str(); // Recall match[0] is the entire regex match.
   

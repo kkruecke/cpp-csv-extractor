@@ -1,15 +1,13 @@
 #ifndef PETITION_PARSER_1234
 #define PETITION_PARSER_1234
 
-#include "file-parser.h"
+#include "file-regex-parser.h"
 #include <string>
 #include <fstream>
 #include <regex>
 
-class PetitionParser : public FileParser {
+class PetitionParser : public FileRegexParser {
     
-    static const std::regex csv_regex;
-
     std::string   line;
     std::string cached_line;
     bool file_initially_empty;
@@ -32,7 +30,7 @@ public:
     bool hasmoreLines() override;
 };
 
-inline PetitionParser::PetitionParser(const std::string& file_name) : FileParser(file_name) 
+inline PetitionParser::PetitionParser(const std::string& file_name) : FileRegexParser(file_name, std::regex { R"(^(\d+),(\d\d-\d\d-\d\d\d\d),(?:"[^"]*"|[^,"]*),(?:"[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),("[^"]*"|[^,"]*),(".+"|[^"]*)$)" }) 
 {
 }
 #endif

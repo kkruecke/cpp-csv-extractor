@@ -1,4 +1,4 @@
-#include "file-parser.h"
+#include "file-regex-parser.h"
 #include <regex>
 #include <stdexcept>
 #include <memory>
@@ -6,7 +6,7 @@
 
 using namespace std;
 
-FileParser::FileParser(const string& file_name) : line_no(1), file_empty(false)
+FileRegexParser::FileRegexParser(const string& file_name, const std::regex& r) : reg_ex(r), line_no(1), file_empty(false)
 {
    input.open(file_name);
 
