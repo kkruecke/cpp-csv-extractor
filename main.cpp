@@ -25,8 +25,10 @@ using namespace sql;
 
 int main(int argc, char** argv) 
 {
- 
-  string s = "How are you?   are you o.k.? feeling fine, I hope! nice to see you. good bye.";
+  cout <<   "            0123            0123                  012              012"; 
+  string s = "How are you?   are you o.k.? feeling fine, I hope!  nice to see you. good bye.";
+  cout << "The input string is\n" << s << "\n\n";
+  
   fixText(s);
 
   return 0;
