@@ -15,7 +15,7 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
-#include "petition-parser.h"
+#include "include/petition-parser.h"
 #include "hidden/db_credentials.h" // database credentials
 #include <iostream>
 using namespace std;
@@ -31,162 +31,161 @@ int main(int argc, char** argv)
       return 0;
   } 
 
-/*
- * Format of CSV file:
- * 
- *   Signer number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
- */
-PetitionParser csv_parser(argv[1]);
+  /*
+   * Format of CSV file:
+   * 
+   *   Signer number,Date,"First Name","Last Name",City,State/Province,Country,"Why is this issue important to you?"
+   */
+  PetitionParser csv_parser(argv[1]);
+     
+  unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
    
-unique_ptr<Connection> conn { get_driver_instance()->connect(DB_Credentials::Url().c_str(), DB_Credentials::User().c_str(), DB_Credentials::Password().c_str()) };
- 
-// Set database to use petition database.
-unique_ptr< Statement > stmt(conn->createStatement());
- 
-stmt->execute("USE petition");
-
-conn->setAutoCommit(false);  // We will use transactions.
- 
-unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
-
-unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, comments) VALUES(?, ?)") };
-
-unique_ptr<Statement> last_insert_id_stmt { conn->createStatement() };  
-
-// Get max(sigee_no) to determine if petition signers are already in the DB.
-unique_ptr<ResultSet> max_signeeResultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signee") };
- 
-max_signeeResultSet->first();
- 
-auto max_signee = max_signeeResultSet->getUInt("max_signee"); 
-
-int lineno = 1;
-
-while (csv_parser.hasmoreLines()) {  
-
-  smatch matches = csv_parser.getNextMatches(); 
+  // Set database to use petition database.
+  unique_ptr< Statement > stmt(conn->createStatement());
+   
+  stmt->execute("USE petition");
   
-  int signee_no = atoi(matches[1].str().c_str());
-
-  if (signee_no <= max_signee) { // Skip if already present in DB. 
-
-   	continue;
-  }
+  conn->setAutoCommit(false);  // We will use transactions.
+   
+  unique_ptr<PreparedStatement> signee_stmt { conn->prepareStatement("INSERT INTO signee(signee_no, date, city, state, country) VALUES(?, ?, ?, ?, ?)") };
   
-  int col = 1;
-
-  try  {
-     auto sz = matches.size();     
-     
-     for(; col < sz; ++col) {
-          
-        bool isEmpty { matches[col].str().empty() };
-        
-        /*
-         * Remove any enclosing double quotes.
-         */
-        string str;
-        const string& str_ref = matches[col].str();
-        
-        if (str_ref.front() == '"' && str_ref.back() == '"') {
-            
-           str = str_ref.substr(1, str_ref.size() - 2); // will invoke move ctor
-           
-        } else {
-            
-           str = move(matches[col].str()); 
-           
-        }
-                
-        /*
-         * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
-         */
-        if (col >= 3 && isEmpty) { 
-
-            // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
-            if (col == 6) { 
-
-                comments_stmt->setNull(2, 0); 
- 
-            } else {
-
-                signee_stmt->setNull(col, 0);  // ??
-            }
-
-            continue;
-        }
-        
-        switch(col) {
-
-           case 1:
-            // Signer #er              
-            signee_stmt->setInt(col, signee_no);
-            comments_stmt->setInt(col, signee_no);
-            break;
-               
-           case 2:    
-            // DATE: YYY-MM-DD
-            signee_stmt->setDateTime(col, str.substr(6, 4) + "-" + str.substr(0, 2) + "-" + str.substr(3, 2));
-
-            break; 
-     
-           case 3:   // City 
-           case 4:   // State 
-           case 5:   // Country 
-            // TODO: touper() first words in each part of city name
-            signee_stmt->setString(col, std::move(str));
-            break; 
-     
-           case 6:    
-            // Comments
-            // TODO: Do any fixes to appearance of text.
-            comments_stmt->setString(2, std::move(str));
-            break; 
-            
-           default:
-            break;  
-     
-         } // end switch
-    } // end for         
+  unique_ptr<PreparedStatement> comments_stmt { conn->prepareStatement("INSERT INTO comments(signee_id, comments) VALUES(?, ?)") };
+  
+  unique_ptr<Statement> last_insert_id_stmt { conn->createStatement() };  
+  
+  // Get max(sigee_no) to determine if petition signers are already in the DB.
+  unique_ptr<ResultSet> max_signeeResultSet { stmt->executeQuery("select max(signee_no) as max_signee FROM signee") };
+   
+  max_signeeResultSet->first();
+   
+  auto max_signee = max_signeeResultSet->getUInt("max_signee"); 
+  
+  int lineno = 1;
+  
+  while (csv_parser.hasmoreLines()) {  
+  
+    smatch matches = csv_parser.getNextMatches(); 
     
-    auto rc1 = signee_stmt->execute(); 
-    
-    unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
-    
-    lastIDResultSet->first();
-    
-    unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); // Get the result in column zero.
-
-    comments_stmt->setUInt(1, last_signee_insertID);
-
-    auto rc2 = comments_stmt->execute(); 
-
-    if (!(lineno % 100)) {
-
-       cout << lineno << " lines processed\n";
-    } 
-
-    } catch (SQLException & e) { 
-        
-        conn->rollback(); 
-        cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
-        cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
-        throw e;
-              
-    } catch (exception & e) {
-                     
-        // catch-all for C++11 exceptions 
-        conn->rollback(); 
-        cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col << "\n";
-        throw e;
+    int signee_no = atoi(matches[1].str().c_str());
+  
+    if (signee_no <= max_signee) { // Skip if already present in DB. 
+  
+   	  continue;
     }
-   
-    ++lineno;
-  }  // end while   
- 
-  conn->commit(); // commit after last line in input has been processed.
+    
+    int col = 1;
   
-  cout << lineno << " lines processed successfully\n";
-        
-  return(0);
+    try  {
+       auto sz = matches.size();     
+       
+       for(; col < sz; ++col) {
+            
+          bool isEmpty { matches[col].str().empty() };
+          
+          /*
+           * Remove any enclosing double quotes.
+           */
+          string str;
+          const string& str_ref = matches[col].str();
+          
+          if (str_ref.front() == '"' && str_ref.back() == '"') {
+              
+             str = str_ref.substr(1, str_ref.size() - 2); // move ctor will be invoked
+             
+          } else {
+              
+             str = move(matches[col].str()); 
+          }
+                  
+          /*
+           * If column not signee_no or date-signed, then, if empty, call setNull(col + 1, 0)
+           */
+          if (col >= 3 && isEmpty) { 
+  
+              // According to http://forums.mysql.com/read.php?167,419402,421088#msg-421088, the 2nd parameter can simply be be 0.   
+              if (col == 6) { 
+  
+                  comments_stmt->setNull(2, 0); 
+   
+              } else {
+  
+                  signee_stmt->setNull(col, 0);  // ??
+              }
+  
+              continue;
+          }
+          
+          switch(col) {
+  
+             case 1:
+              // Signer #er              
+              signee_stmt->setInt(col, signee_no);
+              comments_stmt->setInt(col, signee_no);
+              break;
+                 
+             case 2:    
+              // DATE: YYY-MM-DD
+              signee_stmt->setDateTime(col, str.substr(6, 4) + "-" + str.substr(0, 2) + "-" + str.substr(3, 2));
+  
+              break; 
+       
+             case 3:   // City 
+             case 4:   // State 
+             case 5:   // Country 
+              // TODO: touper() first words in each part of city name
+              signee_stmt->setString(col, std::move(str));
+              break; 
+       
+             case 6:    
+              // Comments
+              // TODO: Do any fixes to appearance of text.
+              comments_stmt->setString(2, std::move(str));
+              break; 
+              
+             default:
+              break;  
+       
+           } // end switch
+      } // end for         
+      
+      auto rc1 = signee_stmt->execute(); 
+      
+      unique_ptr<ResultSet> lastIDResultSet { last_insert_id_stmt->executeQuery("SELECT LAST_INSERT_ID() as lastID") } ;
+      
+      lastIDResultSet->first();
+      
+      unsigned int last_signee_insertID = lastIDResultSet->getUInt("lastID"); 
+  
+      comments_stmt->setUInt(1, last_signee_insertID);
+  
+      auto rc2 = comments_stmt->execute(); 
+  
+      if (!(lineno % 100)) {
+  
+         cout << lineno << " lines processed\n";
+      } 
+  
+      } catch (SQLException & e) { 
+          
+          conn->rollback(); 
+          cerr << "Error code = " << e.getErrorCode() << ". MySQL State message = " << e.getSQLState() << "\n";
+          cerr << "Line number = " << lineno << ". Insert column = " << col << endl;
+          throw e;
+                
+      } catch (exception & e) {
+                       
+          // catch-all for C++11 exceptions 
+          conn->rollback(); 
+          cerr << "C++11 exception caught: " << e.what() << ".\nLine number = " << lineno << ". Insert column = " << col << "\n";
+          throw e;
+      }
+     
+      ++lineno;
+    }  // end while   
+   
+    conn->commit(); // commit after last line in input has been processed.
+    
+    cout << lineno << " lines processed successfully\n";
+          
+    return(0);
 }
