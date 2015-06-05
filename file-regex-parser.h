@@ -35,7 +35,7 @@ inline const std::regex& FileRegexParser::get_regex()
 
 inline FileRegexParser::~FileRegexParser()
 {
-   if (is_open()) { 
+   if (input.is_open()) { 
 
       input.close();
    }
