@@ -36,6 +36,10 @@ void fixText(string& s)
         std::smatch m = *i;
         std::cout << m.str() << " at position " << m.position() << '\n';
 
+    /*
+    TODO: We only care about  m[1] below--I think
+     */
+
       for(auto& sub : m) {
           
            cout << "submatch sub.str() " << sub.str() << " length of " << sub.length() << '\n';
