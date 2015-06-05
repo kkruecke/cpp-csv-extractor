@@ -16,6 +16,7 @@
 #include <cppconn/prepared_statement.h>
 
 #include "include/petition-parser.h"
+#include "include/fix-text.h"
 #include "hidden/db_credentials.h" // database credentials
 #include <iostream>
 using namespace std;
@@ -25,6 +26,11 @@ using namespace sql;
 int main(int argc, char** argv) 
 {
  
+  string s = "How are you?   are you o.k.? feeling fine, I hope! nice to see you. good bye.";
+  fixText(s);
+
+  return 0;
+
   if (argc != 2) {
   
       cerr << "Please re-run with the input file name as the first parameter.\n";
