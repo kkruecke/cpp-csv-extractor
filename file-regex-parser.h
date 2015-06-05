@@ -4,7 +4,9 @@
 #include <string>
 #include <fstream>
 #include <regex>
-
+/*
+ * Abstract base class
+ */ 
 class FileRegexParser {
 
 protected:
@@ -24,8 +26,6 @@ public:
     virtual bool hasmoreLines() = 0;
 
     virtual ~FileRegexParser();
-     
-
 };
 
 inline const std::regex& FileRegexParser::get_regex()
@@ -35,7 +35,7 @@ inline const std::regex& FileRegexParser::get_regex()
 
 inline FileRegexParser::~FileRegexParser()
 {
-   if (!is_empty()) { 
+   if (is_open()) { 
 
       input.close();
    }

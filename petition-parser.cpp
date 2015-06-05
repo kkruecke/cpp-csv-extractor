@@ -16,14 +16,14 @@ smatch match;
  if (cached_line.empty()) {
 
     getline(input, line); 
-        
+         
     if (input.fail()) {      
        
        return smatch();
     }
      
  } else {
-    // Note: string& string::operator=(string && str) does this->swap(str);   
+    /* Note: Since string& string::operator=(string && str) does this->swap(str) cached_line.clear() needs to be called. */
     line = move(cached_line); 
     cached_line.clear();
  } 
@@ -33,20 +33,20 @@ smatch match;
  
  bool rc = regex_search(line, match, reg_ex);
  
- string submatch = match[6].str(); // Recall match[0] is the entire regex match.
-  
- if ( !submatch.empty() ) { // Read ahead until we encounter ether 1.) the next line or 2.) eof
-                 
+ string submatch = match[6].str(); // Get comments submathc.
+
+ if ( !submatch.empty() ) { // Read ahead in case the comments are continue on subsequent lines. Read lines linesahead until we encounter ether 1.) the next line or 2.) eof
+                            // Q: Does this effectly add to the                 
      do {
 
          getline(input, cached_line);
 
-         if (regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" })) {
+         if (regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" })) { // If it is an entirely new csv entry, we are done
 
               break;
          } 
 
-         line += move(cached_line); 
+         line += move(cached_line); // otherwise, append it. Q: Do I append it to "line" or to "match"? Is this effectively the same thing?
 
      } while (!rc);
      
