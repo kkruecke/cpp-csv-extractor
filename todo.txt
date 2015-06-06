@@ -1,7 +1,7 @@
 TODOes
 ======
 
-Finish the FileRegexParser constructor and test if it compiles.
+Finish and test fixText() function.
 
 How to Prepare Petition File
 ============================
