@@ -27,24 +27,26 @@ void fixText(string& s)
 {
    try {
       
-    //std::regex r { R"((?:\.|\?|!)(\s+)[a-z]+)"};
     std::regex r { R"((?:\.|\?|!)(\s+)[a-z])"};   
+    
+    int total_offset = 0;
     
     for(std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
                             i != std::sregex_iterator();
                             ++i )
     {
         std::smatch m = *i;
-        std::cout << m.str() << " at position " << m.position() << '\n';
+        //--std::cout << m.str() << " at position " << m.position() << " from total offset of " << total_offset << '\n';
+        std::cout << '"' << m.str() << '"' << " -- at offset " << total_offset + m.position() << " from total offset of " << total_offset << '\n';
 
-    /*
-    TODO: We only care about  m[1] below--I think
-     */
-
+   
       for(auto& sub : m) {
           
-           cout << "submatch sub.str() " << '"' << sub.str() << '"' <<  " length of " << sub.length() << '\n';
+           cout << "submatch sub.str() " << '"' << sub.str() << '"' <<  " -- has length of " << sub.length() << '\n';
       }
+        
+      total_offset += m.position() + m[0].length();
+      
     }
     
   } catch (exception& e) {
