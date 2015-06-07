@@ -27,7 +27,8 @@ void fixText(string& s)
 {
    try {
       
-    std::regex r { R"((?:\.|\?|!)(\s+)[a-z]+)"};
+    //std::regex r { R"((?:\.|\?|!)(\s+)[a-z]+)"};
+    std::regex r { R"((?:\.|\?|!)(\s+)[a-z])"};   
     
     for(std::sregex_iterator i = std::sregex_iterator(s.begin(), s.end(), r);
                             i != std::sregex_iterator();
@@ -42,7 +43,7 @@ void fixText(string& s)
 
       for(auto& sub : m) {
           
-           cout << "submatch sub.str() " << sub.str() << " length of " << sub.length() << '\n';
+           cout << "submatch sub.str() " << '"' << sub.str() << '"' <<  " length of " << sub.length() << '\n';
       }
     }
     
