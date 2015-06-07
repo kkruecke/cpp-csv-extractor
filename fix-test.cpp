@@ -20,7 +20,12 @@ void fixText(string& s)
     for(auto iter =  sregex_iterator(s.begin(), s.end(), r);
                         iter != sregex_iterator(); ++iter ) {
         smatch m = *iter;
+
         cout << '"' << m.str() << '"' << " -- at offset " << total_offset + m.position() << " from total offset of " << total_offset << '\n';
+
+        int index = total_offset + m.position() + m.length() - 1;
+
+        cout << "'" << s.at(index) << "'" << " -- at offset " << index << " from total offset of " << total_offset << '\n';
 
    
       for(auto& sub : m) {
