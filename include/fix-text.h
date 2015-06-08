@@ -5,5 +5,5 @@
  */ 
 #include <string>
 
-void fixText(std::string& s);
+void ucfirstword_sentences(std::string& s);
 #endif

@@ -8,15 +8,14 @@
 
 using namespace std;
 
-void fixText(string& s)
+void ucfirstword_sentences(string& s)
 {
    setlocale(LC_ALL, "en_US.iso88591"); 
    
    regex r { R"((?:\.|\?|!)(\s+)[a-z])"};
    
    int total_offset = 0;
-   
-  
+    
   /*
    * Look for '.' or '!' or '?" followed by whitespace, followed by lowercase a-z.
    */

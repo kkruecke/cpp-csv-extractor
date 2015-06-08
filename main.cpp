@@ -25,22 +25,6 @@ using namespace sql;
 
 int main(int argc, char** argv) 
 {
-  string s = "How are you?   are you o.k.? feeling fine, I hope!  nice to see you. good bye.";
-  
-  for (auto i = 0; i < s.length(); ++i) {
-        
-      cout << i % 10; 
-  }
-  
-  cout << "\nThe input string is\n" << s << "\n\n";
-  
-  fixText(s);
-  
-  cout << "\nThe string after uppercasing is\n" << s << "\n\n";
-  
-
-  return 0;
-
   if (argc != 2) {
   
       cerr << "Please re-run with the input file name as the first parameter.\n";
@@ -154,7 +138,7 @@ int main(int argc, char** argv)
        
              case 6:    
               // Comments
-              // TODO: Do any fixes to appearance of text.
+              ucfirstword_sentences(str); // capitalize first word of every sentence
               comments_stmt->setString(2, std::move(str));
               break; 
               
