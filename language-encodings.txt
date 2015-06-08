@@ -1,14 +1,10 @@
-ASCII is an single bytes, seven-bit encoding. There are other single byte, eight-bit encodings that extend ASCII.<check>
+ASCII is an single bytes, seven-bit encoding. There are other single byte, eight-bit encodings that extend ASCII like the 8859-X family of character encodings.
+These include:
 
-There are a set of encodings that extend ASCII that come under the general encoding called ISO 8859. This includes
 8859-1 or Latin 1
 8859-2 or Latin 2
 
-
-
- One of
-the most popular is Latin-1, which also have the Internet Assigned Number of ISO/IEC 8859-1. It includes code points for most
-western European languages, including the Norwegian, Swedish, Danish, German, Italian, and Spanish. It includes most of 
+Latin 1 is the most popular. It includes code points for most western European languages, including the Norwegian, Swedish, Danish, German, Italian, and Spanish. It includes most of 
 French with the exception of about two letters, for which there are workarounds.
 
 

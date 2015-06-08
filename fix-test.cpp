@@ -13,7 +13,7 @@ void ucfirstword_sentences(string& s)
    setlocale(LC_ALL, "en_US.iso88591"); 
    
    regex r { R"((?:\.|\?|!)(\s+)[a-z])"};
-   
+      
    int total_offset = 0;
     
   /*

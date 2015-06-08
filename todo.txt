@@ -1,7 +1,3 @@
-TODOes
-======
-
-Finish and test fixText() function.
 
 How to Prepare Petition File
 ============================

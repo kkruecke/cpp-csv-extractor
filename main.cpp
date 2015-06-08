@@ -25,6 +25,7 @@ using namespace sql;
 
 int main(int argc, char** argv) 
 {
+   
   if (argc != 2) {
   
       cerr << "Please re-run with the input file name as the first parameter.\n";

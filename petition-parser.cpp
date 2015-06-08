@@ -23,25 +23,30 @@ smatch match;
     }
      
  } else {
-    /* Note: Since string& string::operator=(string && str) does this->swap(str) cached_line.clear() needs to be called. */
+    /* 
+       Note: Since string& string::operator=(string && str) does this->swap(str), 
+             cached_line.clear() alos needs to be called. 
+     */
     line = move(cached_line); 
     cached_line.clear();
  } 
 
  // Replace any two consecutive double quotes with a single quote
- line = regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG: Failing, I believe that iconv removed the two double quotes?
+ line = regex_replace(line, regex {"(\"\")"}, string{"'"}); // BUG? Failing, I believe that iconv removed the two double quotes?
  
  bool rc = regex_search(line, match, reg_ex);
  
- string submatch = match[6].str(); // Get comments submathc.
+ string submatch = match[6].str(); // Get comments submathch.
 
- if ( !submatch.empty() ) { // Read ahead in case the comments are continue on subsequent lines. Read lines linesahead until we encounter ether 1.) the next line or 2.) eof
-                            // Q: Does this effectly add to the                 
+ if ( !submatch.empty() ) { /* 
+                             Read ahead in case the comments are continue on subsequent lines. Read lines ahead until we encounter either 
+                                 1.) the next line or 2.) eof
+                             */
      do {
 
          getline(input, cached_line);
 
-         if (regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" })) { // If it is an entirely new csv entry, we are done
+         if (regex_search(cached_line, regex{ R"(^\d+,\d\d-\d\d-\d\d\d\d,)" })) { // Tests if we have an entirely new csv entry, which means we are done.
 
               break;
          } 
@@ -49,7 +54,6 @@ smatch match;
          line += move(cached_line); // otherwise, append it. Q: Do I append it to "line" or to "match"? Is this effectively the same thing?
 
      } while (!rc);
-     
  }
 
  return match;
