@@ -35,6 +35,9 @@ int main(int argc, char** argv)
   cout << "\nThe input string is\n" << s << "\n\n";
   
   fixText(s);
+  
+  cout << "\nThe string after uppercasing is\n" << s << "\n\n";
+  
 
   return 0;
 
